@@ -15,7 +15,7 @@ import data from './data.json';
 //   'https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg/440px-Robert_Downey_Jr_2014_Comic_Con_%28cropped%29.jpg',
 // ]
 
-const cards = data.filter((_, i) => i < 5).map(element => element.imageUrl);
+const cards = data.filter((_, i) => i < 52).map(element => element.imageUrl);
 
 let zFlipped = false;
 let maxZIndex = 900;
