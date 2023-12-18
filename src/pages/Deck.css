@@ -1,22 +1,20 @@
 .container {
-    background: lightblue;
     cursor: url('https://uploads.codesandbox.io/uploads/user/b3e56831-8b98-4fee-b941-0e27f39883ab/Ad1_-cursor.png') 39 39,
         auto;
-    top: 50px;
-    width: 200px;
+    top: 10px;
+    width: 370px;
     margin-left: auto;
-    margin-right: 20px;
+    margin-right: auto;
     position: relative;
 }
 
 .deck {
     position: absolute;
-    width: 200px;
-    height: 200px;
     will-change: transform;
     display: flex;
     align-items: center;
     justify-content: center;
+    right: 60px;
 }
 
 .deck>div {
@@ -25,8 +23,8 @@
     background-size: auto 85%;
     background-repeat: no-repeat;
     background-position: center center;
-    width: 120px;
-    height: 200px;
+    width: 110px;
+    height: 180px;
     will-change: transform;
     border-radius: 10px;
     box-shadow: 0 12.5px 10px -10px rgba(50, 50, 73, 0.4), 0 10px 10px -10px rgba(50, 50, 73, 0.3);
