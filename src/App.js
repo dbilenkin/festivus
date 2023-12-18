@@ -1,24 +1,23 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, BrowserRouter as Router, useNavigate } from 'react-router-dom';
+import StartPage from './pages/StartPage';
+import HostGamePage from './pages/host/HostGamePage';
+import PlayerGamePage from './pages/player/PlayerGamePage';
 import './App.css';
-import Test from './pages/Test';
+import { CurrentGameProvider } from './contexts/CurrentGameContext';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          incommon
-        </a>
-      </header>
-      <div className=''>
-        <Test />
-      </div>
-    </div>
+    <CurrentGameProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<StartPage />} />
+          <Route path="/host/:shortId" element={<HostGamePage />} />
+          <Route path="/player/:shortId" element={<PlayerGamePage />} />
+        </Routes>
+      </Router>
+    </CurrentGameProvider>
   );
 }
 
