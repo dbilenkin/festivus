@@ -11,26 +11,35 @@ const PlayerGamePage = () => {
 
     const { shortId } = useParams();
     const [gameData, setGameData] = useState(null);
-    const [gameRef, setGameRef] = useState(null);
+    // const [gameRef, setGameRef] = useState(null);
+    const { gameRef, setGameRef } = useContext(CurrentGameContext);
 
     useEffect(() => {
-        const gamesRef = collection(db, 'games');
-        const q = query(gamesRef, where('shortId', '==', shortId));
+        if (gameRef) {
+            onSnapshot(gameRef, (doc) => {
+                console.log(doc.data());
+                setGameData(doc.data());
 
-        getDocs(q).then((querySnapshot) => {
-            if (querySnapshot.size === 1) {
-                const gameId = querySnapshot.docs[0].id;
-                const _gameRef = doc(db, 'games', gameId);
-                setGameRef(_gameRef)
-                onSnapshot(_gameRef, (doc) => {
-                    console.log(doc.data());
-                    setGameData(doc.data());
+            });
+        } else {
+            const gamesRef = collection(db, 'games');
+            const q = query(gamesRef, where('shortId', '==', shortId));
 
-                });
-            } else {
-                console.error('Invalid short ID.');
-            }
-        });
+            getDocs(q).then((querySnapshot) => {
+                if (querySnapshot.size === 1) {
+                    const gameId = querySnapshot.docs[0].id;
+                    const _gameRef = doc(db, 'games', gameId);
+                    setGameRef(_gameRef)
+                    onSnapshot(_gameRef, (doc) => {
+                        console.log(doc.data());
+                        setGameData(doc.data());
+
+                    });
+                } else {
+                    console.error('Invalid short ID.');
+                }
+            });
+        }
 
 
     }, [shortId]);
@@ -43,9 +52,9 @@ const PlayerGamePage = () => {
 
     return (
         <div>
-            {gameState === 'started' ? 
-            <PlayerRoundPage gameData={gameData} gameRef={gameRef} /> :
-            <PlayerSetupPage gameData={gameData} gameRef={gameRef} />}
+            {gameState === 'started' ?
+                <PlayerRoundPage gameData={gameData} gameRef={gameRef} /> :
+                <PlayerSetupPage gameData={gameData} gameRef={gameRef} />}
         </div>
     );
 };

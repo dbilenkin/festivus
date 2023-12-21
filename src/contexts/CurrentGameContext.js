@@ -7,11 +7,13 @@ const CurrentGameContext = createContext({
     setCurrentPlayerName: () => { },
 });
 
-const CurrentGameProvider = ({ children, gameRef }) => {
+const CurrentGameProvider = ({ children }) => {
     const [currentPlayerName, setCurrentPlayerName] = useState(() => {
         const storedName = localStorage.getItem('currentPlayerName');
         return storedName || '';
     });
+
+    const [gameRef, setGameRef] = useState(null);
 
     const setPlayerNameLocalStorage = (playerName) => {
         localStorage.setItem('currentPlayerName', playerName);
@@ -20,13 +22,6 @@ const CurrentGameProvider = ({ children, gameRef }) => {
     const handleNameChange = (playerName) => {
         setCurrentPlayerName(playerName);
         setPlayerNameLocalStorage(playerName);
-    };
-
-    const setGameRef = (ref) => {
-        // Update gameRef and potentially trigger re-renders
-        ref.onSnapshot((gameDoc) => {
-            setCurrentPlayerName(gameDoc.data().currentPlayerName || '');
-        });
     };
 
     const value = {

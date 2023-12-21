@@ -25,12 +25,12 @@ function StartPage() {
         { name: "blue", players: [], score: 0 }
     ];
     const newGameJson = {
-        players: [], teams, category: '', phrase: '', chosenCards: {}, scores: {}
+        players: [], teams, category: '', phrase: '', scores: {}
     }
 
     const handleStartGame = async () => {
         const gameRef = await addDoc(collection(db, 'games'), newGameJson);
-        // setGameRef(gameRef);
+        setGameRef(gameRef);
         const gameId = gameRef.id;
         const shortId = generateShortId(gameId); // Generate short ID
 
@@ -60,11 +60,12 @@ function StartPage() {
                 updatedPlayers.push({
                     name: playerName,
                     score: 0,
-                    chosenCards: {},
+                    chosenCards: [],
                     team: ''
                 });
 
                 const gameRef = doc(db, 'games', gameId);
+                setGameRef(gameRef);
                 updateDoc(gameRef, {
                     players: updatedPlayers
                 }).then(() => {
@@ -80,23 +81,52 @@ function StartPage() {
 
 
     return (
-        <div>
-            <h2>Start a Game or Join</h2>
+        <div className="container mx-auto p-4">
+            <h2 className="text-2xl font-bold mb-4">Start a Game or Join</h2>
 
-            <h3>Host a Game</h3>
-            <button onClick={handleStartGame}>Start Game</button>
-            <br />
+            <div className="mb-6">
+                <h3 className="text-xl font-semibold mb-2">Host a Game</h3>
+                <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={handleStartGame}
+                >
+                    Start Game
+                </button>
+            </div>
 
-            <h3>Join a Game</h3>
-            <label htmlFor="playerName">Your Name:</label>
-            <input type="text" id="playerName" value={playerName} onChange={e => setPlayerName(e.target.value)} />
-            <br />
+            <div>
+                <h3 className="text-xl font-semibold mb-2">Join a Game</h3>
+                <div className="mb-4">
+                    <label htmlFor="playerName" className="block text-gray-700 text-sm font-bold mb-2">Your Name:</label>
+                    <input
+                        type="text"
+                        id="playerName"
+                        value={playerName}
+                        onChange={e => setPlayerName(e.target.value)}
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
+                </div>
 
-            <label htmlFor="shortId">Game ID:</label>
-            <input type="text" id="shortId" value={shortId} onChange={e => setShortId(e.target.value)} />
-            <br />
-            <button onClick={handleJoinGame}>Join Game</button>
+                <div className="mb-4">
+                    <label htmlFor="shortId" className="block text-gray-700 text-sm font-bold mb-2">Game ID:</label>
+                    <input
+                        type="text"
+                        id="shortId"
+                        value={shortId}
+                        onChange={e => setShortId(e.target.value)}
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    />
+                </div>
+
+                <button
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={handleJoinGame}
+                >
+                    Join Game
+                </button>
+            </div>
         </div>
+
     );
 }
 

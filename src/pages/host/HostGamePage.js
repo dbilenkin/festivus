@@ -29,13 +29,17 @@ const HostGamePage = () => {
   }, [shortId]);
 
   if (!gameData) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+      </div>
+    );
   }
 
   const { players, gameState } = gameData;
 
   return (
-    <div>
+    <div className="flex justify-center h-screen">
       {gameState === 'started' ?
         <HostRoundPage gameData={gameData} gameRef={gameRef} /> :
         <HostSetupPage gameData={gameData} gameRef={gameRef} />}
