@@ -1,14 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { doc, onSnapshot, collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../utils/Firebase';
 import HostSetupPage from './HostSetupPage';
 import HostRoundPage from './HostRoundPage';
+import { CurrentGameContext } from '../../contexts/CurrentGameContext';
+// import data from '../data.json';
+import { cards } from '../../utils/utils';
+
+// const cards = data.filter((_, i) => i < 52).map(element => element.imageUrl);
 
 const HostGamePage = () => {
   const [gameData, setGameData] = useState(null);
   const [gameRef, setGameRef] = useState(null);
   const { shortId } = useParams();
+  const { setCards } = useContext(CurrentGameContext); // Access context
 
   useEffect(() => {
     const gamesRef = collection(db, 'games');
@@ -16,6 +22,7 @@ const HostGamePage = () => {
 
     getDocs(q).then((querySnapshot) => {
       if (querySnapshot.size === 1) {
+        setCards(cards);
         const gameId = querySnapshot.docs[0].id;
         const _gameRef = doc(db, 'games', gameId);
         setGameRef(_gameRef);

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, HashRouter, useNavigate } from 'react-router-dom';
+
 import StartPage from './pages/StartPage';
 import HostGamePage from './pages/host/HostGamePage';
 import PlayerGamePage from './pages/player/PlayerGamePage';

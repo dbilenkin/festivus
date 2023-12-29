@@ -4,9 +4,13 @@ import { collection, query, where, getDocs, arrayUnion } from 'firebase/firestor
 import { doc, onSnapshot, updateDoc, addDoc } from 'firebase/firestore';
 import { db } from '../../utils/Firebase';
 import { CurrentGameContext } from '../../contexts/CurrentGameContext';
+import { cards } from '../../utils/utils';
+// import data from '../data.json';
+
+// const cards = data.filter((_, i) => i < 52).map(element => element.imageUrl);
 
 const PlayerSetupPage = ({ gameData, gameRef }) => {
-    const { currentPlayerName } = useContext(CurrentGameContext); // Access context
+    const { currentPlayerName, setCards } = useContext(CurrentGameContext); // Access context
 
     const [chosenTeam, setChosenTeam] = useState(null);
     const [joinedTeam, setJoinedTeam] = useState(false);
@@ -46,6 +50,8 @@ const PlayerSetupPage = ({ gameData, gameRef }) => {
     };
 
     const handleStartGame = async () => {
+
+        setCards(cards);
 
         // Update game state in Firestore
         await updateDoc(gameRef, {

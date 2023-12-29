@@ -2,6 +2,7 @@
     cursor: url('https://uploads.codesandbox.io/uploads/user/b3e56831-8b98-4fee-b941-0e27f39883ab/Ad1_-cursor.png') 39 39,
         auto;
     position: relative;
+    width: 375px;
 }
 
 .deck {
@@ -16,14 +17,12 @@
 .deck>div {
     touch-action: none;
     background-color: white;
-    background-size: auto 85%;
+    background-size: auto 90%;
     background-repeat: no-repeat;
     background-position: center center;
     will-change: transform;
-    border-radius: 10px;
+    border-radius: 5px;
     box-shadow: 0 12.5px 10px -10px rgba(50, 50, 73, 0.4), 0 10px 10px -10px rgba(50, 50, 73, 0.3);
-    font-size: 75px;
-    line-height: 5;
 }
 
 .switch {

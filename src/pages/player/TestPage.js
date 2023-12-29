@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { collection, query, where, getDocs, arrayUnion } from 'firebase/firestore';
 import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../../utils/Firebase';
-import Deck from '../Deck';
+import Deck from '../../components/Deck';
 
 const TestPage = () => {
 
@@ -11,7 +11,7 @@ const TestPage = () => {
 
     useEffect(() => {
         const gamesRef = collection(db, 'games');
-        const q = query(gamesRef, where('shortId', '==', 'DZ85'));
+        const q = query(gamesRef, where('shortId', '==', 'DA2L'));
 
         getDocs(q).then((querySnapshot) => {
             if (querySnapshot.size === 1) {
