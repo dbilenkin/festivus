@@ -4,6 +4,7 @@ import { collection, addDoc, updateDoc, doc, query, where, getDocs, arrayUnion }
 import { db } from '../utils/Firebase';
 import { generateShortId } from '../utils/utils';
 import { CurrentGameContext } from '../contexts/CurrentGameContext';
+import Button from '../components/Button';
 
 function StartPage() {
     const { setCurrentPlayerName, setGameRef } = useContext(CurrentGameContext);
@@ -86,12 +87,9 @@ function StartPage() {
 
             <div className="mb-6">
                 <h3 className="text-xl font-semibold mb-2">Host a Game</h3>
-                <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={handleStartGame}
-                >
+                <Button onClick={handleStartGame}>
                     Start Game
-                </button>
+                </Button>
             </div>
 
             <div>
@@ -117,13 +115,9 @@ function StartPage() {
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     />
                 </div>
-
-                <button
-                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={handleJoinGame}
-                >
+                <Button onClick={handleJoinGame}>
                     Join Game
-                </button>
+                </Button>
             </div>
         </div>
 

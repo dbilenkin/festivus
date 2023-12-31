@@ -6,12 +6,12 @@ import { db } from '../../utils/Firebase';
 import { CurrentGameContext } from '../../contexts/CurrentGameContext';
 import PlayerRoundPage from './PlayerRoundPage';
 import PlayerSetupPage from './PlayerSetupPage';
+import { getDeck } from '../../utils/utils';
 
 const PlayerGamePage = () => {
 
     const { shortId } = useParams();
     const [gameData, setGameData] = useState(null);
-    // const [gameRef, setGameRef] = useState(null);
     const { gameRef, setGameRef } = useContext(CurrentGameContext);
 
     useEffect(() => {
@@ -31,7 +31,7 @@ const PlayerGamePage = () => {
                     const _gameRef = doc(db, 'games', gameId);
                     setGameRef(_gameRef)
                     onSnapshot(_gameRef, (doc) => {
-                        console.log(doc.data());
+                        // console.log(doc.data());
                         setGameData(doc.data());
 
                     });
@@ -48,12 +48,12 @@ const PlayerGamePage = () => {
         return <p>Loading...</p>;
     }
 
-    const { players, teams, gameState, round } = gameData;
+    const { deckType, gameState } = gameData;
 
     return (
         <div>
             {gameState === 'started' ?
-                <PlayerRoundPage gameData={gameData} gameRef={gameRef} /> :
+                <PlayerRoundPage deck={getDeck(deckType)} gameData={gameData} gameRef={gameRef} /> :
                 <PlayerSetupPage gameData={gameData} gameRef={gameRef} />}
         </div>
     );

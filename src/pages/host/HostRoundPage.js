@@ -9,7 +9,7 @@ import { cards } from '../../utils/utils';
 
 // const cards = data.filter((_, i) => i < 52).map(element => element.imageUrl);
 
-const HostRoundPage = ({ gameData, gameRef }) => {
+const HostRoundPage = ({ deck, gameData, gameRef }) => {
     const { players, teams, gameState, currentRound } = gameData;
     const currentPlayerIndex = currentRound % players.length;
 
@@ -123,8 +123,10 @@ const HostRoundPage = ({ gameData, gameRef }) => {
             </nav>
             <div className="mx-auto p-4">
                 {!phrase &&
-                    <div className="text-lg text-center mb-4">
-                        <p>{chooserName} is choosing the phrase...</p>
+                    <div className='mb-4 flex justify-center items-center'>
+                        <p className="text-lg font-semibold text-gray-700 bg-gray-100 px-4 py-2 rounded-lg shadow">
+                            Waiting for <span className="text-blue-500">{chooserName}</span> to choose the phrase
+                        </p>
                     </div>
                 }
 
@@ -141,7 +143,7 @@ const HostRoundPage = ({ gameData, gameRef }) => {
                                         <span className="font-semibold text-lg">{player.name}</span>
                                         {player.chosenCards.length === 5 && player.chosenCards.map(cardIndex => (
                                             <div>
-                                                <HostCard cardIndex={cardIndex} flipped={flipCards} />
+                                                <HostCard deck= {deck} cardIndex={cardIndex} flipped={flipCards} />
                                             </div>
                                         ))}
                                     </div>

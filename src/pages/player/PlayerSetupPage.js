@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
 import { collection, query, where, getDocs, arrayUnion } from 'firebase/firestore';
 import { doc, onSnapshot, updateDoc, addDoc } from 'firebase/firestore';
-import { db } from '../../utils/Firebase';
 import { CurrentGameContext } from '../../contexts/CurrentGameContext';
-import { cards } from '../../utils/utils';
+import Button from '../../components/Button';
 // import data from '../data.json';
 
 // const cards = data.filter((_, i) => i < 52).map(element => element.imageUrl);
@@ -14,6 +12,11 @@ const PlayerSetupPage = ({ gameData, gameRef }) => {
 
     const [chosenTeam, setChosenTeam] = useState(null);
     const [joinedTeam, setJoinedTeam] = useState(false);
+    const [selectedDeck, setSelectedDeck] = useState('original');
+
+    const handleDeckChange = (event) => {
+        setSelectedDeck(event.target.value);
+    };
 
     const { players, teams } = gameData;
     const firstPlayer = players[0].name === currentPlayerName;
@@ -51,19 +54,18 @@ const PlayerSetupPage = ({ gameData, gameRef }) => {
 
     const handleStartGame = async () => {
 
-        setCards(cards);
-
-        // Update game state in Firestore
-        await updateDoc(gameRef, {
-            currentRound: 1,
-            gameState: 'started', // Set game state to started
-        });
-
         const roundsRef = collection(gameRef, "rounds")
         await addDoc(roundsRef, {
             roundNumber: 1,
             phrase: '',
             players
+        });
+
+        // Update game state in Firestore
+        await updateDoc(gameRef, {
+            currentRound: 1,
+            deckType: selectedDeck,
+            gameState: 'started', // Set game state to started
         });
     };
 
@@ -103,13 +105,12 @@ const PlayerSetupPage = ({ gameData, gameRef }) => {
                                                             </option>
                                                         ))}
                                                     </select>
-                                                    <button
+                                                    <Button
                                                         onClick={handleJoinTeam}
                                                         disabled={!chosenTeam}
-                                                        className={`py-2 px-4 rounded ${chosenTeam ? 'bg-green-500 hover:bg-green-700' : 'bg-gray-200'} text-white font-bold`}
-                                                    >
+                                                        className={`${chosenTeam ? 'bg-blue-500 hover:bg-blue-700' : 'bg-gray-200'}`}>
                                                         Join
-                                                    </button>
+                                                    </Button>
                                                 </div> :
                                                 <span>{chosenTeam}</span>
                                             }
@@ -121,13 +122,27 @@ const PlayerSetupPage = ({ gameData, gameRef }) => {
 
                 </table>
             </div>
+
             {firstPlayer &&
-                <button
-                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4"
-                    onClick={handleStartGame}
-                >
-                    Start Game
-                </button>
+                <div>
+                    <div className="mt-4">
+                        <label htmlFor="deckType" className="block text-gray-700 text-sm font-bold mb-2">
+                            Choose your deck:
+                        </label>
+                        <select
+                            id="deckType"
+                            value={selectedDeck}
+                            onChange={handleDeckChange}
+                            className="block appearance-none w-full border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                        >
+                            <option value="original">Original</option>
+                            <option value="actors">Actors</option>
+                        </select>
+                    </div>
+                    <Button onClick={handleStartGame} className={"mt-4"}>
+                        Start Game
+                    </Button>
+                </div>
             }
         </div>
     );

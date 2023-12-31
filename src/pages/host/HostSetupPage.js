@@ -11,7 +11,7 @@ const HostSetupPage = ({ gameData }) => {
     return (
         <div className="container mx-auto p-4">
             <h2 className="text-2xl font-bold mb-4">Game ID: {shortId}</h2>
-            <h2 className="text-2xl font-bold mb-4">Joined Players:</h2>
+            <h2 className="block text-gray-700 text-sm font-bold mb-2">Joined Players:</h2>
             <div className="overflow-x-auto">
                 <table className="min-w-full leading-normal">
                     <thead>

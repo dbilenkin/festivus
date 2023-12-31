@@ -1,18 +1,17 @@
 import { useState, useEffect, useRef, createRef } from 'react'
 import { useSpring, useSprings, animated, to as interpolate } from '@react-spring/web'
 import { useDrag } from '@use-gesture/react'
-import { CheckIcon } from '@heroicons/react/24/solid';
-import { cards } from '../utils/utils';
 
 import './Deck.css';
+import Button from './Button';
 
 let maxZIndex = 900;
 const markedY = 220;
 
-const cardStates = ["ready", "toReviewed", "reviewed", "toReady", "toMarked", "marked"];
-const cardSet = cards.map(card => "ready");
+const cardStates = ["deck", "ready", "toReviewed", "reviewed", "toReady", "toMarked", "marked"];
+let cardSet = [...Array(52)].map(_ => "ready");
 
-function Deck({ gameData, handleSelectCards }) {
+function Deck({ deck, handleSelectCards, gameData }) {
   const [firstPassDone, setFirstPassDone] = useState(false);
   const [hoveredBox, setHoveredBox] = useState(null);
   const [assignedBoxes, setAssignedBoxes] = useState([]); // { cardIndex: boxIndex }
@@ -24,6 +23,9 @@ function Deck({ gameData, handleSelectCards }) {
     boxRefs.current = Array.from({ length: 5 }, () => createRef());
   }, []);
 
+  useEffect(() => {
+    cardSet = [...Array(52)].map(_ => "ready");
+  }, gameData.currentRound)
 
   // Animation for boxes
   const boxAnimation = useSpring({
@@ -57,8 +59,6 @@ function Deck({ gameData, handleSelectCards }) {
     const deck = cardSet[i] === "deck";
 
     let returnValues = {
-      // x: 0,
-      // y: marked ? 0 : -1000,
       width: 150,
       height: 210,
       scale: 1,
@@ -78,8 +78,8 @@ function Deck({ gameData, handleSelectCards }) {
           ...returnValues,
           x: 0,
           y: 0,
-          width: 100,
-          height: 140,
+          width: 120,
+          height: 168,
         }
       } else {
         return {
@@ -106,7 +106,7 @@ function Deck({ gameData, handleSelectCards }) {
           ...returnValues,
           x: 0,
           y: 0,
-          zIndex: i + maxZIndex
+          zIndex: i
         }
       }
     }
@@ -118,7 +118,7 @@ function Deck({ gameData, handleSelectCards }) {
 
   const transBoxes = () => "scale(1)";
 
-  const [props, api] = useSprings(cards.length, i => ({
+  const [props, api] = useSprings(cardSet.length, i => ({
     ...to(i),
     from: from(i),
   }))
@@ -140,7 +140,7 @@ function Deck({ gameData, handleSelectCards }) {
       for (let i = 0; i < cardSet.length; i++) {
         if (cardSet[i] === "deck") {
           cardSet[i] = "ready";
-        } else if (cardSet[i] === "ready") {
+        } else if (cardSet[i] === "ready" || cardSet[i] === "reviewed") {
           cardSet[i] = "marked";
         }
       }
@@ -150,9 +150,9 @@ function Deck({ gameData, handleSelectCards }) {
   useEffect(() => {
     api.start(i => {
       let _to = { ...to(i) };
-      if (firstPassDone) {
-        _to = { ..._to, width: 120, height: 168, scale: 1, rot: 0 };
-      }
+      // if (firstPassDone) {
+      //   _to = { ..._to, width: 120, height: 168, scale: 1, rot: 0 };
+      // }
       return _to; // Update positions for other cards
     });
 
@@ -161,36 +161,60 @@ function Deck({ gameData, handleSelectCards }) {
   const getBoxPosition = boxIndex => {
     if (boxIndex === 5) {
       return {
-        x: 0,
-        y: 0,
+        bx: 0,
+        by: 0,
       }
     }
     const box = boxRefs.current[boxIndex].current;
 
     return {
-      x: box.offsetLeft - 249,
-      y: box.offsetTop + 186,
+      bx: box.offsetLeft - 249,
+      by: box.offsetTop + 186,
+    }
+  }
+
+  const assignedBoxesFull = () => {
+    for (let i = 0; i < 5; i++) {
+      if (!Number.isInteger(assignedBoxes[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  const submitCards = (assignedBoxes) => {
+    if (assignedBoxesFull()) {
+      handleSelectCards(assignedBoxes);
+    } else {
+      alert("You must select 5 cards in order");
     }
   }
 
   useEffect(() => {
     // console.log({ assignedBoxes });
-    if (assignedBoxes.every(el => el !== undefined)) {
-      console.log("full pick");
-    }
+
     api.start(i => {
-      const numMarked = cardSet.filter(cardState => cardState === "marked").length;
+      const numReady = cardSet.filter(cardState => cardState === "ready").length;
       const boxIndex = assignedBoxes.findIndex(el => el === i);
       if (boxIndex !== -1) {
-        const { x, y } = getBoxPosition(boxIndex);
+
+        if (boxIndex === 5) {
+          const updatedBoxes = [...assignedBoxes];
+          updatedBoxes[5] = undefined;
+          setAssignedBoxes(updatedBoxes);
+        }
+
+        const { bx, by } = getBoxPosition(boxIndex);
 
         // Calculate new position based on the box position
         return {
-          x,
-          y,
+          x: bx,
+          y: by,
+          // width: boxIndex === 5 ? 120 : 100,
+          // height: boxIndex === 5 ? 168 : 140,
           scale: 1,
           rot: 0,
-          zIndex: i === 5 ? numMarked + maxZIndex : 1000
+          zIndex: boxIndex === 5 ? numReady + maxZIndex : 1000
         };
       }
       // Return to original position or other logic for cards not in a box
@@ -202,7 +226,7 @@ function Deck({ gameData, handleSelectCards }) {
 
   const moveCardsDown = (cardIndex, boxIndex, updatedBoxes) => {
     if (boxIndex > 4) {
-      cardSet[cardIndex] = "marked";
+      cardSet[cardIndex] = "ready";
       updatedBoxes[boxIndex] = cardIndex;
     } else {
       const existingCardIndex = updatedBoxes[boxIndex];
@@ -219,23 +243,18 @@ function Deck({ gameData, handleSelectCards }) {
 
     let cardState = cardSet[index];
 
-    switch (cardState) {
-      case "ready":
-        if (my > 110 && !firstPassDone) {
-          cardSet[index] = "readyToMarked";
-        } else if (mx < -80) {
-          cardSet[index] = "toReviewed";
-        }
-        break;
-      case "reviewed":
-        if (my > 90 && !firstPassDone) {
-          cardSet[index] = "reviewedToMarked";
-        } else if (mx > 80) {
-          cardSet[index] = "toReady";
-        }
-        break;
-      default:
-        break;
+    if (cardState === "ready") {
+      if (my > 110 && !firstPassDone) {
+        cardSet[index] = "readyToMarked";
+      } else if (mx < -80) {
+        cardSet[index] = "toReviewed";
+      }
+    } else if (cardState === "reviewed") {
+      if (my > 90 && !firstPassDone) {
+        cardSet[index] = "reviewedToMarked";
+      } else if (mx > 80) {
+        cardSet[index] = "toReady";
+      }
     }
 
     if (active) {
@@ -293,6 +312,7 @@ function Deck({ gameData, handleSelectCards }) {
       let newX = mx;
       let newY = my;
       let zIndex = 2000;
+      const numReady = cardSet.filter(cardState => cardState === "ready").length;
       const numReviewed = cardSet.filter(cardState => cardState === "reviewed").length;
       const numMarked = cardSet.filter(cardState => cardState === "marked").length;
 
@@ -301,7 +321,7 @@ function Deck({ gameData, handleSelectCards }) {
           if (!active) {
             newX = 0;
             newY = 0;
-            zIndex = i + maxZIndex;
+            zIndex = numReady + maxZIndex;
           }
           break;
         case "toReviewed":
@@ -327,24 +347,28 @@ function Deck({ gameData, handleSelectCards }) {
           } else {
             newX = 0;
             newY = 0;
-            zIndex = i + maxZIndex;
+            zIndex = numReady + maxZIndex;
             cardSet[i] = "ready";
           }
           break;
       }
 
       if (firstPassDone) {
-        if (cardState === "ready" || cardState === "reviewed") {
-          if (!active) {
+        if (cardState.startsWith("box")) {
+          const boxIndex = parseInt(cardState.charAt(3));
+          const { bx, by } = getBoxPosition(boxIndex);
+          if (active) {
+            newX = mx + bx;
+            newY = my + by;
+          } else if (y < 325) {
             newX = 0;
             newY = 0;
-            zIndex = i + maxZIndex;
+            zIndex = numReady + maxZIndex;
+            cardSet[i] = "ready";
+            const updatedBoxes = [...assignedBoxes];
+            updatedBoxes[boxIndex] = null;
+            setAssignedBoxes(updatedBoxes);
           }
-        } else if (cardState.startsWith("box")) {
-          const boxIndex = parseInt(cardState.charAt(3));
-          const { x, y } = getBoxPosition(boxIndex);
-          newX = mx + x;
-          newY = my + y;
         }
       } else {
         switch (cardState) {
@@ -397,7 +421,7 @@ function Deck({ gameData, handleSelectCards }) {
   return (
     <div>
       <div className='px-4 flex items-center justify-between'>
-        <div className='flex items-center'>
+        {!firstPassDone && <div className='flex items-center'>
           <label htmlFor="firstPassCheckbox" className="switch flex items-center cursor-pointer ">
             <input
               type="checkbox"
@@ -409,25 +433,29 @@ function Deck({ gameData, handleSelectCards }) {
             <span className={`slider round ${firstPassDone ? 'bg-blue-500' : 'bg-gray-200'}`}></span>
           </label>
           {firstPassDone ? <span className='text-sm ml-2'>Back to Deck</span> : <span className="text-md ml-2">Ready to Order</span>}
-        </div>
-        <button
-          style={{
-            display: firstPassDone ? 'block' : 'none'
-          }}
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded inline-flex items-center"
-          onClick={() => handleSelectCards(assignedBoxes)}>
+        </div>}
+        {firstPassDone && <Button 
+          className={`${assignedBoxesFull() ? 'bg-blue-500 hover:bg-blue-700' : 'bg-gray-200'}`}
+          disabled={!assignedBoxesFull()} 
+          onClick={() => submitCards(assignedBoxes)}>
           Submit Cards
-        </button>
+        </Button>}
       </div>
       <div className='relative' style={{ top: -10 }}>
 
         {props.map(({ x, y, width, height, zIndex, rot, scale, flip, vx, vy }, i) => {
-          const boxIndex = assignedBoxes.findIndex(el => el === i);
-          const cardPicked = boxIndex !== -1 && boxIndex < 5;
-          const correctTrans = cardPicked ? transBoxes : trans;
-          if (cardPicked) {
-            width = 100;
-            height = 140;
+          let correctTrans = trans;
+          if (firstPassDone) {
+            const boxIndex = assignedBoxes.findIndex(el => el === i);
+            const cardPicked = boxIndex !== -1 && boxIndex < 5;
+            correctTrans = cardPicked ? transBoxes : trans;
+            if (cardPicked) {
+              width = 100;
+              height = 140;
+            } else {
+              width = 120;
+              height = 168;
+            }
           }
 
           return (
@@ -438,13 +466,8 @@ function Deck({ gameData, handleSelectCards }) {
                   zIndex,
                   width,
                   height,
-                  // transform: trans(rot, scale, marked.has(i)),
                   transform: interpolate([rot, scale], correctTrans),
-                  // rotateX: marked.has(i) ? '180deg' : '',
-                  // backgroundImage: marked.has(i) ? `url(${cards[0]}` : `url(${cards[i]})`,
-                  backgroundImage: `url(${cards[i]})`,
-                  // immediate: true // Or remove for an animated transition
-                  // backgroundImage: `url(${cardback})`
+                  backgroundImage: `url(${deck[i]})`,
                 }}
               ></animated.div>
             </animated.div>
