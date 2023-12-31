@@ -25,7 +25,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
 
   useEffect(() => {
     cardSet = [...Array(52)].map(_ => "ready");
-  }, gameData.currentRound)
+  }, [gameData.currentRound])
 
   // Animation for boxes
   const boxAnimation = useSpring({
@@ -85,7 +85,9 @@ function Deck({ deck, handleSelectCards, gameData }) {
         return {
           ...returnValues,
           x: 0,
-          y: -1000
+          y: -1000,
+          width: 120,
+          height: 168,
         }
       }
     } else {
@@ -288,7 +290,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
 
     if (!active) {
       // console.log({ hoveredBox, index });
-      if (Number.isInteger(hoveredBox) && Number.isInteger(index) && !Object.hasOwn(assignedBoxes, index)) {
+      if (Number.isInteger(hoveredBox) && Number.isInteger(index)) {
         const updatedBoxes = [...assignedBoxes];
         const originalBoxIndex = updatedBoxes.findIndex(box => box === index);
         if (originalBoxIndex !== -1) {
@@ -469,7 +471,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
                   transform: interpolate([rot, scale], correctTrans),
                   backgroundImage: `url(${deck[i]})`,
                 }}
-              ></animated.div>
+              ><div className='text-white text-xl mt-5'>{cardSet[i]}</div></animated.div>
             </animated.div>
           );
         }

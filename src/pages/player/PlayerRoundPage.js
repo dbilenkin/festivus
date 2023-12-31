@@ -69,12 +69,18 @@ const PlayerRoundPage = ({ deck, gameData, gameRef }) => {
     };
 
     const startNextRound = async () => {
+        //clear out chosen Cards
+        const roundPlayers = [...players];
+        for (const roundPlayer of roundPlayers) {
+            roundPlayer.chosenCards = [];
+        }
+
         try {
             const roundsRef = collection(gameRef, "rounds")
             await addDoc(roundsRef, {
                 roundNumber: currentRound + 1,
                 phrase: '',
-                players
+                players: roundPlayers
             });
 
             await updateDoc(gameRef, {

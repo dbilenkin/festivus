@@ -17,7 +17,7 @@ export function getDeck(deckType) {
             deck.push(imagePath);
         }
 
-        deck.sort(() => Math.random() - 0.5);
+        deck.reverse();
 
         return deck;
     }

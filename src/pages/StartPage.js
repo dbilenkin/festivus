@@ -21,9 +21,10 @@ function StartPage() {
     const navigate = useNavigate();
 
     const teams = [
-        { name: "red", players: [], score: 0 },
-        { name: "green", players: [], score: 0 },
-        { name: "blue", players: [], score: 0 }
+        { name: "red", players: [], roundScore: 0, gameScore: 0 },
+        { name: "green", players: [], roundScore: 0, gameScore: 0 },
+        { name: "blue", players: [], sroundScore: 0, gameScore: 0 },
+        { name: "orange", players: [], roundScore: 0, gameScore: 0 },
     ];
     const newGameJson = {
         players: [], teams, category: '', phrase: '', scores: {}
@@ -60,7 +61,8 @@ function StartPage() {
                 const updatedPlayers = querySnapshot.docs[0].data().players;
                 updatedPlayers.push({
                     name: playerName,
-                    score: 0,
+                    gameScore: 0,
+                    roundScore: 0,
                     chosenCards: [],
                     team: ''
                 });
