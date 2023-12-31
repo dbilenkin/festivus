@@ -70,7 +70,7 @@ const HostRoundPage = ({ deck, gameData, gameRef }) => {
                 player.roundScore += roundScore;
             }
             const gamePlayer = gamePlayers.find(p => p.name === player.name);
-            const gamePlayerScore = gamePlayer.score ? gamePlayer.score : 0;
+            const gamePlayerScore = gamePlayer.gameScore ? gamePlayer.gameScore : 0;
             const newGamePlayerScore = gamePlayerScore + player.roundScore;
             gamePlayer.gameScore = newGamePlayerScore;
             player.gameScore = newGamePlayerScore;
