@@ -61,6 +61,9 @@ const HostRoundPage = ({ deck, gameData, gameRef }) => {
         for (let i = 0; i < roundPlayers.length; i++) {
             const player = roundPlayers[i];
             player.roundScore = 0;
+            player.roundPlayerScores = [];
+            const gamePlayer = gamePlayers.find(p => p.name === player.name);
+
             for (let j = 0; j < roundPlayers.length; j++) {
                 if (i === j) continue;
                 const otherPlayer = roundPlayers[j];
@@ -68,8 +71,18 @@ const HostRoundPage = ({ deck, gameData, gameRef }) => {
                 const cards2 = otherPlayer.chosenCards;
                 const roundScore = getCardScores(cards1, cards2);
                 player.roundScore += roundScore;
+                const roundPlayerScore = {
+                    name: otherPlayer.name,
+                    score: roundScore
+                }
+                player.roundPlayerScores.push(roundPlayerScore);
+                const otherGamePlayer = gamePlayer.gamePlayerScores.find(gp => gp.name === otherPlayer.name);
+                if (otherGamePlayer) {
+                    otherGamePlayer.score += roundScore;
+                } else {
+                    gamePlayer.gamePlayerScores.push(roundPlayerScore);
+                }
             }
-            const gamePlayer = gamePlayers.find(p => p.name === player.name);
             const gamePlayerScore = gamePlayer.gameScore ? gamePlayer.gameScore : 0;
             const newGamePlayerScore = gamePlayerScore + player.roundScore;
             gamePlayer.gameScore = newGamePlayerScore;
@@ -158,17 +171,12 @@ const HostRoundPage = ({ deck, gameData, gameRef }) => {
 
     return (
         <div>
-            <nav className="bg-gray-800 text-white shadow-lg">
-                <div className="mx-auto px-4 py-3 flex justify-between items-center">
-                    <Link to={`/`}><h1 className="text-xl font-bold">Incommon</h1></Link>
-                    <div>
-                        <p className="text-md">Phrase: {phrase}</p>
-                    </div>
-                    <div className="mr-6">
-                        <p className="text-md">Round {currentRound}</p>
-                    </div>
-                </div>
-            </nav>
+            <div>
+                <p className="text-md">Phrase: {phrase}</p>
+            </div>
+            <div className="mr-6">
+                <p className="text-md">Round {currentRound}</p>
+            </div>
             <div className="mx-auto">
                 {!phrase &&
                     <div className='mb-4 flex justify-center items-center'>
@@ -180,8 +188,8 @@ const HostRoundPage = ({ deck, gameData, gameRef }) => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
                     {hydratedTeams.map(team => (
-                        team.players.length === 2 && <div 
-                            key={team.name} 
+                        team.players.length === 2 && <div
+                            key={team.name}
                             className={`bg-${team.name}-800 text-white px-4 pt-2 rounded shadow`}>
                             <div className='flex justify-between'>
                                 <h3 className="font-semibold text-lg">Team {team.name}</h3>

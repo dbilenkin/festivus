@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Routes, Route, BrowserRouter as Router, useNavigate } from 'react-router-dom';
 import { collection, addDoc, updateDoc, doc, query, where, getDocs, arrayUnion } from 'firebase/firestore';
 import { db } from '../utils/Firebase';
+import { Link } from "react-router-dom";
 import { generateShortId } from '../utils/utils';
 import { CurrentGameContext } from '../contexts/CurrentGameContext';
 import Button from '../components/Button';
@@ -27,7 +28,7 @@ function StartPage() {
         { name: "orange", players: [], roundScore: 0, gameScore: 0 },
     ];
     const newGameJson = {
-        players: [], teams, category: '', phrase: '', scores: {}
+        players: [], teams, category: '', phrase: '', gameState: 'setup'
     }
 
     const handleStartGame = async () => {
@@ -63,6 +64,7 @@ function StartPage() {
                     name: playerName,
                     gameScore: 0,
                     roundScore: 0,
+                    gamePlayerScores: [],
                     chosenCards: [],
                     team: ''
                 });
@@ -84,42 +86,49 @@ function StartPage() {
 
 
     return (
-        <div className="container mx-auto p-4">
-            <h2 className="text-2xl font-bold mb-4">Start a Game or Join</h2>
+        <div className="mx-auto">
+            <nav className="bg-gray-800 text-white shadow-lg">
+                <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+                    <Link to={`/`}><h1 className="text-xl font-bold">Incommon</h1></Link>
+                </div>
+            </nav>
+            <div className='container mx-auto p-4'>
+                <h2 className="text-2xl font-bold mb-4">Start a Game or Join</h2>
 
-            <div className="mb-6">
-                <h3 className="text-xl font-semibold mb-2">Host a Game</h3>
-                <Button onClick={handleStartGame}>
-                    Start Game
-                </Button>
-            </div>
-
-            <div>
-                <h3 className="text-xl font-semibold mb-2">Join a Game</h3>
-                <div className="mb-4">
-                    <label htmlFor="playerName" className="block text-gray-700 text-sm font-bold mb-2">Your Name:</label>
-                    <input
-                        type="text"
-                        id="playerName"
-                        value={playerName}
-                        onChange={e => setPlayerName(e.target.value)}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    />
+                <div className="mb-6">
+                    <h3 className="text-xl font-semibold mb-2">Host a Game</h3>
+                    <Button onClick={handleStartGame}>
+                        Start Game
+                    </Button>
                 </div>
 
-                <div className="mb-4">
-                    <label htmlFor="shortId" className="block text-gray-700 text-sm font-bold mb-2">Game ID:</label>
-                    <input
-                        type="text"
-                        id="shortId"
-                        value={shortId}
-                        onChange={e => setShortId(e.target.value)}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    />
+                <div>
+                    <h3 className="text-xl font-semibold mb-2">Join a Game</h3>
+                    <div className="mb-4">
+                        <label htmlFor="playerName" className="block text-gray-700 text-sm font-bold mb-2">Your Name:</label>
+                        <input
+                            type="text"
+                            id="playerName"
+                            value={playerName}
+                            onChange={e => setPlayerName(e.target.value)}
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        />
+                    </div>
+
+                    <div className="mb-4">
+                        <label htmlFor="shortId" className="block text-gray-700 text-sm font-bold mb-2">Game ID:</label>
+                        <input
+                            type="text"
+                            id="shortId"
+                            value={shortId}
+                            onChange={e => setShortId(e.target.value)}
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        />
+                    </div>
+                    <Button onClick={handleJoinGame}>
+                        Join Game
+                    </Button>
                 </div>
-                <Button onClick={handleJoinGame}>
-                    Join Game
-                </Button>
             </div>
         </div>
 

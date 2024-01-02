@@ -2,11 +2,10 @@ import React, { useState, useEffect, useContext } from 'react';
 import { doc, onSnapshot, updateDoc, collection, query, where, getDocs, addDoc } from 'firebase/firestore';
 import { CurrentGameContext } from '../../contexts/CurrentGameContext';
 import Deck from '../../components/Deck';
-import { Link } from "react-router-dom";
 import Button from '../../components/Button';
 
 const PlayerRoundPage = ({ deck, gameData, gameRef }) => {
-    const { players, teams, gameState, currentRound } = gameData;
+    const { players, teams, gameState, currentRound, gameLength } = gameData;
     const currentPlayerIndex = currentRound % players.length;
 
     const { currentPlayerName } = useContext(CurrentGameContext); // Access context
@@ -76,16 +75,23 @@ const PlayerRoundPage = ({ deck, gameData, gameRef }) => {
         }
 
         try {
-            const roundsRef = collection(gameRef, "rounds")
-            await addDoc(roundsRef, {
-                roundNumber: currentRound + 1,
-                phrase: '',
-                players: roundPlayers
-            });
+            if (currentRound === gameLength) {
+                await updateDoc(gameRef, {
+                    gameState: "ended"
+                });
+            } else {
+                const roundsRef = collection(gameRef, "rounds")
+                await addDoc(roundsRef, {
+                    roundNumber: currentRound + 1,
+                    phrase: '',
+                    players: roundPlayers
+                });
 
-            await updateDoc(gameRef, {
-                currentRound: currentRound + 1
-            });
+                await updateDoc(gameRef, {
+                    currentRound: currentRound + 1
+                });
+            }
+
         } catch (error) {
             console.error("Error updating document: ", error);
         }
@@ -149,17 +155,9 @@ const PlayerRoundPage = ({ deck, gameData, gameRef }) => {
 
     return (
         <div>
-            <nav className="bg-gray-800 text-white shadow-lg">
-                <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-                    <Link to={`/`}><h1 className="text-xl font-bold">Incommon</h1></Link>
-                    <div className="mr-6">
-                        <p className="text-md">Round {currentRound}</p>
-                    </div>
-                    <div>
-                        <p className="text-md">{currentPlayerName}</p>
-                    </div>
-                </div>
-            </nav>
+            <div className="mr-6">
+                <p className="text-md">Round {currentRound}</p>
+            </div>
             <div className="container mx-auto text-center">
                 {roundData.phrase ? showDeck() : showChooser()}
             </div>

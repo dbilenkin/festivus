@@ -4,7 +4,9 @@ import { doc, onSnapshot, collection, query, where, getDocs } from 'firebase/fir
 import { db } from '../../utils/Firebase';
 import HostSetupPage from './HostSetupPage';
 import HostRoundPage from './HostRoundPage';
+import HostEndPage from './HostEndPage';
 import { getDeck } from '../../utils/utils';
+import { Link } from "react-router-dom";
 
 const HostGamePage = () => {
   const [gameData, setGameData] = useState(null);
@@ -37,13 +39,30 @@ const HostGamePage = () => {
     );
   }
 
-  const { deckType, gameState } = gameData;
+  const displayHostPage = () => {
+    const { deckType, gameState } = gameData;
+
+    if (gameState === "setup") {
+      return <HostSetupPage gameData={gameData} gameRef={gameRef} />
+    }
+    if (gameState === 'started') {
+      return <HostRoundPage deck={getDeck(deckType)} gameData={gameData} gameRef={gameRef} />
+    }
+    if (gameState === "ended") {
+      return <HostEndPage deck={getDeck(deckType)} gameData={gameData} gameRef={gameRef} />
+    }
+
+    return <div>Something went wrong</div>
+  }
 
   return (
-    <div className="flex justify-center h-screen">
-      {gameState === 'started' ?
-        <HostRoundPage deck={getDeck(deckType)} gameData={gameData} gameRef={gameRef} /> :
-        <HostSetupPage gameData={gameData} gameRef={gameRef} />}
+    <div>
+      <nav className="bg-gray-800 text-white shadow-lg">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <Link to={`/`}><h1 className="text-xl font-bold">Incommon</h1></Link>
+        </div>
+      </nav>
+      {displayHostPage()}
     </div>
 
   );

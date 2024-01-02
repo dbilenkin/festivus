@@ -3,9 +3,11 @@ import { useParams } from 'react-router-dom';
 import { collection, query, where, getDocs, arrayUnion } from 'firebase/firestore';
 import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../../utils/Firebase';
+import { Link } from "react-router-dom";
 import { CurrentGameContext } from '../../contexts/CurrentGameContext';
 import PlayerRoundPage from './PlayerRoundPage';
 import PlayerSetupPage from './PlayerSetupPage';
+import PlayerEndPage from './PlayerEndPage';
 import { getDeck } from '../../utils/utils';
 
 const PlayerGamePage = () => {
@@ -13,6 +15,8 @@ const PlayerGamePage = () => {
     const { shortId } = useParams();
     const [gameData, setGameData] = useState(null);
     const { gameRef, setGameRef } = useContext(CurrentGameContext);
+
+    const { currentPlayerName } = useContext(CurrentGameContext); // Access context
 
     useEffect(() => {
         if (gameRef) {
@@ -48,13 +52,31 @@ const PlayerGamePage = () => {
         return <p>Loading...</p>;
     }
 
-    const { deckType, gameState } = gameData;
+    const displayPlayerPage = () => {
+        const { deckType, gameState } = gameData;
+        if (gameState === "setup") {
+            return <PlayerSetupPage gameData={gameData} gameRef={gameRef} />
+        }
+        if (gameState === 'started') {
+            return <PlayerRoundPage deck={getDeck(deckType)} gameData={gameData} gameRef={gameRef} />
+        }
+        if (gameState === "ended") {
+            return <PlayerEndPage deck={getDeck(deckType)} gameData={gameData} gameRef={gameRef} />
+        }
+        return <div>Something went wrong</div>
+    }
 
     return (
         <div>
-            {gameState === 'started' ?
-                <PlayerRoundPage deck={getDeck(deckType)} gameData={gameData} gameRef={gameRef} /> :
-                <PlayerSetupPage gameData={gameData} gameRef={gameRef} />}
+            <nav className="bg-gray-800 text-white shadow-lg">
+                <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+                    <Link to={`/`}><h1 className="text-xl font-bold">Incommon</h1></Link>
+                    <div>
+                        <p className="text-md">{currentPlayerName}</p>
+                    </div>
+                </div>
+            </nav>
+            {displayPlayerPage()}
         </div>
     );
 };

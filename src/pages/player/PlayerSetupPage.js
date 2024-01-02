@@ -8,14 +8,19 @@ import Button from '../../components/Button';
 // const cards = data.filter((_, i) => i < 52).map(element => element.imageUrl);
 
 const PlayerSetupPage = ({ gameData, gameRef }) => {
-    const { currentPlayerName, setCards } = useContext(CurrentGameContext); // Access context
+    const { currentPlayerName } = useContext(CurrentGameContext); // Access context
 
     const [chosenTeam, setChosenTeam] = useState(null);
     const [joinedTeam, setJoinedTeam] = useState(false);
     const [selectedDeck, setSelectedDeck] = useState('original');
+    const [selectedGameLength, setSelectedGameLength] = useState('3');
 
     const handleDeckChange = (event) => {
         setSelectedDeck(event.target.value);
+    };
+
+    const handleGameLengthChange = (event) => {
+        setSelectedGameLength(event.target.value);
     };
 
     const { players, teams } = gameData;
@@ -63,6 +68,7 @@ const PlayerSetupPage = ({ gameData, gameRef }) => {
 
         // Update game state in Firestore
         await updateDoc(gameRef, {
+            gameLength: parseInt(selectedGameLength),
             currentRound: 1,
             deckType: selectedDeck,
             gameState: 'started', // Set game state to started
@@ -137,6 +143,21 @@ const PlayerSetupPage = ({ gameData, gameRef }) => {
                         >
                             <option value="original">Original</option>
                             <option value="actors">Actors</option>
+                        </select>
+                    </div>
+                    <div className="mt-4">
+                        <label htmlFor="deckType" className="block text-gray-700 text-sm font-bold mb-2">
+                            Game Length:
+                        </label>
+                        <select
+                            id="deckType"
+                            value={selectedGameLength}
+                            onChange={handleGameLengthChange}
+                            className="block appearance-none w-full border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                        >
+                            <option value="3">3</option>
+                            <option value="5">5</option>
+                            <option value="10">10</option>
                         </select>
                     </div>
                     <Button onClick={handleStartGame} className={"mt-4"}>
