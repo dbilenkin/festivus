@@ -116,9 +116,14 @@ const PlayerRoundPage = ({ deck, gameData, gameRef }) => {
         return (
             cardsSubmitted ?
                 showContinueToNextRound()
-                : <div className="mb-4">
-                    <div className='text-md my-2'>
-                        Phrase: {roundData.phrase}
+                : <div className="deckContainer mb-4 mx-auto">
+                    <div className='mt-4 flex justify-around items-center'>
+                        <p className="text-lg font-semibold text-gray-700 bg-gray-100 px-2 py-1 rounded-lg shadow">
+                            Round: {currentRound}
+                        </p>
+                        <p className="text-lg font-semibold text-gray-700 bg-gray-100 px-2 py-1 rounded-lg shadow">
+                            Phrase: {roundData.phrase}
+                        </p>
                     </div>
                     <Deck deck={deck} gameData={gameData} handleSelectCards={handleSelectCards} />
                 </div>
@@ -154,10 +159,7 @@ const PlayerRoundPage = ({ deck, gameData, gameRef }) => {
     }
 
     return (
-        <div>
-            <div className="mr-6">
-                <p className="text-md">Round {currentRound}</p>
-            </div>
+        <div className=''>
             <div className="container mx-auto text-center">
                 {roundData.phrase ? showDeck() : showChooser()}
             </div>

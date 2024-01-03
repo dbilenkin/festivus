@@ -5,6 +5,11 @@
     width: 375px;
 }
 
+.deckContainer {
+    position: relative;
+    width: 375px;
+}
+
 .deck {
     position: absolute;
     will-change: transform;

@@ -170,12 +170,14 @@ const HostRoundPage = ({ deck, gameData, gameRef }) => {
     const phrase = roundData.phrase;
 
     return (
-        <div>
-            <div>
-                <p className="text-md">Phrase: {phrase}</p>
-            </div>
-            <div className="mr-6">
-                <p className="text-md">Round {currentRound}</p>
+        <div className='container mx-auto'>
+            <div className='flex justify-between mx-4'>
+                <div>
+                    <p className="text-md">Phrase: {phrase}</p>
+                </div>
+                <div className="mr-6">
+                    <p className="text-md">Round {currentRound}</p>
+                </div>
             </div>
             <div className="mx-auto">
                 {!phrase &&

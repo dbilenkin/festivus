@@ -25,6 +25,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
 
   useEffect(() => {
     cardSet = [...Array(52)].map(_ => "ready");
+    setAssignedBoxes([]);
   }, [gameData.currentRound])
 
   // Animation for boxes
@@ -422,7 +423,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
   // Now we're just mapping the animated values to our view, that's it. Btw, this component only renders once. :-)
   return (
     <div>
-      <div className='px-4 flex items-center justify-between'>
+      <div className='px-4 flex items-center justify-between pt-3'>
         {!firstPassDone && <div className='flex items-center'>
           <label htmlFor="firstPassCheckbox" className="switch flex items-center cursor-pointer ">
             <input
