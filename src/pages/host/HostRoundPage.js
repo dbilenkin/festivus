@@ -1,230 +1,301 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { doc, onSnapshot, collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
-import { CurrentGameContext } from '../../contexts/CurrentGameContext';
 import HostCard from '../../components/HostCard';
-// import data from '../data.json';
-import cardback from '../../components/card-back.jpg';
-import { Link } from "react-router-dom";
-import { cards } from '../../utils/utils';
+import Nav from '../../components/Nav';
 
-// const cards = data.filter((_, i) => i < 52).map(element => element.imageUrl);
+const HostRoundPage = ({ deck, gameData, gameRef, players }) => {
+  const { teams, currentRound } = gameData;
+  const currentPlayerIndex = currentRound % players.length;
 
-const HostRoundPage = ({ deck, gameData, gameRef }) => {
-    const { players, teams, gameState, currentRound } = gameData;
-    const currentPlayerIndex = currentRound % players.length;
+  const chooserName = players[currentPlayerIndex].name;
 
-    const chooserName = players[currentPlayerIndex].name;
+  const [roundData, setRoundData] = useState(null);
+  const [roundRef, setRoundRef] = useState(null);
+  const [hydratedTeams, setHydratedTeams] = useState([]);
+  const [animationState, setAnimationState] = useState({
+    stage: '',
+    highlight: [],
+    cardIndex: 0,
+    teamIndex: 0,
+    score: 0,
+  });
 
-    const [roundData, setRoundData] = useState(null);
-    const [roundRef, setRoundRef] = useState(null);
-    const [flipCards, setFlipCards] = useState(false);
-    const [hydratedTeams, setHydratedTeams] = useState([]);
-    const [scoresCalculated, setScoresCalculated] = useState(false);
-
-    const getCardScores = (cards1, cards2) => {
-        let score = 0;
-
-        for (let i = 0; i < cards1.length; i++) {
-            if (cards1[i] === cards2[i]) {
-                score += 3;
-            } else if (cards1.indexOf(cards2[i]) !== -1) {
-                score += 2;
-            }
-        }
-
-        return score;
+  const getCardMatch = (card, otherCards) => {
+    for (let i = 0; i < otherCards.length; i++) {
+      if (card === otherCards[i]) {
+        return { match: i, score: 3 };
+      } else if (otherCards.indexOf(card) !== -1) {
+        return { match: otherCards.indexOf(card), score: 2 };
+      }
     }
+    return { match: null, score: 0 };
+  }
 
-    const calculateScores = async () => {
-        const roundTeams = [...teams];
-        const gameTeams = [...teams];
+  // Start the animation sequence
+  useEffect(() => {
+    const { stage, cardIndex, teamIndex } = animationState;
+    if (stage !== 'highlight' || teamIndex >= hydratedTeams.length) return;
 
-        for (const team of roundTeams) {
-            if (team.players.length === 0) {
-                continue;
-            }
-            const cards1 = team.players[0].chosenCards;
-            const cards2 = team.players[1].chosenCards;
+    function highlightMatches() {
+      const team = hydratedTeams[teamIndex];
+      const card = team.players[0].chosenCards[cardIndex];
+      const otherCards = team.players[1].chosenCards;
+      const cardMatch = getCardMatch(card, otherCards);
+      if (cardMatch.match) {
+        setTimeout(() => {
+          // Move to increment score after highlighting
+          setAnimationState({
+            ...animationState,
+            highlight: [card, teamIndex],
+            stage: 'adjustScore',
+            score: cardMatch.score,
+          });
+        }, 1000); // Adjust delay as needed
+      } else {
+        setAnimationState({
+          ...animationState,
+          highlight: [],
+          stage: 'adjustScore',
+          score: 0,
+        });
+      }
+    };
 
-            const score = getCardScores(cards1, cards2);
-            team.roundScore = score;
+    highlightMatches();
+  }, [animationState]);
 
-            const gameTeam = gameTeams.find(t => t.name === team.name);
-            const newGameScore = gameTeam.gameScore + score;
-            team.gameScore = newGameScore;
-            gameTeam.gameScore = newGameScore;
-        }
+  // Increment score animation
+  useEffect(() => {
+    const { stage, highlight, cardIndex, teamIndex, score } = animationState;
+    if (stage !== 'adjustScore') return;
+    function adjustTeamScore() {
+      const team = hydratedTeams[teamIndex];
+      team.roundScore += score;
+      let newCardIndex = cardIndex + 1; 
+      let newTeamIndex = teamIndex;
+      if (cardIndex === 4) {
+        newTeamIndex = teamIndex + 1;
+        newCardIndex = 0;
+      } 
 
-        const roundPlayers = [...roundData.players];
-        const gamePlayers = [...players];
+      const newCardState = {
+        ...animationState,
+        cardIndex: newCardIndex,
+        teamIndex: newTeamIndex,
+        stage: 'highlight'
+      }
 
-        for (let i = 0; i < roundPlayers.length; i++) {
-            const player = roundPlayers[i];
-            player.roundScore = 0;
-            player.roundPlayerScores = [];
-            const gamePlayer = gamePlayers.find(p => p.name === player.name);
+      if (highlight.length === 2) {
+        setTimeout(() => {
+          setAnimationState(newCardState);
+        }, 2000); // Adjust delay as needed
+      } else {
+        setAnimationState(newCardState);
+      }
+    };
 
-            for (let j = 0; j < roundPlayers.length; j++) {
-                if (i === j) continue;
-                const otherPlayer = roundPlayers[j];
-                const cards1 = player.chosenCards;
-                const cards2 = otherPlayer.chosenCards;
-                const roundScore = getCardScores(cards1, cards2);
-                player.roundScore += roundScore;
-                const roundPlayerScore = {
-                    name: otherPlayer.name,
-                    score: roundScore
-                }
-                player.roundPlayerScores.push(roundPlayerScore);
-                const otherGamePlayer = gamePlayer.gamePlayerScores.find(gp => gp.name === otherPlayer.name);
-                if (otherGamePlayer) {
-                    otherGamePlayer.score += roundScore;
-                } else {
-                    gamePlayer.gamePlayerScores.push(roundPlayerScore);
-                }
-            }
-            const gamePlayerScore = gamePlayer.gameScore ? gamePlayer.gameScore : 0;
-            const newGamePlayerScore = gamePlayerScore + player.roundScore;
-            gamePlayer.gameScore = newGamePlayerScore;
-            player.gameScore = newGamePlayerScore;
-        }
+    adjustTeamScore();
+  }, [animationState]);
 
-        setScoresCalculated(true);
-        try {
-            await updateDoc(roundRef, {
-                players: roundPlayers,
-                teams: roundTeams,
-                scoresCalculated: true
-            });
-
-            await updateDoc(gameRef, {
-                players: gamePlayers,
-                teams: gameTeams
-            });
-            console.log("Update successful");
-        } catch (error) {
-            console.error("Error updating document: ", error);
-        }
+  useEffect(() => {
+    if (hydratedTeams.length > 0 && roundData.flippedCards === 6) {
+      setAnimationState({
+        ...animationState,
+        stage: 'highlight',
+      });
     }
+  }, [hydratedTeams])
+
+  useEffect(() => {
+    // const calculateScores = async () => {
+    //   const roundTeams = [...teams];
+
+    //   for (const team of roundTeams) {
+    //     if (team.players.length === 0) {
+    //       continue;
+    //     }
+    //     const cards1 = team.players[0].chosenCards;
+    //     const cards2 = team.players[1].chosenCards;
+
+    //     const score = getCardScores(cards1, cards2);
+    //     team.roundScore = score;
+    //     if (team.gameScore) {
+    //       team.gameScore += score;
+    //     } else {
+    //       team.gameScore = score;
+    //     }
+    //   }
+
+    //   const roundPlayers = [...players];
+
+    //   for (let i = 0; i < roundPlayers.length; i++) {
+    //     const player = roundPlayers[i];
+    //     player.roundScore = 0;
+    //     player.roundPlayerScores = [];
+
+    //     for (let j = 0; j < roundPlayers.length; j++) {
+    //       if (i === j) continue;
+    //       const otherPlayer = roundPlayers[j];
+    //       const cards1 = player.chosenCards;
+    //       const cards2 = otherPlayer.chosenCards;
+    //       const roundScore = getCardScores(cards1, cards2);
+    //       player.roundScore += roundScore;
+    //       const roundPlayerScore = {
+    //         name: otherPlayer.name,
+    //         score: roundScore
+    //       }
+    //       player.roundPlayerScores.push(roundPlayerScore);
+    //     }
+    //     player.gameScore += player.roundScore;
+    //   }
+
+    //   try {
+    //     await updateDoc(roundRef, {
+    //       players: roundPlayers,
+    //       teams: roundTeams,
+    //       scoresCalculated: true
+    //     });
+    //     console.log("Update successful");
+    //   } catch (error) {
+    //     console.error("Error updating document: ", error);
+    //   }
+    // }
 
     const hydrateTeams = roundData => {
-        const _hydratedTeams = [...teams];
-        for (const team of _hydratedTeams) {
-            team.players = roundData.players.filter(player => player.team === team.name);
-            if (!roundData.teams) {
-                team.roundScore = 0;
-            }
-        }
-
-        let cardCount = 0;
-        roundData.players.forEach(player => {
-            cardCount += player.chosenCards.length;
-        });
-        setHydratedTeams(_hydratedTeams);
-
+      const _hydratedTeams = [...teams].filter(t => t.players.length === 2);
+      for (const team of _hydratedTeams) {
+        team.players = players.filter(player => player.team === team.name);
         if (!roundData.teams) {
-            if (cardCount / 5 === players.length) {
-                setFlipCards(true);
-                calculateScores();
-            }
-        } else {
-            setFlipCards(true);
+          team.roundScore = 0;
         }
+      }
+
+      let cardCount = 0;
+      players.forEach(player => {
+        cardCount += player.chosenCards.length;
+      });
+      setHydratedTeams(_hydratedTeams);
     }
 
-    useEffect(() => {
-        if (roundData && roundRef) {
-            hydrateTeams(roundData);
-        }
-    }, [roundData])
+    if (roundData && roundRef) {
+      hydrateTeams(roundData);
+    }
+  }, [roundData, players, roundRef, teams])
 
-    useEffect(() => {
-        setFlipCards(false);
-        setScoresCalculated(false);
-        const roundsRef = collection(gameRef, "rounds");
-        const q = query(roundsRef, where('roundNumber', '==', currentRound));
+  useEffect(() => {
+    const roundsRef = collection(gameRef, "rounds");
+    const q = query(roundsRef, where('roundNumber', '==', currentRound));
 
-        getDocs(q).then((querySnapshot) => {
-            if (querySnapshot.size === 1) {
-                const roundId = querySnapshot.docs[0].id;
-                const _roundRef = doc(roundsRef, roundId);
-                onSnapshot(_roundRef, (doc) => {
-                    setRoundRef(_roundRef);
-                    // console.log(doc.data());
-                    setRoundData(doc.data());
-                });
-            } else {
-                console.error('Invalid short ID.');
-            }
+    getDocs(q).then((querySnapshot) => {
+      if (querySnapshot.size === 1) {
+        const roundId = querySnapshot.docs[0].id;
+        const _roundRef = doc(roundsRef, roundId);
+        onSnapshot(_roundRef, (doc) => {
+          setRoundRef(_roundRef);
+          setRoundData(doc.data());
         });
-    }, [currentRound]);
+      } else {
+        console.error('Invalid short ID.');
+      }
+    });
+  }, [currentRound, gameRef]);
 
-    if (!roundData) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
-            </div>
-        );
-    }
-
-    const phrase = roundData.phrase;
-
+  if (!roundData) {
     return (
-        <div className='container mx-auto'>
-            <div className='flex justify-between mx-4'>
-                <div>
-                    <p className="text-md">Phrase: {phrase}</p>
-                </div>
-                <div className="mr-6">
-                    <p className="text-md">Round {currentRound}</p>
-                </div>
-            </div>
-            <div className="mx-auto">
-                {!phrase &&
-                    <div className='mb-4 flex justify-center items-center'>
-                        <p className="text-lg font-semibold text-gray-700 bg-gray-100 px-4 py-2 rounded-lg shadow">
-                            Waiting for <span className="text-blue-500">{chooserName}</span> to choose the phrase
-                        </p>
-                    </div>
-                }
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-                    {hydratedTeams.map(team => (
-                        team.players.length === 2 && <div
-                            key={team.name}
-                            className={`bg-${team.name}-800 text-white px-4 pt-2 rounded shadow`}>
-                            <div className='flex justify-between'>
-                                <h3 className="font-semibold text-lg">Team {team.name}</h3>
-                                <h3>Round Score: {team.roundScore}</h3>
-                                <h3>Game Score: {team.gameScore}</h3>
-                            </div>
-                            {team.players.map(player => (
-                                <div key={player.name} className="mb-4">
-                                    <div className="mt-2 grid grid-cols-6 gap-2">
-                                        <div className="font-semibold text-lg">
-                                            <div>{player.name}</div>
-                                            <div className='text-xs mt-2'>Round Score</div>
-                                            <div className='font-bold'>{player.roundScore}</div>
-                                            <div className='text-xs mt-2'>Game Score</div>
-                                            <div>{player.gameScore}</div>
-                                        </div>
-                                        {player.chosenCards.length === 5 && player.chosenCards.map(cardIndex => (
-                                            <div key={cardIndex}>
-                                                <HostCard deck={deck} cardIndex={cardIndex} flipped={flipCards} />
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </div>
-
-
-
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
+      </div>
     );
+  }
+
+  const getCardPosition = (teamNumber, playerNumber) => {
+    if (teamNumber < 2 && playerNumber === 0) {
+      return "-31px";
+    } else if (teamNumber < 2 && playerNumber === 1) {
+      return "-5px";
+    } else if (teamNumber >= 2 && playerNumber === 0) {
+      return "-10px";
+    } else if (teamNumber >= 2 && playerNumber === 1) {
+      return "16px";
+    }
+    return "0px";
+  }
+
+  const getPhrase = () => {
+    const phrase = roundData.phrase;
+    return (
+      phrase ? "Phrase: " + phrase :
+        <span>Waiting for <span className="text-blue-500">{chooserName}</span> to choose the phrase</span>
+    )
+  }
+
+  const highlightCard = (cardIndex, currentTeamIndex, playerIndex) => {
+    const { highlight } = animationState;
+    if (highlight[0] === cardIndex && highlight[1] === currentTeamIndex) {
+      return playerIndex === 0 ? "top" : "bottom";
+    }
+    return false;
+  }
+
+  const highlightScoreStyle = (teamIndex) => {
+    const { score, highlight } = animationState;
+    if (score && teamIndex === highlight[1]) {
+      return {
+        boxShadow: '0 0 10px 10px gold'
+      };
+    }
+    return {};
+  }
+
+  return (
+    <div>
+      <Nav className="max-w-screen-xl" round={currentRound} phrase={getPhrase()} />
+      <div className='max-w-screen-xl mx-auto mt-4'>
+        <div className="grid grid-cols-2 gap-4">
+          {hydratedTeams.map((team, teamI) => (
+            <div className='flex bg-gray-100 rounded shadow p-3'>
+              <div className="flex flex-col justify-between items-start">
+                <div key={team.players[0].name} className="flex items-center mb-2">
+                  <div className="text-lg font-semibold w-20 mr-2">{team.players[0].name}</div>
+                </div>
+                <div className='flex-grow-0 my-2'>
+                  <h3 className={`font-bold text-xl text-${team.name}-800`}>Team</h3>
+                  <h3 className={`font-bold text-xl text-${team.name}-800`}>{team.name}</h3>
+                  <p className='text-md' style={highlightScoreStyle(teamI)}>Round: {team.roundScore}</p>
+                  <p className='text-md'>Game: {team.gameScore}</p>
+                </div>
+                <div className="flex items-center mb-2">
+                  <div className="text-lg font-semibold w-20 mr-2">{team.players[1].name}</div>
+                </div>
+              </div>
+              <div key={team.name} className="flex flex-col">
+                {team.players.map((player, playerI) => (
+                  <div key={player.name} className="flex items-center mb-2">
+                    <div className="flex-grow grid grid-cols-5 gap-1">
+                      {player.chosenCards.length === 5 ? player.chosenCards.map((cardIndex, i) => (
+                        <HostCard
+                          deck={deck}
+                          cardIndex={cardIndex}
+                          flip={roundData.flippedCards > i}
+                          position={getCardPosition(teamI, playerI)}
+                          backToChosenCards={i + 1 < roundData.flippedCards}
+                          highlight={highlightCard(cardIndex, teamI, playerI)} />
+                      )) :
+                        Array(5).fill().map((_, i) => (
+                          <div key={i} className="p-1">
+                            <HostCard placeholder={true} />
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default HostRoundPage;

@@ -8,17 +8,16 @@ import Button from './Button';
 let maxZIndex = 900;
 const markedY = 220;
 
-const cardStates = ["deck", "ready", "toReviewed", "reviewed", "toReady", "toMarked", "marked"];
+// const cardStates = ["deck", "ready", "toReviewed", "reviewed", "toReady", "toMarked", "marked"];
 let cardSet = [...Array(52)].map(_ => "ready");
 
 function Deck({ deck, handleSelectCards, gameData }) {
   const [firstPassDone, setFirstPassDone] = useState(false);
   const [hoveredBox, setHoveredBox] = useState(null);
-  const [assignedBoxes, setAssignedBoxes] = useState([]); // { cardIndex: boxIndex }
+  const [assignedBoxes, setAssignedBoxes] = useState([]);
 
   const boxRefs = useRef([]);
 
-  // Create refs for your boxes
   useEffect(() => {
     boxRefs.current = Array.from({ length: 5 }, () => createRef());
   }, []);
@@ -28,14 +27,12 @@ function Deck({ deck, handleSelectCards, gameData }) {
     setAssignedBoxes([]);
   }, [gameData.currentRound])
 
-  // Animation for boxes
   const boxAnimation = useSpring({
-    from: { y: 1000 }, // Start from below the view
-    to: { y: firstPassDone ? 180 : 1000 }, // Slide up if showBoxes is true
+    from: { y: 1000 },
+    to: { y: firstPassDone ? 180 : 1000 }, 
     config: { tension: 200, friction: 20 }
   });
 
-  // JSX for boxes
   const boxes = (
     <div className="box-container flex flex-wrap justify-center items-center mt-4 max-h-screen">
       {boxRefs.current.length > 0 && boxRefs.current.map((ref, i) => (
@@ -57,7 +54,6 @@ function Deck({ deck, handleSelectCards, gameData }) {
     const boxed = cardSet[i].startsWith("box");
     const ready = cardSet[i] === "ready";
     const marked = cardSet[i] === "marked";
-    const deck = cardSet[i] === "deck";
 
     let returnValues = {
       width: 150,
@@ -115,7 +111,6 @@ function Deck({ deck, handleSelectCards, gameData }) {
     }
   }
   const from = (_i) => ({ x: 0, rot: 0, scale: 1, y: -1000 })
-  // This is being used down there in the view, it interpolates rotation and scale into a css transform
   const trans = (r, s) =>
     `perspective(1500px) rotateX(30deg) rotateY(${r / 10}deg) rotateZ(${r}deg) scale(${s})`;
 
@@ -153,13 +148,10 @@ function Deck({ deck, handleSelectCards, gameData }) {
   useEffect(() => {
     api.start(i => {
       let _to = { ...to(i) };
-      // if (firstPassDone) {
-      //   _to = { ..._to, width: 120, height: 168, scale: 1, rot: 0 };
-      // }
-      return _to; // Update positions for other cards
+      return _to;
     });
 
-  }, [firstPassDone]);
+  }, [firstPassDone, api]);
 
   const getBoxPosition = boxIndex => {
     if (boxIndex === 5) {
@@ -194,7 +186,6 @@ function Deck({ deck, handleSelectCards, gameData }) {
   }
 
   useEffect(() => {
-    // console.log({ assignedBoxes });
 
     api.start(i => {
       const numReady = cardSet.filter(cardState => cardState === "ready").length;
@@ -209,12 +200,9 @@ function Deck({ deck, handleSelectCards, gameData }) {
 
         const { bx, by } = getBoxPosition(boxIndex);
 
-        // Calculate new position based on the box position
         return {
           x: bx,
           y: by,
-          // width: boxIndex === 5 ? 120 : 100,
-          // height: boxIndex === 5 ? 168 : 140,
           scale: 1,
           rot: 0,
           zIndex: boxIndex === 5 ? numReady + maxZIndex : 1000
@@ -225,7 +213,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
         // Existing properties for cards not in a box
       };
     });
-  }, [assignedBoxes]);
+  }, [assignedBoxes, api]);
 
   const moveCardsDown = (cardIndex, boxIndex, updatedBoxes) => {
     if (boxIndex > 4) {
@@ -354,6 +342,8 @@ function Deck({ deck, handleSelectCards, gameData }) {
             cardSet[i] = "ready";
           }
           break;
+        default:
+          break;
       }
 
       if (firstPassDone) {
@@ -431,7 +421,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
               checked={firstPassDone}
               onChange={handleCheckboxChange}
               id="firstPassCheckbox"
-              className="hidden" // Hide the default checkbox
+              className="hidden"
             />
             <span className={`slider round ${firstPassDone ? 'bg-blue-500' : 'bg-gray-200'}`}></span>
           </label>

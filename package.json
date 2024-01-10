@@ -13,6 +13,7 @@
     "axios": "^1.6.2",
     "cheerio": "^1.0.0-rc.12",
     "firebase": "^9.9.3",
+    "firebase-admin": "^12.0.0",
     "react": "^18.2.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
@@ -30,7 +31,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "scrape": "node src/utils/imdbScraper.js"
+    "scrape": "node src/utils/imdbScraper.js",
+    "setupGame": "node test/testSeed.js"
   },
   "eslintConfig": {
     "extends": [

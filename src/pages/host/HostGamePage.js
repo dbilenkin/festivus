@@ -1,16 +1,17 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { doc, onSnapshot, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, onSnapshot, collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '../../utils/Firebase';
 import HostSetupPage from './HostSetupPage';
 import HostRoundPage from './HostRoundPage';
 import HostEndPage from './HostEndPage';
 import { getDeck } from '../../utils/utils';
-import { Link } from "react-router-dom";
+import Spinner from '../../components/Spinner';
 
 const HostGamePage = () => {
   const [gameData, setGameData] = useState(null);
   const [gameRef, setGameRef] = useState(null);
+  const [players, setPlayers] = useState([]);
   const { shortId } = useParams();
 
   useEffect(() => {
@@ -31,11 +32,28 @@ const HostGamePage = () => {
     });
   }, [shortId]);
 
+  useEffect(() => {
+    if (gameRef) {
+      const playersRef = collection(gameRef, 'players');
+      const q = query(playersRef, orderBy('joinedAt', 'asc'));
+
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const playersData = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setPlayers(playersData);
+      });
+
+      // Clean up the listener when the component unmounts
+      return () => unsubscribe();
+    }
+  }, [gameRef]);
+
+
   if (!gameData) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-500"></div>
-      </div>
+      <Spinner />
     );
   }
 
@@ -43,13 +61,13 @@ const HostGamePage = () => {
     const { deckType, gameState } = gameData;
 
     if (gameState === "setup") {
-      return <HostSetupPage gameData={gameData} gameRef={gameRef} />
+      return <HostSetupPage gameData={gameData} gameRef={gameRef} players={players} />
     }
     if (gameState === 'started') {
-      return <HostRoundPage deck={getDeck(deckType)} gameData={gameData} gameRef={gameRef} />
+      return <HostRoundPage deck={getDeck(deckType)} gameData={gameData} gameRef={gameRef} players={players} />
     }
     if (gameState === "ended") {
-      return <HostEndPage deck={getDeck(deckType)} gameData={gameData} gameRef={gameRef} />
+      return <HostEndPage deck={getDeck(deckType)} gameData={gameData} gameRef={gameRef} players={players} />
     }
 
     return <div>Something went wrong</div>
@@ -57,11 +75,6 @@ const HostGamePage = () => {
 
   return (
     <div>
-      <nav className="bg-gray-800 text-white shadow-lg">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <Link to={`/`}><h1 className="text-xl font-bold">Incommon</h1></Link>
-        </div>
-      </nav>
       {displayHostPage()}
     </div>
 

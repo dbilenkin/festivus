@@ -3,10 +3,12 @@ import React, { createContext, useState } from 'react';
 const CurrentGameContext = createContext({
     gameRef: null,
     currentPlayerName: '',
+    currentPlayerId: null,
     cards: [],
     setGameRef: () => { },
     setCurrentPlayerName: () => { },
-    setCards: () => {},
+    setCurrentPlayerId: () => { },
+    setCards: () => { },
 });
 
 const CurrentGameProvider = ({ children }) => {
@@ -14,6 +16,8 @@ const CurrentGameProvider = ({ children }) => {
         const storedName = localStorage.getItem('currentPlayerName');
         return storedName || '';
     });
+
+    const [currentPlayerId, setCurrentPlayerId] = useState(null);
 
     const [gameRef, setGameRef] = useState(null);
 
@@ -31,9 +35,11 @@ const CurrentGameProvider = ({ children }) => {
     const value = {
         gameRef,
         currentPlayerName,
+        currentPlayerId,
         cards,
         setGameRef,
         setCurrentPlayerName: handleNameChange,
+        setCurrentPlayerId,
         setCards,
     };
 
