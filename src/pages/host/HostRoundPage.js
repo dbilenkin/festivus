@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, createRef } from 'react';
 import { doc, onSnapshot, collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
 import HostCard from '../../components/HostCard';
 import Nav from '../../components/Nav';
+import AnimatedScore from '../../components/AnimatedScore';
+import { getCardMatchScore } from '../../utils/utils';
 
 const HostRoundPage = ({ deck, gameData, gameRef, players }) => {
   const { teams, currentRound } = gameData;
@@ -18,17 +20,30 @@ const HostRoundPage = ({ deck, gameData, gameRef, players }) => {
     cardIndex: 0,
     teamIndex: 0,
     score: 0,
+    startPosition: { x: 0, y: 0 },
+    endPosition: { x: 0, y: 0 },
   });
 
-  const getCardMatch = (card, otherCards) => {
-    for (let i = 0; i < otherCards.length; i++) {
-      if (card === otherCards[i]) {
-        return { match: i, score: 3 };
-      } else if (otherCards.indexOf(card) !== -1) {
-        return { match: otherCards.indexOf(card), score: 2 };
-      }
+  const teamRefs = useRef([]);
+
+  const setTeamRefs = (element, index) => {
+    if (element) {
+      teamRefs.current[index] = element;
     }
-    return { match: null, score: 0 };
+  };
+
+  const getCardMatch = (card, otherCards) => {
+    const { cardIndex } = animationState;
+    let match = false;
+    let score = 0;
+    if (card === otherCards[cardIndex]) {
+      match = true;
+      score = getCardMatchScore(cardIndex, cardIndex);
+    } else if (otherCards.indexOf(card) !== -1) {
+      match = true;
+      score = getCardMatchScore(cardIndex, otherCards.indexOf(card));
+    }
+    return { match, score };
   }
 
   // Start the animation sequence
@@ -43,19 +58,18 @@ const HostRoundPage = ({ deck, gameData, gameRef, players }) => {
       const cardMatch = getCardMatch(card, otherCards);
       if (cardMatch.match) {
         setTimeout(() => {
-          // Move to increment score after highlighting
           setAnimationState({
             ...animationState,
             highlight: [card, teamIndex],
             stage: 'adjustScore',
             score: cardMatch.score,
           });
-        }, 1000); // Adjust delay as needed
+        }, 500);
       } else {
         setAnimationState({
           ...animationState,
           highlight: [],
-          stage: 'adjustScore',
+          stage: 'nextPair',
           score: 0,
         });
       }
@@ -64,34 +78,49 @@ const HostRoundPage = ({ deck, gameData, gameRef, players }) => {
     highlightMatches();
   }, [animationState]);
 
+  useEffect(() => {
+    const { stage, cardIndex, teamIndex } = animationState;
+    if (stage !== 'nextPair') return;
+    let newCardIndex = cardIndex + 1;
+    let newTeamIndex = teamIndex;
+    let nextTeam = false;
+    if (cardIndex === 4) {
+      newTeamIndex = teamIndex + 1;
+      newCardIndex = 0;
+      nextTeam = true;
+    }
+
+    const newCardState = {
+      ...animationState,
+      cardIndex: newCardIndex,
+      teamIndex: newTeamIndex,
+      stage: 'highlight'
+    }
+    const delayLength = nextTeam ? 500 : 0;
+    setTimeout(() => {
+      setAnimationState(newCardState);
+    }, delayLength);
+  }, [animationState])
+
   // Increment score animation
   useEffect(() => {
-    const { stage, highlight, cardIndex, teamIndex, score } = animationState;
+    const { stage, cardIndex, teamIndex, score } = animationState;
     if (stage !== 'adjustScore') return;
     function adjustTeamScore() {
       const team = hydratedTeams[teamIndex];
       team.roundScore += score;
-      let newCardIndex = cardIndex + 1; 
-      let newTeamIndex = teamIndex;
-      if (cardIndex === 4) {
-        newTeamIndex = teamIndex + 1;
-        newCardIndex = 0;
-      } 
 
-      const newCardState = {
-        ...animationState,
-        cardIndex: newCardIndex,
-        teamIndex: newTeamIndex,
-        stage: 'highlight'
-      }
+      const ref = teamRefs.current[teamIndex];
+      const rect = ref.getBoundingClientRect();
+      const x = rect.width / 2;
+      const y = rect.height / 2 - 45;
 
-      if (highlight.length === 2) {
-        setTimeout(() => {
-          setAnimationState(newCardState);
-        }, 2000); // Adjust delay as needed
-      } else {
-        setAnimationState(newCardState);
-      }
+      const startPosition = { x, y };
+      const endPosition = { x: 0, y };
+
+      setTimeout(() => {
+        setAnimationState({ ...animationState, stage: 'animateScore', startPosition, endPosition });
+      }, 100);
     };
 
     adjustTeamScore();
@@ -237,15 +266,14 @@ const HostRoundPage = ({ deck, gameData, gameRef, players }) => {
     return false;
   }
 
-  const highlightScoreStyle = (teamIndex) => {
-    const { score, highlight } = animationState;
-    if (score && teamIndex === highlight[1]) {
-      return {
-        boxShadow: '0 0 10px 10px gold'
-      };
-    }
-    return {};
-  }
+  // Function to be called when score animation ends
+  const handleScoreAnimationRest = () => {
+
+    setTimeout(() => {
+      setAnimationState({ ...animationState, stage: 'nextPair' });
+    }, 500);
+
+  };
 
   return (
     <div>
@@ -253,16 +281,26 @@ const HostRoundPage = ({ deck, gameData, gameRef, players }) => {
       <div className='max-w-screen-xl mx-auto mt-4'>
         <div className="grid grid-cols-2 gap-4">
           {hydratedTeams.map((team, teamI) => (
-            <div className='flex bg-gray-100 rounded shadow p-3'>
+            <div ref={el => setTeamRefs(el, teamI)} className='flex bg-gray-100 rounded shadow p-3'>
+              {(animationState.stage === "animateScore" && animationState.teamIndex === teamI) && (
+                <AnimatedScore
+                  score={animationState.score}
+                  startPosition={animationState.startPosition}
+                  endPosition={animationState.endPosition}
+                  onRest={handleScoreAnimationRest}
+                />
+              )}
               <div className="flex flex-col justify-between items-start">
                 <div key={team.players[0].name} className="flex items-center mb-2">
                   <div className="text-lg font-semibold w-20 mr-2">{team.players[0].name}</div>
                 </div>
-                <div className='flex-grow-0 my-2'>
+                <div className='relative flex-grow-0 my-2'>
                   <h3 className={`font-bold text-xl text-${team.name}-800`}>Team</h3>
                   <h3 className={`font-bold text-xl text-${team.name}-800`}>{team.name}</h3>
-                  <p className='text-md' style={highlightScoreStyle(teamI)}>Round: {team.roundScore}</p>
-                  <p className='text-md'>Game: {team.gameScore}</p>
+                  <p className='text-md'>Round: </p>
+                  <p className='text-md'>{team.roundScore}</p>
+                  <p className='text-md'>Game:</p>
+                  <p className='text-md'>{team.gameScore}</p>
                 </div>
                 <div className="flex items-center mb-2">
                   <div className="text-lg font-semibold w-20 mr-2">{team.players[1].name}</div>

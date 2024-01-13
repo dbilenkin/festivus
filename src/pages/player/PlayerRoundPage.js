@@ -3,6 +3,7 @@ import { doc, onSnapshot, updateDoc, collection, query, where, getDocs, addDoc }
 import { CurrentGameContext } from '../../contexts/CurrentGameContext';
 import Deck from '../../components/Deck';
 import Button from '../../components/Button';
+import { getOrdinal } from '../../utils/utils';
 
 const PlayerRoundPage = ({ deck, gameData, gameRef, players }) => {
   const { currentRound, gameLength } = gameData;
@@ -19,7 +20,7 @@ const PlayerRoundPage = ({ deck, gameData, gameRef, players }) => {
   const totalCards = 5;
 
   useEffect(() => {
-    console.log({currentPlayerId})
+    console.log({ currentPlayerId })
   }, [currentPlayerId])
 
   useEffect(() => {
@@ -125,11 +126,18 @@ const PlayerRoundPage = ({ deck, gameData, gameRef, players }) => {
   }
 
   const showFirstPlayerChoices = () => {
+    let message = "Start Next Round";
+    if (flippedCards < totalCards) {
+      message = `Flip ${getOrdinal(flippedCards + 1)} Card`
+    } else if (flippedCards === totalCards) {
+      message = 'Show Scores'
+    }
+
     return (
       <div className='mt-4'>
         {flippedCards <= totalCards ? (
           <Button onClick={handleFlipCard}>
-            Flip {flippedCards + 1} Card
+            {message}
           </Button>
         ) : (
           <Button onClick={startNextRound}>
@@ -151,7 +159,7 @@ const PlayerRoundPage = ({ deck, gameData, gameRef, players }) => {
   const showDeck = () => {
     return (
       <div className="deckContainer mb-4 mx-auto">
-        <p className="mx-4 mt-3 flex justify-between items-center text-lg font-semibold text-gray-800 bg-gray-100 px-2 py-1 rounded-lg shadow">
+        <p className="mt-3 flex justify-between items-center text-lg font-semibold text-gray-800 bg-gray-100 px-2 py-1 rounded-lg shadow">
           <span>Round {currentRound}</span>
           <span>Phrase: {roundData.phrase}</span>
         </p>

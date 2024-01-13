@@ -2,12 +2,12 @@
     cursor: url('https://uploads.codesandbox.io/uploads/user/b3e56831-8b98-4fee-b941-0e27f39883ab/Ad1_-cursor.png') 39 39,
         auto;
     position: relative;
-    width: 375px;
+    width: 360px;
 }
 
 .deckContainer {
     position: relative;
-    width: 375px;
+    width: 360px;
 }
 
 .deck {
@@ -16,7 +16,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    right: 20px;
+    right: 15px;
 }
 
 .deck>div {
@@ -25,9 +25,27 @@
     background-size: auto 90%;
     background-repeat: no-repeat;
     background-position: center center;
-    will-change: transform;
-    border-radius: 5px;
     box-shadow: 0 12.5px 10px -10px rgba(50, 50, 73, 0.4), 0 10px 10px -10px rgba(50, 50, 73, 0.3);
+}
+
+.reviewSection {
+  height: 230px;
+}
+
+.markedSection {
+  width: 360px;
+}
+.markedInstructions {
+  width: 190px;
+}
+
+.markedCards {
+  position: relative;
+  margin-top: 20px;
+  right: 7px;
+  height: 200px;
+  width: 170px;
+  float: right;
 }
 
 .switch {

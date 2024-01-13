@@ -6,10 +6,10 @@ import './Deck.css';
 import Button from './Button';
 
 let maxZIndex = 900;
-const markedY = 220;
+const markedY = 240;
 
 // const cardStates = ["deck", "ready", "toReviewed", "reviewed", "toReady", "toMarked", "marked"];
-let cardSet = [...Array(52)].map(_ => "ready");
+let cardSet = [...Array(52)].map(() => "ready");
 
 function Deck({ deck, handleSelectCards, gameData }) {
   const [firstPassDone, setFirstPassDone] = useState(false);
@@ -23,13 +23,13 @@ function Deck({ deck, handleSelectCards, gameData }) {
   }, []);
 
   useEffect(() => {
-    cardSet = [...Array(52)].map(_ => "ready");
+    cardSet = [...Array(52)].map(() => "ready");
     setAssignedBoxes([]);
   }, [gameData.currentRound])
 
   const boxAnimation = useSpring({
-    from: { y: 1000 },
-    to: { y: firstPassDone ? 180 : 1000 }, 
+    from: { y: -1000 },
+    to: { y: firstPassDone ? 180 : -1000 },
     config: { tension: 200, friction: 20 }
   });
 
@@ -39,9 +39,9 @@ function Deck({ deck, handleSelectCards, gameData }) {
         <animated.div
           key={i}
           ref={ref}
-          className={`box ${hoveredBox === i ? 'bg-[#EDAE49]' : 'bg-blue-500'} 
-          text-white p-6 m-1 rounded-lg shadow-lg flex items-center justify-center 
-          text-2xl font-bold w-28 h-[152px] ${i > 2 ? 'mt-2' : ''}`}
+          className={`box ${hoveredBox === i ? 'bg-[#EDAE49]' : ''} 
+          text-gray-800 border-dashed border-2 border-gray-800 p-6 m-1 rounded-lg flex items-center justify-center 
+          text-2xl font-bold w-24 h-[140px] ${i > 2 ? 'mt-2' : ''}`}
           style={boxAnimation}
         >
           {i + 1}
@@ -91,7 +91,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
       if (boxed) {
         return {
           ...returnValues,
-          y: 2000,
+          y: -1000,
         }
       } else if (marked) {
         return {
@@ -410,11 +410,10 @@ function Deck({ deck, handleSelectCards, gameData }) {
     })
   })
 
-  // Now we're just mapping the animated values to our view, that's it. Btw, this component only renders once. :-)
   return (
     <div>
-      <div className='px-4 flex items-center justify-between pt-3'>
-        {!firstPassDone && <div className='flex items-center'>
+      <div className='flex items-center justify-between pt-3'>
+        {<div className='flex items-center'>
           <label htmlFor="firstPassCheckbox" className="switch flex items-center cursor-pointer ">
             <input
               type="checkbox"
@@ -425,17 +424,19 @@ function Deck({ deck, handleSelectCards, gameData }) {
             />
             <span className={`slider round ${firstPassDone ? 'bg-blue-500' : 'bg-gray-200'}`}></span>
           </label>
-          {firstPassDone ? <span className='text-sm ml-2'>Back to Deck</span> : <span className="text-md ml-2">Ready to Order</span>}
+          {firstPassDone ? <span className='text-md text-gray-800 ml-2'>Back to Deck</span> : <span className="text-md text-gray-800 ml-2">Ready to Order</span>}
         </div>}
-        {firstPassDone && <Button 
+        {firstPassDone && <Button
           className={`${assignedBoxesFull() ? 'bg-blue-500 hover:bg-blue-700' : 'bg-gray-200'}`}
-          disabled={!assignedBoxesFull()} 
+          disabled={!assignedBoxesFull()}
           onClick={() => submitCards(assignedBoxes)}>
           Submit Cards
         </Button>}
       </div>
-      <div className='relative' style={{ top: -10 }}>
-
+      <div className='relative text-gray-800 bg-gray-100 rounded-lg shadow'
+        style={{
+          height: firstPassDone ? '175px' : '230px'
+        }}>
         {props.map(({ x, y, width, height, zIndex, rot, scale, flip, vx, vy }, i) => {
           let correctTrans = trans;
           if (firstPassDone) {
@@ -443,11 +444,11 @@ function Deck({ deck, handleSelectCards, gameData }) {
             const cardPicked = boxIndex !== -1 && boxIndex < 5;
             correctTrans = cardPicked ? transBoxes : trans;
             if (cardPicked) {
-              width = 100;
-              height = 140;
+              width = 101;
+              height = 141;
             } else {
-              width = 120;
-              height = 168;
+              width = 121;
+              height = 169;
             }
           }
 
@@ -455,6 +456,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
             <animated.div className='deck' key={i} style={{ x, y, zIndex }}>
               <animated.div
                 {...bind(i)}
+                className='border-solid border-2 border-gray-600 rounded-lg'
                 style={{
                   zIndex,
                   width,
@@ -462,13 +464,29 @@ function Deck({ deck, handleSelectCards, gameData }) {
                   transform: interpolate([rot, scale], correctTrans),
                   backgroundImage: `url(${deck[i]})`,
                 }}
-              ><div className='text-white text-xl mt-5'>{cardSet[i]}</div></animated.div>
+              ></animated.div>
             </animated.div>
           );
         }
         )}
         {boxes}
       </div>
+      {!firstPassDone && <div className='flex markedSection'>
+        <div>
+          <div className='markedInstructions text-gray-800 flex items-center justify-center text-2xl pt-8 px-5'>
+            Swipe 5 or more cards down to order
+          </div>
+          <div className='text-gray-800 flex items-center justify-center'>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-20 h-20 text-gray-800">
+              <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm4.28 10.28a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 1 0-1.06 1.06l1.72 1.72H8.25a.75.75 0 0 0 0 1.5h5.69l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3Z" clipRule="evenodd" />
+            </svg>
+
+          </div>
+        </div>
+        <div className='markedCards text-gray-800 border-dashed border-2 border-gray-800 rounded-lg flex items-center justify-center text-2xl font-bold'>
+          First Pass Cards
+        </div>
+      </div>}
     </div>
   )
 }

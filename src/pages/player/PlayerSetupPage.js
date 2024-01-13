@@ -141,7 +141,7 @@ const PlayerSetupPage = ({ gameData, gameRef, players }) => {
               className="block appearance-none w-full border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             >
               <option key="1" value="original">Original</option>
-              <option key="2" value="actors">Actors</option>
+              <option key="2" value="actors">Movie Stars</option>
             </select>
           </div>
           <div className="mt-4">
