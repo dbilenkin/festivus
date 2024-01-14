@@ -6,7 +6,10 @@ import './Deck.css';
 import Button from './Button';
 
 let maxZIndex = 900;
-const markedY = 240;
+const reviewedX = -193;
+const markedY = 260;
+const boxAdjustX = -235;
+const boxAdjustY = 165;
 
 // const cardStates = ["deck", "ready", "toReviewed", "reviewed", "toReady", "toMarked", "marked"];
 let cardSet = [...Array(52)].map(() => "ready");
@@ -29,26 +32,9 @@ function Deck({ deck, handleSelectCards, gameData }) {
 
   const boxAnimation = useSpring({
     from: { y: -1000 },
-    to: { y: firstPassDone ? 180 : -1000 },
+    to: { y: firstPassDone ? 0 : -1000 },
     config: { tension: 200, friction: 20 }
   });
-
-  const boxes = (
-    <div className="box-container flex flex-wrap justify-center items-center mt-4 max-h-screen">
-      {boxRefs.current.length > 0 && boxRefs.current.map((ref, i) => (
-        <animated.div
-          key={i}
-          ref={ref}
-          className={`box ${hoveredBox === i ? 'bg-[#EDAE49]' : ''} 
-          text-gray-800 border-dashed border-2 border-gray-800 p-6 m-1 rounded-lg flex items-center justify-center 
-          text-2xl font-bold w-24 h-[140px] ${i > 2 ? 'mt-2' : ''}`}
-          style={boxAnimation}
-        >
-          {i + 1}
-        </animated.div>
-      ))}
-    </div>
-  );
 
   const to = (i) => {
     const boxed = cardSet[i].startsWith("box");
@@ -56,8 +42,8 @@ function Deck({ deck, handleSelectCards, gameData }) {
     const marked = cardSet[i] === "marked";
 
     let returnValues = {
-      width: 150,
-      height: 210,
+      width: 130,
+      height: 190,
       scale: 1,
       rot: -3 + Math.random() * 6,
       delay: i * 10,
@@ -66,8 +52,6 @@ function Deck({ deck, handleSelectCards, gameData }) {
       if (boxed) {
         return {
           ...returnValues,
-          width: 100,
-          height: 140,
           zIndex: 1000,
         }
       } else if (ready) {
@@ -75,16 +59,12 @@ function Deck({ deck, handleSelectCards, gameData }) {
           ...returnValues,
           x: 0,
           y: 0,
-          width: 120,
-          height: 168,
         }
       } else {
         return {
           ...returnValues,
           x: 0,
           y: -1000,
-          width: 120,
-          height: 168,
         }
       }
     } else {
@@ -112,7 +92,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
   }
   const from = (_i) => ({ x: 0, rot: 0, scale: 1, y: -1000 })
   const trans = (r, s) =>
-    `perspective(1500px) rotateX(30deg) rotateY(${r / 10}deg) rotateZ(${r}deg) scale(${s})`;
+    `rotateY(${r / 10}deg) rotateZ(${r}deg) scale(${s})`;
 
   const transBoxes = () => "scale(1)";
 
@@ -121,7 +101,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
     from: from(i),
   }))
 
-  const handleCheckboxChange = () => {
+  function handleCheckboxChange() {
     setFirstPassDone(!firstPassDone);
     if (!firstPassDone) {
       for (let i = 0; i < cardSet.length; i++) {
@@ -163,8 +143,8 @@ function Deck({ deck, handleSelectCards, gameData }) {
     const box = boxRefs.current[boxIndex].current;
 
     return {
-      bx: box.offsetLeft - 249,
-      by: box.offsetTop + 186,
+      bx: box.offsetLeft + boxAdjustX,
+      by: box.offsetTop + boxAdjustY,
     }
   }
 
@@ -317,7 +297,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
           break;
         case "toReviewed":
           if (!active) {
-            newX = -180;
+            newX = reviewedX;
             newY = 0;
             zIndex = numReviewed + maxZIndex;
             cardSet[i] = "reviewed";
@@ -325,16 +305,16 @@ function Deck({ deck, handleSelectCards, gameData }) {
           break;
         case "reviewed":
           if (active) {
-            newX = mx - 180;
+            newX = mx + reviewedX;
           } else {
-            newX = -180;
+            newX = reviewedX;
             newY = 0;
             zIndex = numReviewed + maxZIndex;
           }
           break;
         case "toReady":
           if (active) {
-            newX = mx - 180;
+            newX = mx + reviewedX;
           } else {
             newX = 0;
             newY = 0;
@@ -375,7 +355,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
             break;
           case "reviewedToMarked":
             if (active) {
-              newX = mx - 180;
+              newX = mx + reviewedX;
             } else {
               newX = 0;
               newY = markedY;
@@ -410,78 +390,116 @@ function Deck({ deck, handleSelectCards, gameData }) {
     })
   })
 
-  return (
-    <div>
-      <div className='flex items-center justify-between pt-3'>
-        {<div className='flex items-center'>
-          <label htmlFor="firstPassCheckbox" className="switch flex items-center cursor-pointer ">
-            <input
-              type="checkbox"
-              checked={firstPassDone}
-              onChange={handleCheckboxChange}
-              id="firstPassCheckbox"
-              className="hidden"
-            />
-            <span className={`slider round ${firstPassDone ? 'bg-blue-500' : 'bg-gray-200'}`}></span>
-          </label>
-          {firstPassDone ? <span className='text-md text-gray-800 ml-2'>Back to Deck</span> : <span className="text-md text-gray-800 ml-2">Ready to Order</span>}
-        </div>}
-        {firstPassDone && <Button
-          className={`${assignedBoxesFull() ? 'bg-blue-500 hover:bg-blue-700' : 'bg-gray-200'}`}
+  const boxes = (
+    <div className='absolute'>
+      <div className="flex flex-wrap justify-center items-center mt-2 max-h-screen">
+        {boxRefs.current.length > 0 && boxRefs.current.map((ref, i) => (
+          <animated.div
+            key={i}
+            ref={ref}
+            className={`box ${hoveredBox === i ? 'bg-blue-500 text-white border-solid' : 'text-gray-800 border-dashed'} 
+          border-2 border-gray-800 p-6 m-1 rounded-lg flex items-center justify-center 
+          text-2xl font-bold w-[100px] h-[140px] ${i > 2 ? 'mt-2' : ''}`}
+            style={boxAnimation}
+          >
+            {i + 1}
+          </animated.div>
+        ))}
+      </div>
+      <div className='flex items-center justify-around mt-2'>
+        <Button
+          style={{ fontSize: '1rem' }}
+          buttonType='secondary'
+          onClick={handleCheckboxChange}>
+          Back to Deck
+        </Button>
+        <Button
+          style={{ fontSize: '1rem' }}
+          className={`${assignedBoxesFull() ? 'bg-blue-500 hover:bg-blue-700' : 'bg-gray-300'}`}
           disabled={!assignedBoxesFull()}
           onClick={() => submitCards(assignedBoxes)}>
           Submit Cards
-        </Button>}
+        </Button>
       </div>
-      <div className='relative text-gray-800 bg-gray-100 rounded-lg shadow'
-        style={{
-          height: firstPassDone ? '175px' : '230px'
-        }}>
-        {props.map(({ x, y, width, height, zIndex, rot, scale, flip, vx, vy }, i) => {
-          let correctTrans = trans;
-          if (firstPassDone) {
-            const boxIndex = assignedBoxes.findIndex(el => el === i);
-            const cardPicked = boxIndex !== -1 && boxIndex < 5;
-            correctTrans = cardPicked ? transBoxes : trans;
-            if (cardPicked) {
-              width = 101;
-              height = 141;
-            } else {
-              width = 121;
-              height = 169;
-            }
-          }
+    </div>
+  );
 
-          return (
-            <animated.div className='deck' key={i} style={{ x, y, zIndex }}>
-              <animated.div
-                {...bind(i)}
-                className='border-solid border-2 border-gray-600 rounded-lg'
-                style={{
-                  zIndex,
-                  width,
-                  height,
-                  transform: interpolate([rot, scale], correctTrans),
-                  backgroundImage: `url(${deck[i]})`,
-                }}
-              ></animated.div>
-            </animated.div>
-          );
-        }
-        )}
-        {boxes}
+  const reviewPlaceholder = () => {
+    return (
+      <div
+        style={{
+          width: firstPassDone ? 118 : 150,
+          height: firstPassDone ? 162 : 210,
+        }}
+        className='text-gray-100 border-dashed border-2 border-gray-100 rounded-lg'></div>
+    )
+  }
+
+  return (
+    <div>
+      <div className='text-gray-100 bg-gray-800 rounded-lg shadow mt-2 py-2'>
+        <div className={`relative flex items-center justify-evenly`}
+          style={{
+            height: firstPassDone ? '175px' : '230px'
+          }}>
+          {props.map(({ x, y, width, height, zIndex, rot, scale, flip, vx, vy }, i) => {
+            let correctTrans = trans;
+            let right = 18;
+            if (firstPassDone) {
+              right = 27;
+              const boxIndex = assignedBoxes.findIndex(el => el === i);
+              const cardPicked = boxIndex !== -1 && boxIndex < 5;
+              correctTrans = cardPicked ? transBoxes : trans;
+              if (cardPicked) {
+                width = 96;
+                height = 136;
+              } else {
+                width = 110;
+                height = 154;
+              }
+            }
+
+            return (
+              <animated.div className='deck' key={i} style={{ right, x, y, zIndex }}>
+                <animated.div
+                  {...bind(i)}
+                  className='rounded-lg'
+                  style={{
+                    zIndex,
+                    width,
+                    height,
+                    transform: interpolate([rot, scale], correctTrans),
+                    backgroundImage: `url(${deck[i]})`,
+                  }}
+                ></animated.div>
+              </animated.div>
+            );
+          }
+          )}
+          {reviewPlaceholder()}
+          <div className=''>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+              <path fillRule="evenodd" d="M15.97 2.47a.75.75 0 0 1 1.06 0l4.5 4.5a.75.75 0 0 1 0 1.06l-4.5 4.5a.75.75 0 1 1-1.06-1.06l3.22-3.22H7.5a.75.75 0 0 1 0-1.5h11.69l-3.22-3.22a.75.75 0 0 1 0-1.06Zm-7.94 9a.75.75 0 0 1 0 1.06l-3.22 3.22H16.5a.75.75 0 0 1 0 1.5H4.81l3.22 3.22a.75.75 0 1 1-1.06 1.06l-4.5-4.5a.75.75 0 0 1 0-1.06l4.5-4.5a.75.75 0 0 1 1.06 0Z" clipRule="evenodd" />
+            </svg>
+          </div>
+          {reviewPlaceholder()}
+        </div>
+        {!firstPassDone && <div className='flex justify-around'>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+            <path fillRule="evenodd" d="M3.97 3.97a.75.75 0 0 1 1.06 0l13.72 13.72V8.25a.75.75 0 0 1 1.5 0V19.5a.75.75 0 0 1-.75.75H8.25a.75.75 0 0 1 0-1.5h9.44L3.97 5.03a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
+          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+            <path fillRule="evenodd" d="M12 2.25a.75.75 0 0 1 .75.75v16.19l6.22-6.22a.75.75 0 1 1 1.06 1.06l-7.5 7.5a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 1 1 1.06-1.06l6.22 6.22V3a.75.75 0 0 1 .75-.75Z" clipRule="evenodd" />
+          </svg>
+        </div>}
       </div>
-      {!firstPassDone && <div className='flex markedSection'>
+      {firstPassDone && boxes}
+      {!firstPassDone && <div className='flex justify-evenly markedSection'>
         <div>
-          <div className='markedInstructions text-gray-800 flex items-center justify-center text-2xl pt-8 px-5'>
+          <div className='markedInstructions text-gray-800 flex items-center justify-center text-xl pt-8 px-5'>
             Swipe 5 or more cards down to order
           </div>
-          <div className='text-gray-800 flex items-center justify-center'>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-20 h-20 text-gray-800">
-              <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm4.28 10.28a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 1 0-1.06 1.06l1.72 1.72H8.25a.75.75 0 0 0 0 1.5h5.69l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3Z" clipRule="evenodd" />
-            </svg>
-
-          </div>
+          <Button onClick={handleCheckboxChange} style={{ zIndex: '2000' }} className='w-28 mt-4'>Ready to Order</Button>
         </div>
         <div className='markedCards text-gray-800 border-dashed border-2 border-gray-800 rounded-lg flex items-center justify-center text-2xl font-bold'>
           First Pass Cards

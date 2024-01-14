@@ -11,6 +11,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-touch-callout: none !important;
   background-color: #BEE3DB;
+  /* background-color: rgb(191 219 254); */
 }
 
 code {
