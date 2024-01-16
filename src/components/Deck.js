@@ -10,9 +10,10 @@ const reviewedX = -193;
 const markedY = 260;
 const boxAdjustX = -235;
 const boxAdjustY = 165;
+const deckSize = 26;
 
 // const cardStates = ["deck", "ready", "toReviewed", "reviewed", "toReady", "toMarked", "marked"];
-let cardSet = [...Array(52)].map(() => "ready");
+let cardSet = [...Array(deckSize)].map(() => "ready");
 
 function Deck({ deck, handleSelectCards, gameData }) {
   const [firstPassDone, setFirstPassDone] = useState(false);
@@ -26,7 +27,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
   }, []);
 
   useEffect(() => {
-    cardSet = [...Array(52)].map(() => "ready");
+    cardSet = [...Array(deckSize)].map(() => "ready");
     setAssignedBoxes([]);
   }, [gameData.currentRound])
 
@@ -435,6 +436,17 @@ function Deck({ deck, handleSelectCards, gameData }) {
     )
   }
 
+  const displayName = i => {
+    const name = deck[i].name;
+    if (!name) return;
+    const firstName = name.split(" ")[0];
+    const lastName = name.split(" ").slice(1).join(" ");
+  
+    return (
+      <div className='text-white text-center bg-gray-800 w-full p-1 text-xs flex justify-center self-end'>{firstName} <br></br> {lastName} </div>
+    )
+  }
+
   return (
     <div>
       <div className='text-gray-100 bg-gray-800 rounded-lg shadow mt-2 py-2'>
@@ -459,19 +471,22 @@ function Deck({ deck, handleSelectCards, gameData }) {
               }
             }
 
+            const boxed = cardSet[i].startsWith("box");
+
             return (
               <animated.div className='deck' key={i} style={{ right, x, y, zIndex }}>
                 <animated.div
                   {...bind(i)}
                   className='rounded-lg'
                   style={{
+                    display: 'flex',
                     zIndex,
                     width,
                     height,
                     transform: interpolate([rot, scale], correctTrans),
-                    backgroundImage: `url(${deck[i]})`,
+                    backgroundImage: `url(${deck[i].imageUrl})`,
                   }}
-                ></animated.div>
+                >{!boxed && displayName(i)}</animated.div>
               </animated.div>
             );
           }

@@ -5,7 +5,7 @@ import Deck from '../../components/Deck';
 import Button from '../../components/Button';
 import { getOrdinal } from '../../utils/utils';
 
-const PlayerRoundPage = ({ deck, gameData, gameRef, players }) => {
+const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
   const { currentRound, gameLength } = gameData;
   const currentPlayerIndex = currentRound % players.length;
 
@@ -128,9 +128,11 @@ const PlayerRoundPage = ({ deck, gameData, gameRef, players }) => {
   const showFirstPlayerChoices = () => {
     let message = "Start Next Round";
     if (flippedCards < totalCards) {
-      message = `Flip ${getOrdinal(flippedCards + 1)} Card`
+      message = `Flip ${getOrdinal(flippedCards + 1)} Card`;
     } else if (flippedCards === totalCards) {
-      message = 'Show Scores'
+      message = 'Show Scores';
+    } else if (currentRound === gameLength) {
+      message = "Show End Screen";
     }
 
     return (
@@ -141,7 +143,7 @@ const PlayerRoundPage = ({ deck, gameData, gameRef, players }) => {
           </Button>
         ) : (
           <Button onClick={startNextRound}>
-            Start Next Round
+            {message}
           </Button>
         )}
       </div>

@@ -5,8 +5,8 @@ import { db } from '../../utils/Firebase';
 import HostSetupPage from './HostSetupPage';
 import HostRoundPage from './HostRoundPage';
 import HostEndPage from './HostEndPage';
-import { getDeck } from '../../utils/utils';
 import Spinner from '../../components/Spinner';
+import { getDeck } from '../../utils/utils';
 
 const HostGamePage = () => {
   const [gameData, setGameData] = useState(null);
@@ -58,16 +58,16 @@ const HostGamePage = () => {
   }
 
   const displayHostPage = () => {
-    const { deckType, gameState } = gameData;
+    const { deckType, indexDeck, gameState } = gameData;
 
     if (gameState === "setup") {
       return <HostSetupPage gameData={gameData} gameRef={gameRef} players={players} />
     }
     if (gameState === 'started') {
-      return <HostRoundPage deck={getDeck(deckType)} gameData={gameData} gameRef={gameRef} players={players} />
+      return <HostRoundPage deck={getDeck(indexDeck, deckType)} gameData={gameData} gameRef={gameRef} players={players} />
     }
     if (gameState === "ended") {
-      return <HostEndPage deck={getDeck(deckType)} gameData={gameData} gameRef={gameRef} players={players} />
+      return <HostEndPage deck={getDeck(indexDeck, deckType)} gameData={gameData} gameRef={gameRef} players={players} />
     }
 
     return <div>Something went wrong</div>

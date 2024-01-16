@@ -29,3 +29,4 @@ axios.get(url)
         console.log(data); // Outputs the scraped data
     })
     .catch(console.error);
+    

@@ -33,19 +33,19 @@ function HostCard({ deck, cardIndex, placeholder, flip, position, backToChosenCa
 
   useEffect(() => {
     if (highlight) {
-      const translateY = highlight === "top" ? "-20px" : "20px";
-      set({ 
+      set({
         boxShadow: '0 0 20px 10px gold',
-        transform: `perspective(600px) rotateY(180deg) scale(1.3) translateY(${translateY})`, 
+        transform: `perspective(600px) rotateY(180deg) scale(1.3) translateY(${translateY})`,
         zIndex: 100,
         immediate: key => key === 'zIndex',
       });
 
       setTimeout(() => {
-        set({ 
+        set({
           boxShadow: '0 12.5px 10px -10px rgba(50, 50, 73, 0.4)',
-          transform: `perspective(600px) rotateY(180deg) scale(1) translateY(0px)`, 
-          zIndex: 10 });
+          transform: `perspective(600px) rotateY(180deg) scale(1) translateY(0px)`,
+          zIndex: 10
+        });
       }, 1500);
     }
   }, [highlight])
@@ -77,20 +77,30 @@ function HostCard({ deck, cardIndex, placeholder, flip, position, backToChosenCa
   // Card face styles
   const cardFaceStyle = {
     position: 'absolute', // Card faces are absolute
+    display: 'flex',
     borderStyle: 'solid',
-    borderWidth: '1px',
+    borderWidth: '4px',
     borderRadius: '4px',
-    borderColor: '#dd5833',
+    borderColor: 'white',
     boxShadow,
     width: '100%',
     height: '100%',
     backfaceVisibility: 'hidden', // Hide the back side when it is facing away
     backgroundImage: `url(${cardback})`,
-    position: 'absolute',
     opacity: opacity.to(o => 1 - o),
     transform,
     transformStyle: 'preserve-3d',
   };
+
+  const displayName = () => {
+    const name = deck[cardIndex].name;
+    const firstName = name.split(" ")[0];
+    const lastName = name.split(" ").slice(1).join(" ");
+
+    return (
+      <div className='text-white text-center bg-gray-800 w-full p-1 text-xs flex justify-center self-end'>{firstName} <br></br> {lastName} </div>
+    )
+  }
 
   return (
     placeholder ?
@@ -99,24 +109,26 @@ function HostCard({ deck, cardIndex, placeholder, flip, position, backToChosenCa
         height: cardSize.height,
         borderStyle: 'dashed',
         borderWidth: '2px',
-        borderColor: '#212529',
+        borderColor: 'white',
         borderRadius: '8px',
       }}></div>
       :
       <animated.div style={cardStyle}>
         <animated.div className='card'
-          style={{...cardFaceStyle,
+          style={{
+            ...cardFaceStyle,
             backgroundImage: `url(${cardback})`,
             opacity: opacity.to(o => 1 - o),
           }}
         ></animated.div>
         <animated.div className={'card ' + (highlight ? 'highlight' : '')}
-          style={{...cardFaceStyle,
-            backgroundImage: `url(${deck[cardIndex]})`,
+          style={{
+            ...cardFaceStyle,
+            backgroundImage: `url(${deck[cardIndex].imageUrl})`,
             opacity,
             rotateY: "180deg",
           }}
-        ></animated.div>
+        >{false && displayName()}</animated.div>
       </animated.div>
   );
 }

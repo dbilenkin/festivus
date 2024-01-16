@@ -3,13 +3,12 @@ import { useParams } from 'react-router-dom';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../../utils/Firebase';
-import { Link } from "react-router-dom";
 import { CurrentGameContext } from '../../contexts/CurrentGameContext';
 import PlayerRoundPage from './PlayerRoundPage';
 import PlayerSetupPage from './PlayerSetupPage';
 import PlayerEndPage from './PlayerEndPage';
-import { getDeck } from '../../utils/utils';
 import Nav from '../../components/Nav';
+import { getDeck } from '../../utils/utils';
 
 const PlayerGamePage = () => {
 
@@ -22,10 +21,10 @@ const PlayerGamePage = () => {
 
   const getCurrentPlayerId = gameRef => {
     const playersRef = collection(gameRef, 'players');
-    const q = query(playersRef, where('name', '==', currentPlayerName));
+    const q = query(playersRef, where('name', '==', currentPlayerName, orderBy('joinedAt', 'asc')));
 
     getDocs(q).then((querySnapshot) => {
-      if (querySnapshot.size === 1) {
+      if (querySnapshot.size >= 1) {
         const playerId = querySnapshot.docs[0].id;
         setCurrentPlayerId(playerId);
       } else {
@@ -88,15 +87,15 @@ const PlayerGamePage = () => {
   }
 
   const displayPlayerPage = () => {
-    const { deckType, gameState } = gameData;
+    const { deckType, indexDeck, gameState } = gameData;
     if (gameState === "setup") {
       return <PlayerSetupPage gameData={gameData} gameRef={gameRef} players={players} />
     }
     if (gameState === 'started') {
-      return <PlayerRoundPage deck={getDeck(deckType)} gameData={gameData} gameRef={gameRef} players={players} />
+      return <PlayerRoundPage deck={getDeck(indexDeck, deckType)} gameData={gameData} gameRef={gameRef} players={players} />
     }
     if (gameState === "ended") {
-      return <PlayerEndPage deck={getDeck(deckType)} gameData={gameData} gameRef={gameRef} players={players} />
+      return <PlayerEndPage deck={getDeck(indexDeck, deckType)} gameData={gameData} gameRef={gameRef} players={players} />
     }
     return <div>Something went wrong</div>
   }

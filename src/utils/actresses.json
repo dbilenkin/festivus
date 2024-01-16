@@ -1,0 +1,290 @@
+[
+  {
+    "name": "Cate Blanchett",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Cate_Blanchett_Berlinale_2023_%28cropped%29.jpg/220px-Cate_Blanchett_Berlinale_2023_%28cropped%29.jpg"
+  },
+  {
+    "name": "Natalie Portman",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Natalie_Portman_%2848470988352%29_%28cropped%29.jpg/220px-Natalie_Portman_%2848470988352%29_%28cropped%29.jpg"
+  },
+  {
+    "name": "Uma Thurman",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Uma_Thurman_Cannes_2017_%28cropped%29.jpg/220px-Uma_Thurman_Cannes_2017_%28cropped%29.jpg"
+  },
+  {
+    "name": "Helena Bonham Carter",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Helena_Bonham_Carter_2011_AA.jpg/220px-Helena_Bonham_Carter_2011_AA.jpg"
+  },
+  {
+    "name": "Frances McDormand",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Frances_McDormand_2015_%28cropped%29.jpg/220px-Frances_McDormand_2015_%28cropped%29.jpg"
+  },
+  {
+    "name": "Meryl Streep",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Meryl_Streep_December_2018_%28cropped%29.jpg/220px-Meryl_Streep_December_2018_%28cropped%29.jpg"
+  },
+  {
+    "name": "Sigourney Weaver",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Sigourney_Weaver_by_Gage_Skidmore_4.jpg/220px-Sigourney_Weaver_by_Gage_Skidmore_4.jpg"
+  },
+  {
+    "name": "Charlize Theron",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Charlize-theron-IMG_6045.jpg/220px-Charlize-theron-IMG_6045.jpg"
+  },
+  {
+    "name": "Julianne Moore",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Julianne_Moore_%2815011443428%29_%282%29.jpg/220px-Julianne_Moore_%2815011443428%29_%282%29.jpg"
+  },
+  {
+    "name": "Robin Wright",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Robin_Wright_2009.jpg/220px-Robin_Wright_2009.jpg"
+  },
+  {
+    "name": "Jodie Foster",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Jodie_Foster_C%C3%A9sars_2011_2_%28cropped%29.jpg/220px-Jodie_Foster_C%C3%A9sars_2011_2_%28cropped%29.jpg"
+  },
+  {
+    "name": "Rachel McAdams",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Rachel_McAdams_2016.jpg/220px-Rachel_McAdams_2016.jpg"
+  },
+  {
+    "name": "Emma Stone",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Emma_Stone_%282018%29.jpg/220px-Emma_Stone_%282018%29.jpg"
+  },
+  {
+    "name": "Saoirse Ronan",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Mary_Queen_of_Scots_premiere_%2831825261767%29_%28cropped%29.jpg/220px-Mary_Queen_of_Scots_premiere_%2831825261767%29_%28cropped%29.jpg"
+  },
+  {
+    "name": "Nicole Kidman",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Nicole_Kidman_2_%2829900987478%29.jpg/220px-Nicole_Kidman_2_%2829900987478%29.jpg"
+  },
+  {
+    "name": "Jennifer Lawrence",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Jennifer_Lawrence_in_2016.jpg/220px-Jennifer_Lawrence_in_2016.jpg"
+  },
+  {
+    "name": "Julie Delpy",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Julie_Delpy_Cannes%2C_in_2002.jpg/220px-Julie_Delpy_Cannes%2C_in_2002.jpg"
+  },
+  {
+    "name": "Keira Knightley",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/KeiraKnightleyByAndreaRaffin2011_%28cropped%29.jpg/220px-KeiraKnightleyByAndreaRaffin2011_%28cropped%29.jpg"
+  },
+  {
+    "name": "Anne Hathaway",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Anne_Hathaway-68408_%28cropped%29.jpg/220px-Anne_Hathaway-68408_%28cropped%29.jpg"
+  },
+  {
+    "name": "Amy Adams",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Amy_Adams_UK_Nocturnal_Animals_Premiere_%28cropped%29.jpg/220px-Amy_Adams_UK_Nocturnal_Animals_Premiere_%28cropped%29.jpg"
+  },
+  {
+    "name": "Margot Robbie",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/SYDNEY%2C_AUSTRALIA_-_JANUARY_23_Margot_Robbie_arrives_at_the_Australian_Premiere_of_%27I%2C_Tonya%27_on_January_23%2C_2018_in_Sydney%2C_Australia_%2828074883999%29_%28cropped%29.jpg/220px-thumbnail.jpg"
+  },
+  {
+    "name": "Emma Watson",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Emma_Watson_2013.jpg/220px-Emma_Watson_2013.jpg"
+  },
+  {
+    "name": "Jennifer Connelly",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Jennifer_Connelly_2010_TIFF.jpg/220px-Jennifer_Connelly_2010_TIFF.jpg"
+  },
+  {
+    "name": "Kate Winslet",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Kate_Winslet_at_the_2017_Toronto_International_Film_Festival_%28cropped%29.jpg/220px-Kate_Winslet_at_the_2017_Toronto_International_Film_Festival_%28cropped%29.jpg"
+  },
+  {
+    "name": "Diane Kruger",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Diane_Kruger-5300_%28cropped%29.jpg/220px-Diane_Kruger-5300_%28cropped%29.jpg"
+  },
+  {
+    "name": "Mia Farrow",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Pulitzer2018-mia-farrow-20180530-wp.jpg/220px-Pulitzer2018-mia-farrow-20180530-wp.jpg"
+  },
+  {
+    "name": "Jennifer Jason Leigh",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Jennifer_Jason_Leigh_by_Gage_Skidmore.jpg/220px-Jennifer_Jason_Leigh_by_Gage_Skidmore.jpg"
+  },
+  {
+    "name": "Hilary Swank",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Hilary_Swank_at_28th_Tokyo_International_Film_Festival.jpg/220px-Hilary_Swank_at_28th_Tokyo_International_Film_Festival.jpg"
+  },
+  {
+    "name": "Alicia Vikander",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Alicia_Vikander_-_Tokyo_International_Film_Festival_2019_%2849013506278%29_%28cropped%29.jpg/220px-Alicia_Vikander_-_Tokyo_International_Film_Festival_2019_%2849013506278%29_%28cropped%29.jpg"
+  },
+  {
+    "name": "Jessica Chastain",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Jessica_Chastain_Cannes_2016_4_%28cropped%29.jpg/220px-Jessica_Chastain_Cannes_2016_4_%28cropped%29.jpg"
+  },
+  {
+    "name": "Julia Roberts",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Julia_Roberts_2011_Shankbone_3.JPG/220px-Julia_Roberts_2011_Shankbone_3.JPG"
+  },
+  {
+    "name": "Eva Green",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/EVA_GREEN_CESAR_2020.jpg/220px-EVA_GREEN_CESAR_2020.jpg"
+  },
+  {
+    "name": "Audrey Tautou",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Audrey_Tautou_Berlin_2015.jpg/220px-Audrey_Tautou_Berlin_2015.jpg"
+  },
+  {
+    "name": "Tilda Swinton",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Tilda_Swinton_Viennale_2018.jpg/220px-Tilda_Swinton_Viennale_2018.jpg"
+  },
+  {
+    "name": "Milla Jovovich",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Milla_Jovovich_Cannes_2019.jpg/220px-Milla_Jovovich_Cannes_2019.jpg"
+  },
+  {
+    "name": "Scarlett Johansson",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Scarlett_Johansson_by_Gage_Skidmore_2_%28cropped%2C_2%29.jpg/220px-Scarlett_Johansson_by_Gage_Skidmore_2_%28cropped%2C_2%29.jpg"
+  },
+  {
+    "name": "Angelina Jolie",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Angelina_Jolie_at_the_U.S._Department_of_State_in_Washington%2C_D.C._in_2022.jpg/220px-Angelina_Jolie_at_the_U.S._Department_of_State_in_Washington%2C_D.C._in_2022.jpg"
+  },
+  {
+    "name": "Brie Larson",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Captain_Marvel_trailer_at_the_National_Air_and_Space_Museum_4_%28cropped%29.jpg/220px-Captain_Marvel_trailer_at_the_National_Air_and_Space_Museum_4_%28cropped%29.jpg"
+  },
+  {
+    "name": "Rosamund Pike",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/MJK_10907_Rosamund_Pike_%28Berlinale_2018%29_%28cropped%29.jpg/220px-MJK_10907_Rosamund_Pike_%28Berlinale_2018%29_%28cropped%29.jpg"
+  },
+  {
+    "name": "Anna Kendrick",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Cannes_067_%2828008270522%29.jpg/220px-Cannes_067_%2828008270522%29.jpg"
+  },
+  {
+    "name": "Carey Mulligan",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Carey_Mulligan_2023_%28cropped_2%29.jpg/220px-Carey_Mulligan_2023_%28cropped_2%29.jpg"
+  },
+  {
+    "name": "Diane Keaton",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Diane_Keaton_2012-1_%28cropped%29.jpg/220px-Diane_Keaton_2012-1_%28cropped%29.jpg"
+  },
+  {
+    "name": "Julia Louis-Dreyfus",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Julia_Louis-Dreyfus_2019_%28cropped%29.jpg/220px-Julia_Louis-Dreyfus_2019_%28cropped%29.jpg"
+  },
+  {
+    "name": "Emily Blunt",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Emily_Blunt_SAG_Awards_2019.png/220px-Emily_Blunt_SAG_Awards_2019.png"
+  },
+  {
+    "name": "Felicity Jones",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Felicity_Jones_December_2016.jpg/220px-Felicity_Jones_December_2016.jpg"
+  },
+  {
+    "name": "Viola Davis",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Viola_Davis_by_Gage_Skidmore.jpg/220px-Viola_Davis_by_Gage_Skidmore.jpg"
+  },
+  {
+    "name": "Naomi Watts",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Naomi_Watts_%2836037832511%29_%28cropped%29.jpg/220px-Naomi_Watts_%2836037832511%29_%28cropped%29.jpg"
+  },
+  {
+    "name": "Carrie Fisher",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Carrie_Fisher_2013-a_straightened.jpg/220px-Carrie_Fisher_2013-a_straightened.jpg"
+  },
+  {
+    "name": "Vera Farmiga",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Vera_Farmiga_by_Gage_Skidmore.jpg/220px-Vera_Farmiga_by_Gage_Skidmore.jpg"
+  },
+  {
+    "name": "Hailee Steinfeld",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Hailee_Steinfeld_by_Gage_Skidmore.jpg/220px-Hailee_Steinfeld_by_Gage_Skidmore.jpg"
+  },
+  {
+    "name": "Elizabeth Olsen",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Elizabeth_Olsen_by_Gage_Skidmore_2.jpg/220px-Elizabeth_Olsen_by_Gage_Skidmore_2.jpg"
+  },
+  {
+    "name": "Sharon Stone",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Sharon_Stone_%2833374127422%29_%28cropped%29.jpg/220px-Sharon_Stone_%2833374127422%29_%28cropped%29.jpg"
+  },
+  {
+    "name": "Rooney Mara",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Rooney_Mara_at_The_Discovery_premiere_during_day_2_of_the_2017_Sundance_Film_Festival_at_Eccles_Center_Theatre_on_January_20%2C_2017_in_Park_City%2C_Utah_%2832088061480%29_%28cropped%29.jpg/220px-thumbnail.jpg"
+  },
+  {
+    "name": "Daisy Ridley",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Daisy_Ridley_by_Gage_Skidmore.jpg/220px-Daisy_Ridley_by_Gage_Skidmore.jpg"
+  },
+  {
+    "name": "Kim Basinger",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Kim_Basinger_%281990%29.jpg/220px-Kim_Basinger_%281990%29.jpg"
+  },
+  {
+    "name": "Elizabeth Banks",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Elizabeth_Banks_by_Gage_Skidmore.jpg/220px-Elizabeth_Banks_by_Gage_Skidmore.jpg"
+  },
+  {
+    "name": "Lauren Cohan",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Lauren_Cohan_by_Gage_Skidmore_5.jpg/220px-Lauren_Cohan_by_Gage_Skidmore_5.jpg"
+  },
+  {
+    "name": "Emmy Rossum",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Emmy_Rossum_cropped.jpg/220px-Emmy_Rossum_cropped.jpg"
+  },
+  {
+    "name": "Kate Mara",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Kate_Mara_by_Gage_Skidmore.jpg/220px-Kate_Mara_by_Gage_Skidmore.jpg"
+  },
+  {
+    "name": "Demi Moore",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Demi_Moore_%28cropped%29.jpg/220px-Demi_Moore_%28cropped%29.jpg"
+  },
+  {
+    "name": "Joan Allen",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/JoanAllen2000TIFF.jpg/220px-JoanAllen2000TIFF.jpg"
+  },
+  {
+    "name": "Chloë Grace Moretz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Chloe_Moretz_2018_2.jpg/220px-Chloe_Moretz_2018_2.jpg"
+  },
+  {
+    "name": "Blake Lively",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Blake_Lively_Cannes_2016_3.jpg/220px-Blake_Lively_Cannes_2016_3.jpg"
+  },
+  {
+    "name": "Rachel Weisz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Rachel_Weisz_Deauville_2012_2.jpg/220px-Rachel_Weisz_Deauville_2012_2.jpg"
+  },
+  {
+    "name": "Michelle Pfeiffer",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Michelle_Pfeiffer_Ant-Man_%26_The_Wasp_premiere.jpg/220px-Michelle_Pfeiffer_Ant-Man_%26_The_Wasp_premiere.jpg"
+  },
+  {
+    "name": "Maggie Gyllenhaal",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Maggie_Gyllenhaal_2021.jpg/220px-Maggie_Gyllenhaal_2021.jpg"
+  },
+  {
+    "name": "Evangeline Lilly",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Evangeline_Lilly_2014_Comic_Con_01_%28cropped%29.jpg/220px-Evangeline_Lilly_2014_Comic_Con_01_%28cropped%29.jpg"
+  },
+  {
+    "name": "Octavia Spencer",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/%22Hidden_Figures%22_Screening_at_the_White_House_%28NHQ201612150008%29_%28cropped%29.jpg/220px-%22Hidden_Figures%22_Screening_at_the_White_House_%28NHQ201612150008%29_%28cropped%29.jpg"
+  },
+  {
+    "name": "Alyson Hannigan",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Alyson_Hannigan%2C_2013-07-20_%28cropped%29.jpg/220px-Alyson_Hannigan%2C_2013-07-20_%28cropped%29.jpg"
+  },
+  {
+    "name": "Cameron Diaz",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Cameron_Diaz_WE_2012_Shankbone_4.JPG/220px-Cameron_Diaz_WE_2012_Shankbone_4.JPG"
+  },
+  {
+    "name": "Jennifer Aniston",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/JenniferAnistonHWoFFeb2012.jpg/220px-JenniferAnistonHWoFFeb2012.jpg"
+  },
+  {
+    "name": "Kirsten Dunst",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Kirsten_Dunst_Cannes_2016.jpg/220px-Kirsten_Dunst_Cannes_2016.jpg"
+  }
+]

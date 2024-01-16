@@ -1,11 +1,11 @@
 .card {
     background-color: white;
-    background-size: auto 90%;
+    background-size: 110% auto;
     background-repeat: no-repeat;
-    background-position: center center;
+    background-position: top;
     will-change: transform;
     border-radius: 4px;
-    /* box-shadow: 0 12.5px 10px -10px rgba(50, 50, 73, 0.4), 0 10px 10px -10px rgba(50, 50, 73, 0.3); */
+    justify-content: center;
 }
 
 /* .highlight { 
