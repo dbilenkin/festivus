@@ -1,0 +1,430 @@
+[
+  {
+    "name": "Albert Einstein",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Einstein_1921_by_F_Schmutzer_-_restoration.jpg/220px-Einstein_1921_by_F_Schmutzer_-_restoration.jpg"
+  },
+  {
+    "name": "Isaac Newton",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Portrait_of_Sir_Isaac_Newton%2C_1689_%28brightened%29.jpg/220px-Portrait_of_Sir_Isaac_Newton%2C_1689_%28brightened%29.jpg"
+  },
+  {
+    "name": "Leonardo da Vinci",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Francesco_Melzi_-_Portrait_of_Leonardo.png/220px-Francesco_Melzi_-_Portrait_of_Leonardo.png"
+  },
+  {
+    "name": "Marie Curie",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Marie_Curie_c._1920s.jpg/220px-Marie_Curie_c._1920s.jpg"
+  },
+  {
+    "name": "William Shakespeare",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/William_Shakespeare_by_John_Taylor.jpg/220px-William_Shakespeare_by_John_Taylor.jpg"
+  },
+  {
+    "name": "Mozart",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Mozart_Portrait_Croce.jpg/220px-Mozart_Portrait_Croce.jpg"
+  },
+  {
+    "name": "Ludwig van Beethoven",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Joseph_Karl_Stieler%27s_Beethoven_mit_dem_Manuskript_der_Missa_solemnis.jpg/220px-Joseph_Karl_Stieler%27s_Beethoven_mit_dem_Manuskript_der_Missa_solemnis.jpg"
+  },
+  {
+    "name": "Socrates",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Socrate_du_Louvre.jpg/220px-Socrate_du_Louvre.jpg"
+  },
+  {
+    "name": "Julius Caesar",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Retrato_de_Julio_C%C3%A9sar_%2826724093101%29_%28cropped%29.jpg/240px-Retrato_de_Julio_C%C3%A9sar_%2826724093101%29_%28cropped%29.jpg"
+  },
+  {
+    "name": "Alexander the Great",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Alexander_the_Great_mosaic_%28cropped%29.jpg/220px-Alexander_the_Great_mosaic_%28cropped%29.jpg"
+  },
+  {
+    "name": "Napoleon Bonaparte",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Jacques-Louis_David_-_The_Emperor_Napoleon_in_His_Study_at_the_Tuileries_-_Google_Art_Project.jpg/220px-Jacques-Louis_David_-_The_Emperor_Napoleon_in_His_Study_at_the_Tuileries_-_Google_Art_Project.jpg"
+  },
+  {
+    "name": "Adolf Hitler",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Hitler_portrait_crop.jpg/220px-Hitler_portrait_crop.jpg"
+  },
+  {
+    "name": "Genghis Khan",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/YuanEmperorAlbumGenghisPortrait.jpg/220px-YuanEmperorAlbumGenghisPortrait.jpg"
+  },
+  {
+    "name": "Cleopatra",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Kleopatra-VII.-Altes-Museum-Berlin1.jpg/220px-Kleopatra-VII.-Altes-Museum-Berlin1.jpg"
+  },
+  {
+    "name": "Joan of Arc",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Joan_of_Arc_miniature_graded.jpg/220px-Joan_of_Arc_miniature_graded.jpg"
+  },
+  {
+    "name": "Queen Elizabeth I",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Darnley_stage_3.jpg/220px-Darnley_stage_3.jpg"
+  },
+  {
+    "name": "Thomas Edison",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Thomas_Edison2.jpg/220px-Thomas_Edison2.jpg"
+  },
+  {
+    "name": "Galileo Galilei",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Galileo_Galilei_%281564-1642%29_RMG_BHC2700.tiff/lossy-page1-220px-Galileo_Galilei_%281564-1642%29_RMG_BHC2700.tiff.jpg"
+  },
+  {
+    "name": "Aristotle",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Aristotle_Altemps_Inv8575.jpg/220px-Aristotle_Altemps_Inv8575.jpg"
+  },
+  {
+    "name": "Plato",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Plato_Silanion_Musei_Capitolini_MC1377.jpg/220px-Plato_Silanion_Musei_Capitolini_MC1377.jpg"
+  },
+  {
+    "name": "Gautama Buddha",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Buddha_in_Sarnath_Museum_%28Dhammajak_Mutra%29.jpg/220px-Buddha_in_Sarnath_Museum_%28Dhammajak_Mutra%29.jpg"
+  },
+  {
+    "name": "Jesus Christ",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Spas_vsederzhitel_sinay.jpg/220px-Spas_vsederzhitel_sinay.jpg"
+  },
+  {
+    "name": "Muhammad",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Dark_vignette_Al-Masjid_AL-Nabawi_Door800x600x300.jpg/220px-Dark_vignette_Al-Masjid_AL-Nabawi_Door800x600x300.jpg"
+  },
+  {
+    "name": "Confucius",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Confucius_Tang_Dynasty.jpg/220px-Confucius_Tang_Dynasty.jpg"
+  },
+  {
+    "name": "Martin Luther King Jr.",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Martin_Luther_King%2C_Jr..jpg/220px-Martin_Luther_King%2C_Jr..jpg"
+  },
+  {
+    "name": "Nelson Mandela",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Nelson_Mandela_1994.jpg/220px-Nelson_Mandela_1994.jpg"
+  },
+  {
+    "name": "Winston Churchill",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Sir_Winston_Churchill_-_19086236948.jpg/220px-Sir_Winston_Churchill_-_19086236948.jpg"
+  },
+  {
+    "name": "Mahatma Gandhi",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Mahatma-Gandhi%2C_studio%2C_1931.jpg/220px-Mahatma-Gandhi%2C_studio%2C_1931.jpg"
+  },
+  {
+    "name": "Mother Teresa",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Mother_Teresa_1.jpg/220px-Mother_Teresa_1.jpg"
+  },
+  {
+    "name": "Margaret Thatcher",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Margaret_Thatcher_stock_portrait_%28cropped%29.jpg/220px-Margaret_Thatcher_stock_portrait_%28cropped%29.jpg"
+  },
+  {
+    "name": "Christopher Columbus",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Portrait_of_a_Man%2C_Said_to_be_Christopher_Columbus.jpg/220px-Portrait_of_a_Man%2C_Said_to_be_Christopher_Columbus.jpg"
+  },
+  {
+    "name": "Marco Polo",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Marco_Polo_-_costume_tartare.jpg/220px-Marco_Polo_-_costume_tartare.jpg"
+  },
+  {
+    "name": "Vasco da Gama",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Ignoto_portoghese%2C_ritratto_di_un_cavaliere_dell%27ordine_di_cristo%2C_1525-50_ca._02.jpg/220px-Ignoto_portoghese%2C_ritratto_di_un_cavaliere_dell%27ordine_di_cristo%2C_1525-50_ca._02.jpg"
+  },
+  {
+    "name": "Neil Armstrong",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Neil_Armstrong_pose.jpg/220px-Neil_Armstrong_pose.jpg"
+  },
+  {
+    "name": "Yuri Gagarin",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Yuri_Gagarin_%281961%29_-_Restoration.jpg/220px-Yuri_Gagarin_%281961%29_-_Restoration.jpg"
+  },
+  {
+    "name": "Charles Darwin",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Charles_Darwin_seated_crop.jpg/220px-Charles_Darwin_seated_crop.jpg"
+  },
+  {
+    "name": "Sigmund Freud",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Sigmund_Freud%2C_by_Max_Halberstadt_%28cropped%29.jpg/220px-Sigmund_Freud%2C_by_Max_Halberstadt_%28cropped%29.jpg"
+  },
+  {
+    "name": "Karl Marx",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Karl_Marx_001.jpg/220px-Karl_Marx_001.jpg"
+  },
+  {
+    "name": "Vladimir Lenin",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Lenin_in_1920_%28cropped%29.jpg/220px-Lenin_in_1920_%28cropped%29.jpg"
+  },
+  {
+    "name": "Joseph Stalin",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/StalinCropped1943%28b%29.jpg/220px-StalinCropped1943%28b%29.jpg"
+  },
+  {
+    "name": "Mao Zedong",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Mao_Zedong_in_1959_%28cropped%29.jpg/220px-Mao_Zedong_in_1959_%28cropped%29.jpg"
+  },
+  {
+    "name": "Abraham Lincoln",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Abraham_Lincoln_O-77_matte_collodion_print.jpg/220px-Abraham_Lincoln_O-77_matte_collodion_print.jpg"
+  },
+  {
+    "name": "George Washington",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Gilbert_Stuart_Williamstown_Portrait_of_George_Washington.jpg/220px-Gilbert_Stuart_Williamstown_Portrait_of_George_Washington.jpg"
+  },
+  {
+    "name": "John F. Kennedy",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/John_F._Kennedy%2C_White_House_color_photo_portrait.jpg/220px-John_F._Kennedy%2C_White_House_color_photo_portrait.jpg"
+  },
+  {
+    "name": "Franklin D. Roosevelt",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/FDR_1944_Color_Portrait.jpg/220px-FDR_1944_Color_Portrait.jpg"
+  },
+  {
+    "name": "Thomas Jefferson",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Official_Presidential_portrait_of_Thomas_Jefferson_%28by_Rembrandt_Peale%2C_1800%29%28cropped%29.jpg/220px-Official_Presidential_portrait_of_Thomas_Jefferson_%28by_Rembrandt_Peale%2C_1800%29%28cropped%29.jpg"
+  },
+  {
+    "name": "Benjamin Franklin",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Joseph_Siffrein_Duplessis_-_Benjamin_Franklin_-_Google_Art_Project.jpg/220px-Joseph_Siffrein_Duplessis_-_Benjamin_Franklin_-_Google_Art_Project.jpg"
+  },
+  {
+    "name": "Alexander Graham Bell",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Alexander_Graham_Bell.jpg/220px-Alexander_Graham_Bell.jpg"
+  },
+  {
+    "name": "Nikola Tesla",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/Tesla_circa_1890.jpeg/220px-Tesla_circa_1890.jpeg"
+  },
+  {
+    "name": "Steve Jobs",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Steve_Jobs_Headshot_2010-CROP_%28cropped_2%29.jpg/220px-Steve_Jobs_Headshot_2010-CROP_%28cropped_2%29.jpg"
+  },
+  {
+    "name": "Bill Gates",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Bill_Gates_-_2023_-_P062021-967902_%28cropped%29.jpg/220px-Bill_Gates_-_2023_-_P062021-967902_%28cropped%29.jpg"
+  },
+  {
+    "name": "Henry Ford",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Henry_ford_1919.jpg/220px-Henry_ford_1919.jpg"
+  },
+  {
+    "name": "Walt Disney",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Walt_Disney_1946.JPG/220px-Walt_Disney_1946.JPG"
+  },
+  {
+    "name": "Vincent van Gogh",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Vincent_van_Gogh_-_Self-Portrait_-_Google_Art_Project_%28454045%29.jpg/220px-Vincent_van_Gogh_-_Self-Portrait_-_Google_Art_Project_%28454045%29.jpg"
+  },
+  {
+    "name": "Pablo Picasso",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Portrait_de_Picasso%2C_1908.jpg/220px-Portrait_de_Picasso%2C_1908.jpg"
+  },
+  {
+    "name": "Michelangelo",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Michelangelo_Daniele_da_Volterra_%28dettaglio%29.jpg/220px-Michelangelo_Daniele_da_Volterra_%28dettaglio%29.jpg"
+  },
+  {
+    "name": "Rembrandt",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Rembrandt_van_Rijn_-_Self-Portrait_-_Google_Art_Project.jpg/220px-Rembrandt_van_Rijn_-_Self-Portrait_-_Google_Art_Project.jpg"
+  },
+  {
+    "name": "Andy Warhol",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Andy_Warhol_at_the_Jewish_Museum_%28by_Bernard_Gotfryd%29_%E2%80%93_LOC.jpg/220px-Andy_Warhol_at_the_Jewish_Museum_%28by_Bernard_Gotfryd%29_%E2%80%93_LOC.jpg"
+  },
+  {
+    "name": "Louis Armstrong",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Louis_Armstrong_restored.jpg/257px-Louis_Armstrong_restored.jpg"
+  },
+  {
+    "name": "Elvis Presley",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Elvis_Presley_promoting_Jailhouse_Rock.jpg/220px-Elvis_Presley_promoting_Jailhouse_Rock.jpg"
+  },
+  {
+    "name": "Bob Dylan",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Bob_Dylan_-_Azkena_Rock_Festival_2010_2.jpg/220px-Bob_Dylan_-_Azkena_Rock_Festival_2010_2.jpg"
+  },
+  {
+    "name": "Michael Jackson",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Michael_Jackson_in_1988.jpg/220px-Michael_Jackson_in_1988.jpg"
+  },
+  {
+    "name": "Madonna",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/MadonnaO2171023_%2897_of_133%29_%2853269593787%29_%28cropped%29.jpg/220px-MadonnaO2171023_%2897_of_133%29_%2853269593787%29_%28cropped%29.jpg"
+  },
+  {
+    "name": "Frida Kahlo",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Frida_Kahlo%2C_by_Guillermo_Kahlo.jpg/220px-Frida_Kahlo%2C_by_Guillermo_Kahlo.jpg"
+  },
+  {
+    "name": "Jane Austen",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/CassandraAusten-JaneAusten%28c.1810%29_hires.jpg/200px-CassandraAusten-JaneAusten%28c.1810%29_hires.jpg"
+  },
+  {
+    "name": "Charles Dickens",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Dickens_Gurney_head.jpg/220px-Dickens_Gurney_head.jpg"
+  },
+  {
+    "name": "J.K. Rowling",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/J._K._Rowling_2010.jpg/220px-J._K._Rowling_2010.jpg"
+  },
+  {
+    "name": "Stephen Hawking",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Stephen_Hawking.StarChild.jpg/220px-Stephen_Hawking.StarChild.jpg"
+  },
+  {
+    "name": "Homer",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Homer_British_Museum.jpg/220px-Homer_British_Museum.jpg"
+  },
+  {
+    "name": "Dante Alighieri",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Portrait_de_Dante.jpg/220px-Portrait_de_Dante.jpg"
+  },
+  {
+    "name": "Leo Tolstoy",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/%D0%9B%D0%B5%D0%B2_%D0%A2%D0%BE%D0%BB%D1%81%D1%82%D0%BE%D0%B9_%28%D0%A7%D0%B5%D1%80%D1%82%D0%BA%D0%BE%D0%B2%2C_1910%29_-_0003600121.jpg/220px-%D0%9B%D0%B5%D0%B2_%D0%A2%D0%BE%D0%BB%D1%81%D1%82%D0%BE%D0%B9_%28%D0%A7%D0%B5%D1%80%D1%82%D0%BA%D0%BE%D0%B2%2C_1910%29_-_0003600121.jpg"
+  },
+  {
+    "name": "Johann Sebastian Bach",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Johann_Sebastian_Bach.jpg/220px-Johann_Sebastian_Bach.jpg"
+  },
+  {
+    "name": "Frederic Chopin",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Frederic_Chopin_photo.jpeg/220px-Frederic_Chopin_photo.jpeg"
+  },
+  {
+    "name": "Albert Camus",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Albert_Camus%2C_gagnant_de_prix_Nobel%2C_portrait_en_buste%2C_pos%C3%A9_au_bureau%2C_faisant_face_%C3%A0_gauche%2C_cigarette_de_tabagisme.jpg/220px-Albert_Camus%2C_gagnant_de_prix_Nobel%2C_portrait_en_buste%2C_pos%C3%A9_au_bureau%2C_faisant_face_%C3%A0_gauche%2C_cigarette_de_tabagisme.jpg"
+  },
+  {
+    "name": "Ernest Hemingway",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/ErnestHemingway.jpg/220px-ErnestHemingway.jpg"
+  },
+  {
+    "name": "George Orwell",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/George_Orwell_press_photo.jpg/220px-George_Orwell_press_photo.jpg"
+  },
+  {
+    "name": "Virginia Woolf",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/George_Charles_Beresford_-_Virginia_Woolf_in_1902_-_Restoration.jpg/220px-George_Charles_Beresford_-_Virginia_Woolf_in_1902_-_Restoration.jpg"
+  },
+  {
+    "name": "Mark Twain",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Mark_Twain_by_AF_Bradley.jpg/220px-Mark_Twain_by_AF_Bradley.jpg"
+  },
+  {
+    "name": "Oscar Wilde",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Oscar_Wilde_by_Napoleon_Sarony._Three-quarter-length_photograph%2C_seated.jpg/220px-Oscar_Wilde_by_Napoleon_Sarony._Three-quarter-length_photograph%2C_seated.jpg"
+  },
+  {
+    "name": "Sigmund Freud",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Sigmund_Freud%2C_by_Max_Halberstadt_%28cropped%29.jpg/220px-Sigmund_Freud%2C_by_Max_Halberstadt_%28cropped%29.jpg"
+  },
+  {
+    "name": "Carl Jung",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/ETH-BIB-Jung%2C_Carl_Gustav_%281875-1961%29-Portrait-Portr_14163_%28cropped%29.tif/lossy-page1-220px-ETH-BIB-Jung%2C_Carl_Gustav_%281875-1961%29-Portrait-Portr_14163_%28cropped%29.tif.jpg"
+  },
+  {
+    "name": "Louis Pasteur",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Louis_Pasteur%2C_foto_av_Paul_Nadar%2C_Crisco_edit.jpg/220px-Louis_Pasteur%2C_foto_av_Paul_Nadar%2C_Crisco_edit.jpg"
+  },
+  {
+    "name": "Gregor Mendel",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Gregor_Mendel_2.jpg/220px-Gregor_Mendel_2.jpg"
+  },
+  {
+    "name": "Marie Antoinette",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Marie-Antoinette%2C_1775_-_Mus%C3%A9e_Antoine_L%C3%A9cuyer.jpg/220px-Marie-Antoinette%2C_1775_-_Mus%C3%A9e_Antoine_L%C3%A9cuyer.jpg"
+  },
+  {
+    "name": "Catherine the Great",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Catherine_II_by_J.B.Lampi_%281780s%2C_Kunsthistorisches_Museum%29.jpg/220px-Catherine_II_by_J.B.Lampi_%281780s%2C_Kunsthistorisches_Museum%29.jpg"
+  },
+  {
+    "name": "Queen Victoria",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Queen_Victoria_by_Bassano.jpg/220px-Queen_Victoria_by_Bassano.jpg"
+  },
+  {
+    "name": "Anne Frank",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Anne_Frank_passport_photo%2C_May_1942.jpg/220px-Anne_Frank_passport_photo%2C_May_1942.jpg"
+  },
+  {
+    "name": "Rosa Parks",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Rosaparks.jpg/220px-Rosaparks.jpg"
+  },
+  {
+    "name": "Amelia Earhart",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Amelia_Earhart_standing_under_nose_of_her_Lockheed_Model_10-E_Electra%2C_small.jpg/250px-Amelia_Earhart_standing_under_nose_of_her_Lockheed_Model_10-E_Electra%2C_small.jpg"
+  },
+  {
+    "name": "Florence Nightingale",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Florence_Nightingale_%28H_Hering_NPG_x82368%29.jpg/220px-Florence_Nightingale_%28H_Hering_NPG_x82368%29.jpg"
+  },
+  {
+    "name": "Helen Keller",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Helen_Keller_circa_1920_-_restored.jpg/220px-Helen_Keller_circa_1920_-_restored.jpg"
+  },
+  {
+    "name": "Eleanor Roosevelt",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Eleanor_Roosevelt_portrait_1933.jpg/220px-Eleanor_Roosevelt_portrait_1933.jpg"
+  },
+  {
+    "name": "Coco Chanel",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Coco_Chanel_in_Los_Angeles%2C_1931_%28cropped%29.jpg/220px-Coco_Chanel_in_Los_Angeles%2C_1931_%28cropped%29.jpg"
+  },
+  {
+    "name": "Malcolm X",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Malcolm_X_NYWTS_2.jpg/220px-Malcolm_X_NYWTS_2.jpg"
+  },
+  {
+    "name": "John Lennon",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/John_Lennon_1969_%28cropped%29.jpg/220px-John_Lennon_1969_%28cropped%29.jpg"
+  },
+  {
+    "name": "Che Guevara",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Che_Guevara_-_Guerrillero_Heroico_by_Alberto_Korda.jpg/220px-Che_Guevara_-_Guerrillero_Heroico_by_Alberto_Korda.jpg"
+  },
+  {
+    "name": "Bruce Lee",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Bruce_Lee_1973.jpg/220px-Bruce_Lee_1973.jpg"
+  },
+  {
+    "name": "Marilyn Monroe",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Monroecirca1953.jpg/220px-Monroecirca1953.jpg"
+  },
+  {
+    "name": "Charlie Chaplin",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Charlie_Chaplin_portrait.jpg/220px-Charlie_Chaplin_portrait.jpg"
+  },
+  {
+    "name": "Albert Schweitzer",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Bundesarchiv_Bild_183-D0116-0041-019%2C_Albert_Schweitzer.jpg/220px-Bundesarchiv_Bild_183-D0116-0041-019%2C_Albert_Schweitzer.jpg"
+  },
+  {
+    "name": "Fridtjof Nansen",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Fridtjof_Nansen_LOC_03377u-3.jpg/220px-Fridtjof_Nansen_LOC_03377u-3.jpg"
+  },
+  {
+    "name": "Alexander Fleming",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Synthetic_Production_of_Penicillin_TR1468.jpg/220px-Synthetic_Production_of_Penicillin_TR1468.jpg"
+  },
+  {
+    "name": "Enrico Fermi",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Enrico_Fermi_1943-49.jpg/220px-Enrico_Fermi_1943-49.jpg"
+  },
+  {
+    "name": "Alan Turing",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Alan_Turing_%281912-1954%29_in_1936_at_Princeton_University.jpg/220px-Alan_Turing_%281912-1954%29_in_1936_at_Princeton_University.jpg"
+  },
+  {
+    "name": "Srinivasa Ramanujan",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Srinivasa_Ramanujan_-_OPC_-_2_%28cleaned%29.jpg/220px-Srinivasa_Ramanujan_-_OPC_-_2_%28cleaned%29.jpg"
+  },
+  {
+    "name": "Leonhard Euler",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Leonhard_Euler.jpg/220px-Leonhard_Euler.jpg"
+  },
+  {
+    "name": "James Watt",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Watt_James_von_Breda.jpg/220px-Watt_James_von_Breda.jpg"
+  }
+]

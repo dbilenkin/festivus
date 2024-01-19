@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, onSnapshot } from 'firebase/firestore';
 import Spinner from '../../components/Spinner';
 import Nav from '../../components/Nav';
 import PlayerGraph from '../../components/PlayerGraph';
@@ -9,39 +9,102 @@ import { getCardScores } from '../../utils/utils';
 function HostEndPage({ gameData, gameRef }) {
 
   const [round, setRound] = useState(null);
+  const [data, setData] = useState({ nodes: [], links: [] });
+  const [strongestPlayer, setStrongestPlayer] = useState(null);
+  const [strongestConnectionCount, setStrongestConnectionCount] = useState(null);
+
+
+
+
+  useEffect(() => {
+    const roundsRef = collection(gameRef, "rounds");
+    const q = query(roundsRef, where('roundNumber', '==', gameData.gameLength));
+
+    getDocs(q).then((querySnapshot) => {
+      if (querySnapshot.size === 1) {
+        const roundId = querySnapshot.docs[0].id;
+        const _roundRef = doc(roundsRef, roundId);
+        onSnapshot(_roundRef, (doc) => {
+          setRound(doc.data());
+        });
+      } else {
+        console.error('Invalid short ID.');
+      }
+    });
+  }, [gameData.gameLength, gameRef]);
 
   useEffect(() => {
 
-    async function fetchRoundData() {
-      const roundsRef = collection(gameRef, 'rounds');
-      const q = query(roundsRef, where('roundNumber', '==', gameData.gameLength));
+    if (!round || !round.connectionThreshold) return;
+    
+    const _data = { nodes: [], links: [] };
+    let groups = {};
 
-      try {
-        const querySnapshot = await getDocs(q);
-        if (!querySnapshot.empty) {
-          const roundData = querySnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          }));
-
-          setRound(roundData[0]);
-        } else {
-          console.log("No matching rounds found");
+    const addToGroups = (neighborGroupNumber, player) => {
+      if (!Object.hasOwn(groups, player.name)) {
+        groups[player.name] = neighborGroupNumber;
+        for (let [name, score] of Object.entries(player.connections)) {
+          const otherPlayer = round.players.find(p => p.name === name);
+          if (score > round.connectionThreshold) {
+            addToGroups(neighborGroupNumber, otherPlayer)
+          }
         }
-      } catch (error) {
-        console.error("Error fetching round data: ", error);
       }
     }
 
-    fetchRoundData();
+    const createGroups = () => {
+      let groupNumber = 0;
+      addToGroups(groupNumber, round.players[0]);
+      for (let i = 1; i < round.players.length; i++) {
+        const player = round.players[i];
+        if (!Object.hasOwn(groups, player.name)) {
+          groupNumber++;
+          addToGroups(groupNumber, player);
+        }
+      }
+      for (let [key, value] of Object.entries(groups)) {
+        _data.nodes.push({
+          id: key,
+          group: value
+        })
+      }
+      setData(_data);
+    }
 
-  }, [gameData.gameLength, gameRef]);
+    createGroups();
 
-  if (!gameData || !round) {
+    const createDataFromPlayerScores = () => {
+      for (let i = 0; i < round.players.length; i++) {
+        const player = round.players[i];
+        for (let j = i + 1; j < round.players.length; j++) {
+          const score = player.connections[round.players[j].name];
+          if (score > round.connectionThreshold) {
+            _data.links.push({
+              source: player.name,
+              target: round.players[j].name,
+              value: score,
+            });
+          }
+        }
+      }
+      setData(_data);
+    }
+
+    createDataFromPlayerScores();
+
+    const _strongestPlayer = [...round.players].sort((a, b) => b.gameScore - a.gameScore)[0];
+    setStrongestPlayer(_strongestPlayer);
+    setStrongestConnectionCount(Object.values(_strongestPlayer.connections).filter(score => score > round.connectionThreshold).length);
+
+  }, [round])
+
+  if (!gameData || !round || !strongestPlayer) {
     return (
       <Spinner />
     );
   }
+
+
 
   const sortedPlayers = [...round.players].sort((a, b) => b.roundScore - a.roundScore);
   // const data = {
@@ -113,24 +176,21 @@ function HostEndPage({ gameData, gameRef }) {
 
   ///////////////// END TESTING ///////////
 
-  const data = { nodes: [], links: [] };
+
   let maxScore = 0;
   let totalScore = 0;
-  let averageScore = 0;
   let strongestPair = {};
 
   const getMaxScore = () => {
     for (let i = 0; i < round.players.length; i++) {
       const player = round.players[i];
-      for (let j = 0; j < player.connections.length; j++) {
-        const otherPlayer = player.connections[j];
-        const score = otherPlayer.score;
+      for (let [name, score] of Object.entries(player.connections)) {
         totalScore += score;
         if (score > maxScore) {
           maxScore = score;
           strongestPair = {
             source: player.name,
-            target: otherPlayer.name,
+            target: name,
             value: score
           }
         }
@@ -140,101 +200,46 @@ function HostEndPage({ gameData, gameRef }) {
 
   getMaxScore();
 
-  const getAverageScore = () => {
-    averageScore = totalScore / (round.players.length * (round.players.length - 1))
-  }
+  // const getAverageScore = () => {
+  //   connectionThreshold = totalScore / (round.players.length * (round.players.length - 1))
+  // }
 
-  getAverageScore();
+  // getAverageScore();
 
-  let groups = {};
-
-  const addToGroups = (neighborGroupNumber, player) => {
-    if (!Object.hasOwn(groups, player.name)) {
-      groups[player.name] = neighborGroupNumber;
-      for (let i = 0; i < player.connections.length; i++) {
-        const connection = player.connections[i];
-        const otherPlayer = round.players.find(p => p.name === connection.name);
-        if (connection.score > averageScore) {
-          addToGroups(neighborGroupNumber, otherPlayer)
-        }
-      }
-    }
-  }
-
-  const createGroups = () => {
-    let groupNumber = 0;
-    addToGroups(groupNumber, round.players[0]);
-    for (let i = 1; i < round.players.length; i++) {
-      const player = round.players[i];
-      if (!Object.hasOwn(groups, player.name)) {
-        groupNumber++;
-        addToGroups(groupNumber, player);
-      }
-    }
-    for (let [key, value] of Object.entries(groups)) {
-      data.nodes.push({
-        id: key,
-        group: value
-      })
-    }
-  }
-
-  createGroups();
-
-  const createDataFromPlayerScores = () => {
-    for (let i = 0; i < round.players.length; i++) {
-      const player = round.players[i];
-      for (let j = i + 1; j < round.players.length; j++) {
-        const connection = player.connections.find(c => c.name === round.players[j].name);
-        const score = connection.score;
-        if (score > averageScore) {
-          data.links.push({
-            source: player.name,
-            target: connection.name,
-            value: score,
-          });
-        }
-      }
-    }
-  }
-
-  createDataFromPlayerScores();
-
-  const strongestPlayer = [...round.players].sort((a, b) => b.gameScore - a.gameScore)[0];
-  const strongestConnectionCount = strongestPlayer.connections.filter(({score}) => score > averageScore).length;
 
   return (
     <div>
-      <Nav className="container" />
-      <div className='max-w-screen-xl mx-auto mt-3'>
-        {/* Summary Section */}
-        <div className='text-center mb-4 p-4 bg-gray-700 text-gray-100 rounded-lg'>
-          <h2 className='text-3xl font-bold mb-4'>Game Summary</h2>
-          <p className='text-xl'>
-            <span className='font-bold'>{strongestPlayer.name}</span> had the most in common with the group with {strongestConnectionCount} connections totaling {strongestPlayer.gameScore} points!
-          </p>
-          <p className='text-xl'>
-            <span className='font-bold'>{strongestPair.source}</span> & <span className='font-bold'>{strongestPair.target}</span> had the most in common with each other with a score of {maxScore} points!
-          </p>
-        </div>
+      {strongestPlayer && Number.isInteger(strongestConnectionCount) && <div>
+        <Nav className="container" />
+        <div className='max-w-screen-xl mx-auto mt-3'>
+          {/* Summary Section */}
+          <div className='text-center mb-4 p-4 bg-gray-700 text-gray-100 rounded-lg'>
+            <h2 className='text-3xl font-bold mb-4'>Game Summary</h2>
+            <p className='text-xl'>
+              <span className='font-bold'>{strongestPlayer.name}</span> had the most in common with the group with {strongestConnectionCount} connections totaling {strongestPlayer.gameScore} points!
+            </p>
+            <p className='text-xl'>
+              <span className='font-bold'>{strongestPair.source}</span> & <span className='font-bold'>{strongestPair.target}</span> had the most in common with each other with a score of {maxScore} points!
+            </p>
+          </div>
 
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-          {/* Player Connections Table */}
-          <div className='md:col-span-1 rounded-lg'>
-            <PlayerConnectionsTable
-              playersData={round.players}
-              averageScore={averageScore}
-              strongestPlayer={strongestPlayer.name}
-              strongestPair={strongestPair} />
-          </div>
-          {/* Player Graph */}
-          <div className='md:col-span-1 bg-gray-100 border border-2 border-gray-800 rounded-lg'>
-            <PlayerGraph data={data} strongestPlayer={strongestPlayer.name} strongestPair={strongestPair} />
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+            {/* Player Connections Table */}
+            <div className='md:col-span-1 rounded-lg'>
+              <PlayerConnectionsTable
+                playersData={round.players}
+                averageScore={round.connectionThreshold}
+                strongestPlayer={strongestPlayer.name}
+                strongestPair={strongestPair} />
+            </div>
+            {/* Player Graph */}
+            <div className='md:col-span-1 bg-gray-100 border border-2 border-gray-800 rounded-lg'>
+              <PlayerGraph data={data} strongestPlayer={strongestPlayer.name} strongestPair={strongestPair} />
+            </div>
           </div>
         </div>
-      </div>
+      </div>}
     </div>
-
   );
 
 }

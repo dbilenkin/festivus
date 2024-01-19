@@ -1,12 +1,12 @@
-import movieStars from './celebrities.json';
-import actors from './actors.json';
-import actresses from './actresses.json';
+import celebrities from './dataFiles/celebrities.json';
+import actors from './dataFiles/actors.json';
+import famousPeople from './dataFiles/famousPeople.json';
+import animals from './dataFiles/animals.json';
 
-const actorsAndActresses = [...actors, ...actresses];
 const deckSize = 26;
-let randomChoices = [];
 let deck = [];
 let indexDeck = [];
+let createdDeckType = "";
 
 export function generateShortId(id) {
   return id.slice(0, 4).toUpperCase();
@@ -26,16 +26,15 @@ export function createIndexDeck(deckLength) {
 }
 
 export function getIndexDeck(deckType) {
-  if (indexDeck && indexDeck.length > 0) return indexDeck;
 
-  if (deckType === "movieStars") {
-    createIndexDeck(movieStars.length);
+  if (deckType === "celebrities") {
+    createIndexDeck(celebrities.length);
   } else if (deckType === "actors") {
     createIndexDeck(actors.length);
-  } else if (deckType === "actresses") {
-    createIndexDeck(actresses.length);
-  } else if (deckType === "actorsAndActresses") {
-    createIndexDeck(actorsAndActresses.length);
+  } else if (deckType === "famousPeople") {
+    createIndexDeck(famousPeople.length);
+  } else if (deckType === "animals") {
+    createIndexDeck(animals.length);
   } else {
     createIndexDeck(52);
   }
@@ -45,16 +44,16 @@ export function getIndexDeck(deckType) {
 
 export function getDeck(_indexDeck, deckType) {
 
-  if (deck.length > 0) return deck;
+  if (deckType === createdDeckType && deck.length > 0) return deck;
 
-  if (deckType === "movieStars") {
-    deck = movieStars.filter((_, i) => _indexDeck.includes(i));
+  if (deckType === "celebrities") {
+    deck = celebrities.filter((_, i) => _indexDeck.includes(i));
   } else if (deckType === "actors") {
     deck = actors.filter((_, i) => _indexDeck.includes(i));
-  } else if (deckType === "actresses") {
-    deck = actresses.filter((_, i) => _indexDeck.includes(i));
-  } else if (deckType === "actorsAndActresses") {
-    deck = actorsAndActresses.filter((_, i) => _indexDeck.includes(i));
+  } else if (deckType === "famousPeople") {
+    deck = famousPeople.filter((_, i) => _indexDeck.includes(i));
+  } else if (deckType === "animals") {
+    deck = animals.filter((_, i) => _indexDeck.includes(i));
   } else {
     for (let i = 0; i < deckSize; i++) {
       const randomI = _indexDeck[i];

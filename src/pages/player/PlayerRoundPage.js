@@ -101,6 +101,10 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
     clearChosenCards();
     setFlippedCards(0);
     setPhrase("");
+    const updatedPlayers = [...players];
+    for (let i =0; i < roundData.players.length; i++) {
+      updatedPlayers[i].gameScore = roundData.players[i].gameScore;
+    }
 
     try {
       if (currentRound === gameLength) {
@@ -112,11 +116,11 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
         await addDoc(roundsRef, {
           roundNumber: currentRound + 1,
           phrase: '',
-          players
+          players: updatedPlayers,
         });
 
         await updateDoc(gameRef, {
-          currentRound: currentRound + 1
+          currentRound: currentRound + 1,
         });
       }
 

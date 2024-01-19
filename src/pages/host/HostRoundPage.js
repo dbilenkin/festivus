@@ -139,12 +139,15 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
 
       const calculateScores = async () => {
         const roundPlayers = [...players];
+        let totalConnectionScore = 0;
     
         for (let i = 0; i < roundPlayers.length; i++) {
           const player = roundPlayers[i];
           player.roundScore = 0;
-          player.connections = [];
-          player.gameScore = 0;
+
+          const roundPlayer = roundData.players.find(p => p.name === player.name);
+          player.gameScore = roundPlayer.gameScore;
+          player.connections = roundPlayer.connections;
     
           for (let j = 0; j < roundPlayers.length; j++) {
             if (i === j) continue;
@@ -153,18 +156,23 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
             const cards2 = otherPlayer.chosenCards;
             const roundScore = getCardScores(cards1, cards2);
             player.roundScore += roundScore;
-            const connection = {
-              name: otherPlayer.name,
-              score: roundScore
+
+            if (!player.connections || !player.connections[otherPlayer.name]) {
+              player.connections[otherPlayer.name] = roundScore;
+            } else {
+              player.connections[otherPlayer.name] += roundScore;
             }
-            player.connections.push(connection);
+
+            totalConnectionScore += player.connections[otherPlayer.name];
           }
           player.gameScore += player.roundScore;
         }
-    
+        const connectionThreshold = totalConnectionScore / (roundPlayers.length * (roundPlayers.length - 1));
         try {
           await updateDoc(roundRef, {
-            players: roundPlayers
+            players: roundPlayers,
+            scoresCalculated: true,
+            connectionThreshold
           });
           console.log("Update successful");
         } catch (error) {
@@ -172,7 +180,7 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
         }
       }
       
-      if (!roundData.players[0].connections) {
+      if (!roundData.scoresCalculated) {
         calculateScores();
       }
 
@@ -223,7 +231,7 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
       <div className='max-w-screen-xl mx-auto mt-3'>
         <div className="grid grid-cols-2 gap-3">
           {players.map((player, playerIndex) => (
-            <div
+            <div key={playerIndex}
               className='flex bg-gray-800 text-gray-100 rounded shadow px-3 pt-2'
               style={{
                 boxShadow: highlightPlayer(playerIndex) ? '0 0 20px 10px gold' : '',

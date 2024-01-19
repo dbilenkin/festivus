@@ -93,7 +93,7 @@ const PlayerGraph = ({ data, strongestPlayer, strongestPair }) => {
       .velocityDecay(0.4);
 
     // Run the simulation for a set number of ticks to stabilize
-    const numTicks = 100;
+    const numTicks = 150;
     for (let i = 0; i < numTicks; ++i) {
       simulation.tick();
     }

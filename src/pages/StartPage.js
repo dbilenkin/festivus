@@ -70,8 +70,8 @@ function StartPage() {
           name: playerName,
           gameScore: 0,
           roundScore: 0,
-          gamePlayerScores: [],
           chosenCards: [],
+          connections: {},
           team: '',
           joinedAt: serverTimestamp()
         }).then(player => {
