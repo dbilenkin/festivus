@@ -214,7 +214,7 @@ function HostEndPage({ gameData, gameRef }) {
         <Nav className="container" />
         <div className='max-w-screen-xl mx-auto mt-3'>
           {/* Summary Section */}
-          <div className='text-center mb-4 p-4 bg-gray-700 text-gray-100 rounded-lg'>
+          <div className='text-center mb-4 p-4 bg-gray-700 text-gray-200 rounded-lg'>
             <h2 className='text-3xl font-bold mb-4'>Game Summary</h2>
             <p className='text-xl'>
               <span className='font-bold'>{strongestPlayer.name}</span> had the most in common with the group with {strongestConnectionCount} connections totaling {strongestPlayer.gameScore} points!

@@ -5,27 +5,32 @@ import { CurrentGameContext } from '../../contexts/CurrentGameContext';
 import Button from '../../components/Button';
 import { db } from '../../utils/Firebase';
 import Spinner from '../../components/Spinner';
-import { getIndexDeck, displayFormattedDeckType, displayGameLength } from '../../utils/utils';
+import { getIndexDeck, displayFormattedDeckType, displayGameLength, displayWordSelection } from '../../utils/utils';
 
 const PlayerSetupPage = ({ gameData, gameRef, players }) => {
   const { currentPlayerName, currentPlayerId } = useContext(CurrentGameContext); // Access context
 
   const [chosenTeam, setChosenTeam] = useState('');
   const [joinedTeam, setJoinedTeam] = useState(false);
-  const [selectedDeck, setSelectedDeck] = useState(gameData.deckType || 'original');
+  const [selectedDeck, setSelectedDeck] = useState(gameData.deckType || 'life');
   const [selectedGameLength, setSelectedGameLength] = useState(gameData.gameLength || 3);
+  const [selectedWordSelection, setSelectedWordSelection] = useState(gameData.wordSelection || 'custom');
 
   useEffect(() => {
     const updateGame = async () => {
       await updateDoc(gameRef, {
         gameLength: parseInt(selectedGameLength),
         deckType: selectedDeck,
+        wordSelection: selectedWordSelection,
       });
     }
 
     updateGame();
-  }, [selectedGameLength, selectedDeck])
+  }, [selectedGameLength, selectedDeck, selectedWordSelection])
 
+  const handleWordSelectionChange = (event) => {
+    setSelectedWordSelection(event.target.value);
+  }
 
   const handleDeckChange = (event) => {
     setSelectedDeck(event.target.value);
@@ -77,7 +82,7 @@ const PlayerSetupPage = ({ gameData, gameRef, players }) => {
     const roundsRef = collection(gameRef, "rounds")
     await addDoc(roundsRef, {
       roundNumber: 1,
-      phrase: '',
+      word: '',
       players
     });
 
@@ -91,44 +96,34 @@ const PlayerSetupPage = ({ gameData, gameRef, players }) => {
   };
 
   return (
-    <div className="max-w-screen-sm mx-auto p-4 text-lg text-gray-200">
-      <h2 className="bg-gray-800 text-gray-200 text-xl font-bold mb-4 p-4 text-gray-100 rounded-lg">Game ID: {shortId}</h2>
-      <div className="overflow-x-auto bg-gray-800 rounded-lg">
-        <table className="min-w-full leading-normal text-gray-300">
-          <thead>
-            <tr className="">
-              <th className="px-4 py-3 border-b-2 border-gray-700 text-gray-300 text-left uppercase font-bold">Joined Players</th>
-              {/* <th className="px-5 py-3 border-b-2 border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">Team</th> */}
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="">
-              <td className="px-4 py-2 border-b border-gray-700 bg-gray-800 text-gray-300">
-                {players.map(p => p.name).join(", ")}
-              </td>
-              {/* <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">{player.team}</td> */}
-            </tr>
-          </tbody>
-
-        </table>
+    <div className="max-w-screen-sm mx-auto p-4 text-lg text-gray-300">
+      <h2 className="bg-gray-800 text-gray-300 text-xl font-bold mb-4 p-4 text-gray-300 rounded-lg">Game Code: {shortId}</h2>
+      <div className='mt-4 p-4 bg-gray-800 rounded-lg'>
+        <div className="pb-2 border-b-2 border-gray-700 text-left text-lg">
+          Joined Players
+        </div>
+        <div className="pt-2 text-lg font-bold">
+          {players.map(p => p.name).join(", ")}
+        </div>
       </div>
 
       <div className='text-gray-300'>
         {firstPlayer ? <div className="mt-4 p-4 bg-gray-800 rounded-lg flex items-center">
-          <label htmlFor="deckType" className="block font-bold mb-2 w-2/5">
-            Select Deck
+          <label htmlFor="deckType" className="block font-bold mb-2 w-5/12">
+            Deck
           </label>
           <select
             id="deckType"
             value={selectedDeck}
             onChange={handleDeckChange}
-            className="block appearance-none w-3/5 bg-gray-700 border border-gray-500 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-gray-600 focus:border-gray-500"
+            className="block appearance-none w-7/12 bg-gray-700 border border-gray-500 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-gray-600 focus:border-gray-500"
           >
-            <option key="1" value="original">Original</option>
-            <option key="2" value="celebrities">Celebrities</option>
-            <option key="3" value="actors">Actors</option>
-            <option key="4" value="famousPeople">Famous People</option>
-            <option key="5" value="animals">Animals</option>
+            <option value="life">Life</option>
+            <option value="celebrities">Celebrities</option>
+            <option value="actors">Actors</option>
+            <option value="famousPeople">Famous People</option>
+            <option value="animals">Animals</option>
+            <option value="original">Original</option>
           </select>
         </div> :
           <div className='mt-4 p-4 bg-gray-800 rounded-lg'>
@@ -137,14 +132,14 @@ const PlayerSetupPage = ({ gameData, gameRef, players }) => {
             </label>
           </div>}
         {firstPlayer ? <div className="mt-4 p-4 bg-gray-800 rounded-lg flex items-center">
-          <label htmlFor="deckType" className="block font-bold mb-2 w-2/5">
-            Select Game Length
+          <label htmlFor="deckType" className="block font-bold mb-2 w-5/12">
+            Game Length
           </label>
           <select
             id="deckType"
             value={selectedGameLength}
             onChange={handleGameLengthChange}
-            className="block appearance-none w-3/5 bg-gray-700 border border-gray-500 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-gray-600 focus:border-gray-500"
+            className="block appearance-none w-7/12 bg-gray-700 border border-gray-500 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-gray-600 focus:border-gray-500"
           >
             <option key="3" value="3">Short</option>
             <option key="5" value="5">Medium</option>
@@ -154,6 +149,25 @@ const PlayerSetupPage = ({ gameData, gameRef, players }) => {
           <div className='mt-4 p-4 bg-gray-800 rounded-lg'>
             <label htmlFor="deckType" className="block font-normal">
               Game Length: <span className='font-bold'>{displayGameLength(gameData.gameLength)}</span>
+            </label>
+          </div>}
+        {firstPlayer ? <div className="mt-4 p-4 bg-gray-800 rounded-lg flex items-center">
+          <label htmlFor="deckType" className="block font-bold mb-2 w-5/12">
+            Word Selection
+          </label>
+          <select
+            id="deckType"
+            value={selectedWordSelection}
+            onChange={handleWordSelectionChange}
+            className="block appearance-none w-7/12 bg-gray-700 border border-gray-500 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-gray-600 focus:border-gray-500"
+          >
+            <option value="custom">Custom</option>
+            <option value="wordList">Word List</option>
+          </select>
+        </div> :
+          <div className='mt-4 p-4 bg-gray-800 rounded-lg'>
+            <label htmlFor="deckType" className="block font-normal">
+              Word Selection: <span className='font-bold'>{displayWordSelection(gameData.wordSelection)}</span>
             </label>
           </div>}
         {firstPlayer && <Button onClick={handleStartGame} className={"mt-4 w-full text-xl p-4"}>

@@ -50,7 +50,7 @@ function StartPage() {
 
   const handleJoinGame = async () => {
     if (!playerName || !shortId) {
-      alert('Please enter your name and game ID.');
+      alert('Please enter your name and game code.');
       return;
     }
 
@@ -81,7 +81,7 @@ function StartPage() {
           console.error(error);
         });
       } else {
-        alert('Invalid game ID.');
+        alert('Invalid game code.');
       }
     });
   };
@@ -99,7 +99,7 @@ function StartPage() {
         <div className='bg-gray-800 mx-4 p-4 mt-4 rounded-lg'>
           <div className='flex '>
             <div className="mb-4 w-2/3">
-              <label htmlFor="playerName" className="block text-gray-300 text-sm font-bold mb-2">Your Name:</label>
+              <label htmlFor="playerName" className="block text-gray-300 text-sm font-bold mb-2">Your Name</label>
               <input
                 type="text"
                 id="playerName"
@@ -110,7 +110,7 @@ function StartPage() {
             </div>
 
             <div className="ml-4 mb-4 w-1/3">
-              <label htmlFor="shortId" className="block text-gray-300 text-sm font-bold mb-2">Game ID:</label>
+              <label htmlFor="shortId" className="block text-gray-300 text-sm font-bold mb-2">Game Code</label>
               <input
                 type="text"
                 id="shortId"

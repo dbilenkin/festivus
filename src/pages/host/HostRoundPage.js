@@ -235,11 +235,11 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
     );
   }
 
-  const getPhrase = () => {
-    const phrase = roundData.phrase;
+  const getWord = () => {
+    const word = roundData.word;
     return (
-      phrase ? "Phrase: " + phrase :
-        <span>Waiting for <span className="text-green-500 font-bold">{chooserName}</span> to choose the phrase</span>
+      word ? <span>Word:  <span className='text-green-500 font-bold uppercase'>{word}</span></span> :
+        <span>Waiting for <span className="text-green-500 font-bold">{chooserName}</span> to choose the word</span>
     )
   }
 
@@ -256,12 +256,12 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
 
   return (
     <div>
-      <Nav className="max-w-screen-xl" round={currentRound} phrase={getPhrase()} />
+      <Nav className="max-w-screen-xl" round={currentRound} word={getWord()} />
       <div className='max-w-screen-xl mx-auto mt-3'>
         <div className="grid grid-cols-2 gap-3">
           {players.map((player, playerIndex) => (
             <div key={playerIndex}
-              className='flex bg-gray-800 text-gray-100 rounded-lg shadow px-3 pt-2'
+              className='flex bg-gray-800 text-gray-200 rounded-lg shadow px-3 pt-2'
               style={{
                 boxShadow: highlightPlayer(playerIndex) ? '0 0 20px 10px gold' : '',
               }}>
@@ -279,8 +279,15 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
                       <div className='absolute text-base text-center'>{roundData.players[playerIndex].roundScore}</div>}
                   </div>
                   <div className="text-sm w-20 mr-2 border-t-2 border-gray-100 pt-2 mt-5 text-center">Game</div>
-                  <div className="text-md font-semibold w-20 mr-2 text-center">{roundData.players[playerIndex].gameScore}</div>
-                </div>
+                  <div className="relative text-md font-semibold w-20 mr-2 pb-2 flex justify-center">
+                    {(roundData.scoresCalculated) ? (
+                      <AnimatedPlayerScore
+                        score={roundData.players[playerIndex].gameScore}
+                        onRest={handleScoreAnimationRest}
+                      />
+                    ) :
+                      <div className='absolute text-base text-center'>{roundData.players[playerIndex].gameScore}</div>}
+                  </div>                </div>
               </div>
               <div className="flex flex-col">
                 <div className="flex items-center mb-2">

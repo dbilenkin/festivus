@@ -250,11 +250,11 @@ const HostRoundPage = ({ deck, gameData, gameRef, players }) => {
     return "0px";
   }
 
-  const getPhrase = () => {
-    const phrase = roundData.phrase;
+  const getWord = () => {
+    const word = roundData.word;
     return (
-      phrase ? "Phrase: " + phrase :
-        <span>Waiting for <span className="text-blue-500">{chooserName}</span> to choose the phrase</span>
+      word ? "Word: " + word :
+        <span>Waiting for <span className="text-blue-500">{chooserName}</span> to choose the word</span>
     )
   }
 
@@ -277,7 +277,7 @@ const HostRoundPage = ({ deck, gameData, gameRef, players }) => {
 
   return (
     <div>
-      <Nav className="max-w-screen-xl" round={currentRound} phrase={getPhrase()} />
+      <Nav className="max-w-screen-xl" round={currentRound} word={getWord()} />
       <div className='max-w-screen-xl mx-auto mt-4'>
         <div className="grid grid-cols-2 gap-4">
           {hydratedTeams.map((team, teamI) => (

@@ -3,20 +3,21 @@ import { doc, onSnapshot, updateDoc, collection, query, where, getDocs, addDoc }
 import { CurrentGameContext } from '../../contexts/CurrentGameContext';
 import Deck from '../../components/Deck';
 import Button from '../../components/Button';
-import { getOrdinal } from '../../utils/utils';
+import { getOrdinal, getRandomWords } from '../../utils/utils';
 
 const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
-  const { currentRound, gameLength } = gameData;
+  const { currentRound, gameLength, wordSelection, deckType } = gameData;
   const currentPlayerIndex = currentRound % players.length;
 
   const { currentPlayerName, currentPlayerId } = useContext(CurrentGameContext);
   const firstPlayer = players[0].name === currentPlayerName;
 
-  const [phrase, setPhrase] = useState('');
+  const [word, setWord] = useState('');
   const [roundData, setRoundData] = useState('');
   const [roundRef, setRoundRef] = useState(null);
   const [cardsSubmitted, setCardsSubmitted] = useState(false);
   const [flippedCards, setFlippedCards] = useState(0);
+  const [wordList, setWordList] = useState([]);
   const totalCards = 5;
 
   useEffect(() => {
@@ -46,12 +47,19 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
     setCardsSubmitted(currPlayer.chosenCards && currPlayer.chosenCards.length > 0);
   }, [players, currentPlayerName]);
 
-  const handleChoosePhrase = async (event) => {
-    event.preventDefault();
+  const handleChooseWord = async (event) => {
+    event.preventDefault()
     await updateDoc(roundRef, {
-      phrase
+      word
     });
   };
+
+  const handleWordSelection = async (wordOption) => {
+    setWord(wordOption);
+    await updateDoc(roundRef, {
+      word: wordOption
+    });
+  }
 
   const handleSelectCards = async (assignedBoxes) => {
     const chosenCards = Object.values(assignedBoxes).slice(0, 5);
@@ -99,7 +107,8 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
   const startNextRound = async () => {
     clearChosenCards();
     setFlippedCards(0);
-    setPhrase("");
+    setWord("");
+    setWordList([]);
     const updatedPlayers = [...players];
     for (let i = 0; i < roundData.players.length; i++) {
       updatedPlayers[i].gameScore = roundData.players[i].gameScore;
@@ -115,7 +124,7 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
         const roundsRef = collection(gameRef, "rounds")
         await addDoc(roundsRef, {
           roundNumber: currentRound + 1,
-          phrase: '',
+          word: '',
           players: updatedPlayers,
         });
 
@@ -175,7 +184,7 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
         <div className="deckContainer mb-4 mx-auto bg-gray-800">
           <p className="flex justify-between items-center font-semibold text-gray-300 bg-gray-800 border-b border-gray-500 px-2 py-1">
             <span className='text-md'>Round {currentRound}</span>
-            <span className='text-lg font-bold text-gray-100'>{roundData.phrase}</span>
+            <span className='text-lg font-bold uppercase text-green-500'>{roundData.word}</span>
           </p>
           <Deck deck={deck} gameData={gameData} handleSelectCards={handleSelectCards} />
         </div>
@@ -183,30 +192,51 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
     )
   }
 
-  const showChoosePhrase = () => {
+  const showChooseWord = () => {
+
+    if (wordSelection === "wordList") {
+      if (!wordList || wordList.length === 0) {
+        const _wordList = getRandomWords(deckType);
+        setWordList(_wordList);
+      }
+
+      return (
+        <div className='bg-gray-800 mx-4 text-gray-300 text-lg p-4 mt-4 rounded-lg'>
+          <p className="text-lg font-semibold mb-4">Choose the word for round {currentRound}</p>
+          <div className="flex flex-wrap gap-2">
+            {wordList.map((wordOption, index) => (
+              <Button key={index} onClick={() => handleWordSelection(wordOption)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                {wordOption}
+              </Button>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
     return (
       <div className='bg-gray-800 mx-4 text-gray-300 text-lg p-4 mt-4 rounded-lg'>
-        <form onSubmit={handleChoosePhrase} className="space-y-4">
-          <p className="text-lg font-semibold">Choose the phrase for round {currentRound}</p>
+        <form onSubmit={handleChooseWord} className="space-y-4">
+          <p className="text-lg font-semibold">Choose the word for round {currentRound}</p>
           <input
             type="text"
-            placeholder="Enter your phrase..."
-            value={phrase}
-            onChange={(event) => setPhrase(event.target.value)}
-            className="mr-2 px-3 py-2 bg-gray-700 border border-gray-500 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="Enter your word..."
+            value={word}
+            onChange={(event) => setWord(event.target.value)}
+            className="w-full px-3 py-2 bg-gray-700 border border-gray-500 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
-          <Button className="w-full" type="submit">Choose Phrase</Button>
+          <Button className="w-full" type="submit">Choose Word</Button>
         </form>
-
       </div>
     )
-  }
+  };
 
-  const showWaitingForPhrase = () => {
+
+  const showWaitingForWord = () => {
     return (
       <div className='m-4 text-gray-300 bg-gray-800 rounded-lg shadow'>
         <p className="text-2xl font-semibold  px-4 py-2">
-          Waiting for <span className="text-green-500 font-bold">{players[currentPlayerIndex].name}</span> <br></br>to choose the phrase
+          Waiting for <span className="text-green-500 font-bold">{players[currentPlayerIndex].name}</span> <br></br>to choose the word
         </p>
       </div>
     )
@@ -216,7 +246,7 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
     const chooserName = players[currentPlayerIndex].name;
     const chooser = chooserName === currentPlayerName;
 
-    if (roundData.phrase) {
+    if (roundData.word) {
       if (cardsSubmitted) {
         if (firstPlayer) {
           return showFirstPlayerChoices();
@@ -227,9 +257,9 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
     }
 
     if (chooser) {
-      return showChoosePhrase();
+      return showChooseWord();
     }
-    return showWaitingForPhrase();
+    return showWaitingForWord();
   }
 
   return (

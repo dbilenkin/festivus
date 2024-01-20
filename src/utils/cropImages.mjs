@@ -1,11 +1,14 @@
 import fs from 'fs';
-import path from 'path';
 import sharp from 'sharp';
+import path from 'path';
 
 const targetAspectRatio = 5 / 7;
+const resizeWidth = 200;
+const resizeHeight = 280;
+const deckType = 'life';
 
-// Function to crop an image
-const cropImage = async (filePath, outputFolder) => {
+// Function to crop and resize an image
+const cropAndResizeImage = async (filePath, outputFolder, index) => {
     try {
         const metadata = await sharp(filePath).metadata();
         const { width, height } = metadata;
@@ -13,52 +16,49 @@ const cropImage = async (filePath, outputFolder) => {
 
         // Calculate new dimensions to maintain a 5:7 aspect ratio
         if (width / height > targetAspectRatio) {
-            // Image is too wide, reduce width
             newHeight = height;
             newWidth = Math.round(height * targetAspectRatio);
         } else {
-            // Image is too tall, reduce height
             newWidth = width;
             newHeight = Math.round(width / targetAspectRatio);
         }
 
-        const filename = path.basename(filePath);
-        const outputPath = path.join(outputFolder, filename);
+        const outputFilename = `${deckType}-${index}.jpg`; // Format: deckType_index.jpg
+        const outputPath = path.join(outputFolder, outputFilename);
 
         await sharp(filePath)
             .extract({ 
                 width: newWidth, 
                 height: newHeight, 
-                left: Math.round((width - newWidth) / 2), // Round to nearest integer
-                top: Math.round((height - newHeight) / 2)  // Round to nearest integer
+                left: Math.round((width - newWidth) / 2), 
+                top: Math.round((height - newHeight) / 2)
             })
+            .resize(resizeWidth, resizeHeight)
             .toFile(outputPath);
 
-        console.log(`Processed ${filename}`);
+        console.log(`Processed ${outputFilename}`);
     } catch (error) {
         console.error(`Error processing ${filePath}:`, error);
     }
 };
 
-const deckType = "famousPeople";
-
 // Main function
 const processImages = async () => {
-    const inputFolder = './' + deckType; // Folder containing images
-    const outputFolder = './cropped_' + deckType; // Folder for cropped images
+    const inputFolder = `./dataFiles/${deckType}`; // Folder containing images
+    const outputFolder = `./dataFiles/${deckType}/processed`; // Folder for processed images
 
-    // Create output folder if it doesn't exist
     if (!fs.existsSync(outputFolder)) {
         fs.mkdirSync(outputFolder);
     }
 
-    // Read all files in the input folder
     const files = fs.readdirSync(inputFolder);
+    let index = 1;
 
     for (const file of files) {
         const filePath = path.join(inputFolder, file);
         if (fs.statSync(filePath).isFile()) {
-            await cropImage(filePath, outputFolder);
+            await cropAndResizeImage(filePath, outputFolder, index);
+            index++;
         }
     }
 };
