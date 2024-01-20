@@ -88,50 +88,46 @@ function StartPage() {
 
 
   return (
-    <div className="mx-auto">
-      <Nav className="max-w-screen-md"/>
-      <div className='max-w-screen-md mx-auto p-4'>
-        <div className="mb-6">
-          <p className="text-2xl font-bold mb-4 text-gray-800">
-            Create a Game
-          </p>
-          <Button onClick={handleCreateGame}>
+    <div className="">
+      <Nav className="max-w-screen-md" />
+      <div className='max-w-screen-md mx-auto text-gray-100'> {/* Adjusted text color for dark background */}
+        <div className="bg-gray-800 mx-4 p-4 mt-4 rounded-lg">
+          <Button onClick={handleCreateGame} className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded">
             Create Game
           </Button>
         </div>
-        <hr className="my-6 border-0 h-px bg-gradient-to-r from-transparent via-gray-800 to-transparent"></hr>
-        <p className="text-2xl font-bold mb-4 text-gray-800">
-          Join a Game
-        </p>
-        <div className='flex'>
-          <div className="mb-4 w-64">
-            <label htmlFor="playerName" className="block text-gray-700 text-sm font-bold mb-2">Your Name:</label>
-            <input
-              type="text"
-              id="playerName"
-              value={playerName}
-              onChange={e => setPlayerName(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+        <div className='bg-gray-800 mx-4 p-4 mt-4 rounded-lg'>
+          <div className='flex '>
+            <div className="mb-4 w-2/3">
+              <label htmlFor="playerName" className="block text-gray-300 text-sm font-bold mb-2">Your Name:</label>
+              <input
+                type="text"
+                id="playerName"
+                value={playerName}
+                onChange={e => setPlayerName(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-300"
+              />
+            </div>
 
-          <div className="ml-4 mb-4 w-24">
-            <label htmlFor="shortId" className="block text-gray-700 text-sm font-bold mb-2">Game ID:</label>
-            <input
-              type="text"
-              id="shortId"
-              value={shortId}
-              onChange={e => handleSetShortId(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
-          </div>
+            <div className="ml-4 mb-4 w-1/3">
+              <label htmlFor="shortId" className="block text-gray-300 text-sm font-bold mb-2">Game ID:</label>
+              <input
+                type="text"
+                id="shortId"
+                value={shortId}
+                onChange={e => handleSetShortId(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-300"
+              />
+            </div>
 
+          </div>
+          <Button onClick={handleJoinGame} className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded">
+            Join Game
+          </Button>
         </div>
-        <Button onClick={handleJoinGame}>
-          Join Game
-        </Button>
       </div>
     </div>
+
 
   );
 }

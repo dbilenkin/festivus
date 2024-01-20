@@ -2,6 +2,7 @@ import celebrities from './dataFiles/celebrities.json';
 import actors from './dataFiles/actors.json';
 import famousPeople from './dataFiles/famousPeople.json';
 import animals from './dataFiles/animals.json';
+import listOfNames from './dataFiles/listsOfNames.json';
 
 const deckSize = 26;
 let deck = [];
@@ -9,7 +10,16 @@ let indexDeck = [];
 let createdDeckType = "";
 
 export function generateShortId(id) {
-  return id.slice(0, 4).toUpperCase();
+  const shortIdLength = 4;
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  let shortId = '';
+  for (let i = 0; i < shortIdLength; i++) {
+    const letterIndex = Math.floor(Math.random() * letters.length);
+    const randomLetter = letters[letterIndex];
+    shortId += randomLetter;
+  }
+
+  return shortId;
 }
 
 export function createIndexDeck(deckLength) {
@@ -27,16 +37,18 @@ export function createIndexDeck(deckLength) {
 
 export function getIndexDeck(deckType) {
 
-  if (deckType === "celebrities") {
-    createIndexDeck(celebrities.length);
-  } else if (deckType === "actors") {
-    createIndexDeck(actors.length);
-  } else if (deckType === "famousPeople") {
-    createIndexDeck(famousPeople.length);
-  } else if (deckType === "animals") {
-    createIndexDeck(animals.length);
-  } else {
-    createIndexDeck(52);
+  switch (deckType) {
+    case "celebrities":
+    case "actors":
+    case "famousPeople":
+    case "animals":
+      createIndexDeck(listOfNames[deckType].length);
+      break;
+    case "original":
+      createIndexDeck(52);
+      break;
+    default:
+      break;
   }
 
   return indexDeck;
@@ -46,27 +58,36 @@ export function getDeck(_indexDeck, deckType) {
 
   if (deckType === createdDeckType && deck.length > 0) return deck;
 
-  if (deckType === "celebrities") {
-    deck = celebrities.filter((_, i) => _indexDeck.includes(i));
-  } else if (deckType === "actors") {
-    deck = actors.filter((_, i) => _indexDeck.includes(i));
-  } else if (deckType === "famousPeople") {
-    deck = famousPeople.filter((_, i) => _indexDeck.includes(i));
-  } else if (deckType === "animals") {
-    deck = animals.filter((_, i) => _indexDeck.includes(i));
-  } else {
-    for (let i = 0; i < deckSize; i++) {
-      const randomI = _indexDeck[i];
-      const imageName = `${deckType}-${randomI}.jpg`; // Construct the image name
-      const imageUrl = `decks/${deckType}/${imageName}`; // Construct the image path
-      deck.push({
-        name: '',
-        imageUrl
-      });
-    }
-
-    deck.reverse();
+  switch (deckType) {
+    case "celebrities":
+    case "actors":
+    case "famousPeople":
+    case "animals":
+      for (let i = 0; i < deckSize; i++) {
+        const randomI = _indexDeck[i];
+        const name = listOfNames[deckType][randomI].name;
+        const imageUrl = `decks/${deckType}/${listOfNames[deckType][randomI].imageUrl}`;
+        deck.push({
+          name,
+          imageUrl
+        });
+      }
+      break;
+    case "original":
+      for (let i = 0; i < deckSize; i++) {
+        const randomI = _indexDeck[i];
+        const imageName = `${deckType}-${randomI}.jpg`; // Construct the image name
+        const imageUrl = `decks/${deckType}/${imageName}`; // Construct the image path
+        deck.push({
+          name: '',
+          imageUrl
+        });
+      }
+      break;
+    default:
+      break;
   }
+
   return deck;
 }
 
@@ -100,4 +121,15 @@ export function getOrdinal(i) {
     return i + "rd";
   }
   return i + "th";
+}
+
+
+export function displayGameLength(numRounds = 3) {
+  const gameLengths = { 3: "Short", 5: "Medium", 10: "Long" };
+  return gameLengths[numRounds];
+}
+
+export function displayFormattedDeckType(deckType = "original") {
+  const deckTypes = { original: "Original", actors: "Actors", celebrities: "Celebrities", famousPeople: "Famous People", animals: "Animals" };
+  return deckTypes[deckType];
 }

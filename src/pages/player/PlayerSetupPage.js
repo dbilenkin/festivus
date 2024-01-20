@@ -1,19 +1,31 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { collection } from 'firebase/firestore';
 import { doc, updateDoc, addDoc } from 'firebase/firestore';
 import { CurrentGameContext } from '../../contexts/CurrentGameContext';
 import Button from '../../components/Button';
 import { db } from '../../utils/Firebase';
 import Spinner from '../../components/Spinner';
-import { getIndexDeck } from '../../utils/utils';
+import { getIndexDeck, displayFormattedDeckType, displayGameLength } from '../../utils/utils';
 
 const PlayerSetupPage = ({ gameData, gameRef, players }) => {
   const { currentPlayerName, currentPlayerId } = useContext(CurrentGameContext); // Access context
 
   const [chosenTeam, setChosenTeam] = useState('');
   const [joinedTeam, setJoinedTeam] = useState(false);
-  const [selectedDeck, setSelectedDeck] = useState('original');
-  const [selectedGameLength, setSelectedGameLength] = useState('3');
+  const [selectedDeck, setSelectedDeck] = useState(gameData.deckType || 'original');
+  const [selectedGameLength, setSelectedGameLength] = useState(gameData.gameLength || 3);
+
+  useEffect(() => {
+    const updateGame = async () => {
+      await updateDoc(gameRef, {
+        gameLength: parseInt(selectedGameLength),
+        deckType: selectedDeck,
+      });
+    }
+
+    updateGame();
+  }, [selectedGameLength, selectedDeck])
+
 
   const handleDeckChange = (event) => {
     setSelectedDeck(event.target.value);
@@ -29,7 +41,7 @@ const PlayerSetupPage = ({ gameData, gameRef, players }) => {
     );
   }
 
-  const { teams } = gameData;
+  const { teams, shortId } = gameData;
   const firstPlayer = players[0].name === currentPlayerName;
 
   const handleSelectTeam = (event) => {
@@ -79,98 +91,75 @@ const PlayerSetupPage = ({ gameData, gameRef, players }) => {
   };
 
   return (
-    <div className="max-w-screen-md mx-auto p-4 text-gray-800">
-      <h2 className="text-2xl font-bold mb-4">Joined Players:</h2>
-      <div className="overflow-x-auto">
-        <table className="min-w-full leading-normal">
+    <div className="max-w-screen-sm mx-auto p-4 text-lg text-gray-200">
+      <h2 className="bg-gray-800 text-gray-200 text-xl font-bold mb-4 p-4 text-gray-100 rounded-lg">Game ID: {shortId}</h2>
+      <div className="overflow-x-auto bg-gray-800 rounded-lg">
+        <table className="min-w-full leading-normal text-gray-300">
           <thead>
-            <tr className="bg-gray-100">
-              <th className="px-5 py-3 border-b-2 border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">Player Name</th>
+            <tr className="">
+              <th className="px-4 py-3 border-b-2 border-gray-700 text-gray-300 text-left uppercase font-bold">Joined Players</th>
               {/* <th className="px-5 py-3 border-b-2 border-gray-200 text-gray-800  text-left text-sm uppercase font-normal">Team</th> */}
             </tr>
           </thead>
           <tbody>
-            {players.map((player) => (
-              player.name !== currentPlayerName ?
-                <tr key={player.name} className="hover:bg-gray-100">
-                  <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">{player.name}</td>
-                  {/* <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">{player.team}</td> */}
-                </tr> :
-                (
-                  <tr key={player.name} className="hover:bg-gray-100">
-                    <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">{currentPlayerName}</td>
-                    {false && <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-                      {!joinedTeam ?
-                        <div className="flex items-center">
-                          <select
-                            value={chosenTeam}
-                            onChange={handleSelectTeam}
-                            className="appearance-none mr-2 py-2 px-4 border rounded shadow"
-                          >
-                            <option value="">Choose Team</option>
-                            {teams.map((team) => (
-                              <option key={team.name} value={team.name}>
-                                {team.name}
-                              </option>
-                            ))}
-                          </select>
-                          <Button
-                            onClick={handleJoinTeam}
-                            disabled={!chosenTeam}
-                            className={`${chosenTeam ? 'bg-blue-500 hover:bg-blue-700' : 'bg-gray-200'}`}>
-                            Join
-                          </Button>
-                        </div> :
-                        <span>{chosenTeam}</span>
-                      }
-                    </td>}
-                  </tr>
-                )
-            ))}
+            <tr className="">
+              <td className="px-4 py-2 border-b border-gray-700 bg-gray-800 text-gray-300">
+                {players.map(p => p.name).join(", ")}
+              </td>
+              {/* <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">{player.team}</td> */}
+            </tr>
           </tbody>
 
         </table>
       </div>
 
-      {firstPlayer &&
-        <div>
-          <div className="mt-4">
-            <label htmlFor="deckType" className="block text-gray-700 text-sm font-bold mb-2">
-              Choose your deck:
+      <div className='text-gray-300'>
+        {firstPlayer ? <div className="mt-4 p-4 bg-gray-800 rounded-lg flex items-center">
+          <label htmlFor="deckType" className="block font-bold mb-2 w-2/5">
+            Select Deck
+          </label>
+          <select
+            id="deckType"
+            value={selectedDeck}
+            onChange={handleDeckChange}
+            className="block appearance-none w-3/5 bg-gray-700 border border-gray-500 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-gray-600 focus:border-gray-500"
+          >
+            <option key="1" value="original">Original</option>
+            <option key="2" value="celebrities">Celebrities</option>
+            <option key="3" value="actors">Actors</option>
+            <option key="4" value="famousPeople">Famous People</option>
+            <option key="5" value="animals">Animals</option>
+          </select>
+        </div> :
+          <div className='mt-4 p-4 bg-gray-800 rounded-lg'>
+            <label htmlFor="deckType" className="block font-normal">
+              Deck: <span className='font-bold'>{displayFormattedDeckType(gameData.deckType)}</span>
             </label>
-            <select
-              id="deckType"
-              value={selectedDeck}
-              onChange={handleDeckChange}
-              className="block appearance-none w-full border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            >
-              <option key="1" value="original">Original</option>
-              <option key="2" value="celebrities">Celebrities</option>
-              <option key="3" value="actors">Actors</option>
-              <option key="4" value="famousPeople">Famous People</option>
-              <option key="5" value="animals">Animals</option>
-            </select>
-          </div>
-          <div className="mt-4">
-            <label htmlFor="deckType" className="block text-gray-700 text-sm font-bold mb-2">
-              Game Length:
+          </div>}
+        {firstPlayer ? <div className="mt-4 p-4 bg-gray-800 rounded-lg flex items-center">
+          <label htmlFor="deckType" className="block font-bold mb-2 w-2/5">
+            Select Game Length
+          </label>
+          <select
+            id="deckType"
+            value={selectedGameLength}
+            onChange={handleGameLengthChange}
+            className="block appearance-none w-3/5 bg-gray-700 border border-gray-500 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-gray-600 focus:border-gray-500"
+          >
+            <option key="3" value="3">Short</option>
+            <option key="5" value="5">Medium</option>
+            <option key="10" value="10">Long</option>
+          </select>
+        </div> :
+          <div className='mt-4 p-4 bg-gray-800 rounded-lg'>
+            <label htmlFor="deckType" className="block font-normal">
+              Game Length: <span className='font-bold'>{displayGameLength(gameData.gameLength)}</span>
             </label>
-            <select
-              id="deckType"
-              value={selectedGameLength}
-              onChange={handleGameLengthChange}
-              className="block appearance-none w-full border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            >
-              <option key="3" value="3">Short</option>
-              <option key="5" value="5">Medium</option>
-              <option key="10" value="10">Long</option>
-            </select>
-          </div>
-          <Button onClick={handleStartGame} className={"mt-4"}>
-            Start Game
-          </Button>
-        </div>
-      }
+          </div>}
+        {firstPlayer && <Button onClick={handleStartGame} className={"mt-4 w-full text-xl p-4"}>
+          Start Game
+        </Button>}
+      </div>
     </div>
   );
 };

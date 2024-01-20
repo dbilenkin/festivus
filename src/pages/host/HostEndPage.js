@@ -13,9 +13,6 @@ function HostEndPage({ gameData, gameRef }) {
   const [strongestPlayer, setStrongestPlayer] = useState(null);
   const [strongestConnectionCount, setStrongestConnectionCount] = useState(null);
 
-
-
-
   useEffect(() => {
     const roundsRef = collection(gameRef, "rounds");
     const q = query(roundsRef, where('roundNumber', '==', gameData.gameLength));
@@ -35,7 +32,7 @@ function HostEndPage({ gameData, gameRef }) {
 
   useEffect(() => {
 
-    if (!round || !round.connectionThreshold) return;
+    if (!round || !Number.isInteger(round.connectionThreshold)) return;
     
     const _data = { nodes: [], links: [] };
     let groups = {};
@@ -68,7 +65,6 @@ function HostEndPage({ gameData, gameRef }) {
           group: value
         })
       }
-      setData(_data);
     }
 
     createGroups();
@@ -87,10 +83,15 @@ function HostEndPage({ gameData, gameRef }) {
           }
         }
       }
-      setData(_data);
+
     }
 
     createDataFromPlayerScores();
+
+    const topScore = round.connectionScores[round.connectionScores.length - 1];
+    _data.topScore = topScore;
+
+    setData(_data);
 
     const _strongestPlayer = [...round.players].sort((a, b) => b.gameScore - a.gameScore)[0];
     setStrongestPlayer(_strongestPlayer);

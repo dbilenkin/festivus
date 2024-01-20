@@ -21,9 +21,9 @@ const PlayerGraph = ({ data, strongestPlayer, strongestPair }) => {
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
     // Increase the node size dynamically or to a fixed value larger than 5
-    const nodeRadius = 30;  // Or make it dynamic based on data
+    const nodeRadius = 25;  // Or make it dynamic based on data
     const minValue = 0;
-    const maxValue = 330;
+    const maxValue = data.topScore;
     // Normalize your values (example function, you'll need to adjust this to your data)
     function normalizeValue(value) {
       // Example normalization that you might need to adjust according to your data range
@@ -40,7 +40,7 @@ const PlayerGraph = ({ data, strongestPlayer, strongestPair }) => {
 
     const strokeWidth = (d) => {
       const normalizedValue = normalizeValue(d.value);
-      const baseWidth = 40;
+      const baseWidth = 30;
       return baseWidth * normalizedValue;
     }
 
@@ -88,8 +88,9 @@ const PlayerGraph = ({ data, strongestPlayer, strongestPair }) => {
       .force("charge", d3.forceManyBody().strength(d => -calculateTotalConnectionStrength(d, data.links)))
       .force("x", d3.forceX().x(d => getGroupCenters()[d.group].x))
       .force("y", d3.forceY().y(d => getGroupCenters()[d.group].y))
+      // .force("center", d3.forceCenter(width / 2, height / 2))
       .force("collide", d3.forceCollide(nodeRadius * 2)) // Add collision force
-      .alphaDecay(0.02)
+      .alphaDecay(0.01)
       .velocityDecay(0.4);
 
     // Run the simulation for a set number of ticks to stabilize
@@ -137,7 +138,7 @@ const PlayerGraph = ({ data, strongestPlayer, strongestPair }) => {
 
     // Style labels to be inside and centered in the nodes
     labels.attr("text-anchor", "middle") // Center the text horizontally
-      .attr("dy", "-0.7em")
+      .attr("dy", "-0.5em")
       .attr("fill", "white") // Set the text color to white
       .style("font-size", "14px") // Adjust font size to fit inside the nodes
       .style("pointer-events", "none"); // Ignore pointer events for text elements

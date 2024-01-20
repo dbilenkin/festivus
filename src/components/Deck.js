@@ -7,9 +7,9 @@ import Button from './Button';
 
 let maxZIndex = 900;
 const reviewedX = -193;
-const markedY = 260;
+const markedY = 263;
 const boxAdjustX = -235;
-const boxAdjustY = 165;
+const boxAdjustY = 166;
 const deckSize = 26;
 
 // const cardStates = ["deck", "ready", "toReviewed", "reviewed", "toReady", "toMarked", "marked"];
@@ -392,14 +392,14 @@ function Deck({ deck, handleSelectCards, gameData }) {
   })
 
   const boxes = (
-    <div className='absolute'>
+    <div className='absolute bg-gray-800 bg-text-300 border-t border-gray-500 mt-2'>
       <div className="flex flex-wrap justify-center items-center mt-2 max-h-screen">
         {boxRefs.current.length > 0 && boxRefs.current.map((ref, i) => (
           <animated.div
             key={i}
             ref={ref}
-            className={`box ${hoveredBox === i ? 'bg-blue-500 text-white border-solid' : 'text-gray-800 border-dashed'} 
-          border-2 border-gray-800 p-6 m-1 rounded-lg flex items-center justify-center 
+            className={`box ${hoveredBox === i ? 'bg-gray-300 text-gray-800 border-solid' : 'text-gray-300 border-dashed'} 
+          border-2 border-gray-300 p-6 m-1 rounded-lg flex items-center justify-center 
           text-2xl font-bold w-[100px] h-[140px] ${i > 2 ? 'mt-2' : ''}`}
             style={boxAnimation}
           >
@@ -407,8 +407,9 @@ function Deck({ deck, handleSelectCards, gameData }) {
           </animated.div>
         ))}
       </div>
-      <div className='flex items-center justify-around mt-2'>
+      <div className='flex items-center mt-2'>
         <Button
+          className="w-1/2 mx-4 mb-4 mt-2 bg-gray-800 border border-gray-300 text-gray-300"
           style={{ fontSize: '1rem' }}
           buttonType='secondary'
           onClick={handleCheckboxChange}>
@@ -416,7 +417,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
         </Button>
         <Button
           style={{ fontSize: '1rem' }}
-          className={`${assignedBoxesFull() ? 'bg-blue-500 hover:bg-blue-700' : 'bg-gray-300'}`}
+          className={`w-1/2 mx-4 mb-4 mt-2 ${assignedBoxesFull() ? 'bg-green-600 text-white' : 'bg-gray-500 text-gray-100'}`}
           disabled={!assignedBoxesFull()}
           onClick={() => submitCards(assignedBoxes)}>
           Submit Cards
@@ -441,15 +442,17 @@ function Deck({ deck, handleSelectCards, gameData }) {
     if (!name) return;
     const firstName = name.split(" ")[0];
     const lastName = name.split(" ").slice(1).join(" ");
-  
+
     return (
-      <div className='text-white text-center bg-gray-800 w-full p-1 text-xs flex justify-center self-end'>{firstName} <br></br> {lastName} </div>
+      <div className={`text-white text-center bg-gray-800 opacity-90 w-full p-1 ${firstPassDone ? 'text-xs' : 'text-sm'} flex justify-center self-end`}>
+        {firstName} <br></br> {lastName}
+      </div>
     )
   }
 
   return (
-    <div>
-      <div className='text-gray-100 bg-gray-800 rounded-lg shadow mt-2 py-2'>
+    <div className=''>
+      <div className='text-gray-100 bg-gray-800 border-b border-gray-500 shadow py-2'>
         <div className={`relative flex items-center justify-evenly`}
           style={{
             height: firstPassDone ? '175px' : '230px'
@@ -507,16 +510,17 @@ function Deck({ deck, handleSelectCards, gameData }) {
             <path fillRule="evenodd" d="M12 2.25a.75.75 0 0 1 .75.75v16.19l6.22-6.22a.75.75 0 1 1 1.06 1.06l-7.5 7.5a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 1 1 1.06-1.06l6.22 6.22V3a.75.75 0 0 1 .75-.75Z" clipRule="evenodd" />
           </svg>
         </div>}
+        {firstPassDone && boxes}
       </div>
-      {firstPassDone && boxes}
-      {!firstPassDone && <div className='flex justify-evenly markedSection'>
+
+      {!firstPassDone && <div className='flex justify-evenly markedSection pb-6'>
         <div>
-          <div className='markedInstructions text-gray-800 flex items-center justify-center text-xl pt-8 px-5'>
+          <div className='markedInstructions text-gray-300 flex items-center justify-center text-xl pt-8 px-5'>
             Swipe 5 or more cards down to order
           </div>
           <Button onClick={handleCheckboxChange} style={{ zIndex: '2000' }} className='w-28 mt-4'>Ready to Order</Button>
         </div>
-        <div className='markedCards text-gray-800 border-dashed border-2 border-gray-800 rounded-lg flex items-center justify-center text-2xl font-bold'>
+        <div className='markedCards text-gray-300 border-dashed border-2 border-gray-300 rounded-lg flex items-center justify-center text-2xl font-bold'>
           First Pass Cards
         </div>
       </div>}

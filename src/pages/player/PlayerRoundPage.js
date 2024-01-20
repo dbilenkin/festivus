@@ -34,7 +34,6 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
         onSnapshot(_roundRef, (doc) => {
           setRoundRef(_roundRef);
           setRoundData(doc.data());
-
         });
       } else {
         console.error('Invalid short ID.');
@@ -102,8 +101,9 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
     setFlippedCards(0);
     setPhrase("");
     const updatedPlayers = [...players];
-    for (let i =0; i < roundData.players.length; i++) {
+    for (let i = 0; i < roundData.players.length; i++) {
       updatedPlayers[i].gameScore = roundData.players[i].gameScore;
+      updatedPlayers[i].connections = roundData.players[i].connections;
     }
 
     try {
@@ -131,6 +131,13 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
 
   const showFirstPlayerChoices = () => {
     let message = "Start Next Round";
+    if (!roundData.allCardsSubmitted) {
+      return (
+        <p className="mx-4 text-xl font-semibold text-gray-300 bg-gray-800 px-4 py-2 rounded-lg shadow mt-4">
+          Waiting for all players <br></br> to submit cards...
+        </p >
+      )
+    }
     if (flippedCards < totalCards) {
       message = `Flip ${getOrdinal(flippedCards + 1)} Card`;
     } else if (flippedCards === totalCards) {
@@ -140,13 +147,13 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
     }
 
     return (
-      <div className='mt-4'>
+      <div className='m-4'>
         {flippedCards <= totalCards ? (
-          <Button onClick={handleFlipCard}>
+          <Button className="w-full" onClick={handleFlipCard}>
             {message}
           </Button>
         ) : (
-          <Button onClick={startNextRound}>
+          <Button className="w-full" onClick={startNextRound}>
             {message}
           </Button>
         )}
@@ -156,7 +163,7 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
 
   const showWaitingForNextRound = () => {
     return (
-      <p className="text-lg font-semibold text-gray-700 bg-gray-100 px-4 py-2 rounded-lg shadow mt-4">
+      <p className="mx-4 text-lg font-semibold text-gray-300 bg-gray-800 px-4 py-2 rounded-lg shadow mt-4">
         Waiting for next round to start...
       </p >
     )
@@ -164,29 +171,31 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
 
   const showDeck = () => {
     return (
-      <div className="deckContainer mb-4 mx-auto">
-        <p className="mt-3 flex justify-between items-center text-lg font-semibold text-gray-800 bg-gray-100 px-2 py-1 rounded-lg shadow">
-          <span>Round {currentRound}</span>
-          <span>Phrase: {roundData.phrase}</span>
-        </p>
-        <Deck deck={deck} gameData={gameData} handleSelectCards={handleSelectCards} />
+      <div className='max-w-screen-sm bg-gray-800'>
+        <div className="deckContainer mb-4 mx-auto bg-gray-800">
+          <p className="flex justify-between items-center font-semibold text-gray-300 bg-gray-800 border-b border-gray-500 px-2 py-1">
+            <span className='text-md'>Round {currentRound}</span>
+            <span className='text-lg font-bold text-gray-100'>{roundData.phrase}</span>
+          </p>
+          <Deck deck={deck} gameData={gameData} handleSelectCards={handleSelectCards} />
+        </div>
       </div>
     )
   }
 
   const showChoosePhrase = () => {
     return (
-      <div>
-        <form onSubmit={handleChoosePhrase} className="space-y-4 mt-4">
+      <div className='bg-gray-800 mx-4 text-gray-300 text-lg p-4 mt-4 rounded-lg'>
+        <form onSubmit={handleChoosePhrase} className="space-y-4">
           <p className="text-lg font-semibold">Choose the phrase for round {currentRound}</p>
           <input
             type="text"
             placeholder="Enter your phrase..."
             value={phrase}
             onChange={(event) => setPhrase(event.target.value)}
-            className="mr-2 px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="mr-2 px-3 py-2 bg-gray-700 border border-gray-500 rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
-          <Button type="submit">Choose Phrase</Button>
+          <Button className="w-full" type="submit">Choose Phrase</Button>
         </form>
 
       </div>
@@ -195,9 +204,9 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
 
   const showWaitingForPhrase = () => {
     return (
-      <div className='mt-4'>
-        <p className="text-lg font-semibold text-gray-700 bg-gray-100 px-4 py-2 rounded-lg shadow">
-          Waiting for <span className="text-blue-500">{players[currentPlayerIndex].name}</span> to choose the phrase
+      <div className='m-4 text-gray-300 bg-gray-800 rounded-lg shadow'>
+        <p className="text-2xl font-semibold  px-4 py-2">
+          Waiting for <span className="text-green-500 font-bold">{players[currentPlayerIndex].name}</span> <br></br>to choose the phrase
         </p>
       </div>
     )

@@ -15,6 +15,7 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
 
   const [roundData, setRoundData] = useState(null);
   const [roundRef, setRoundRef] = useState(null);
+  const [animateScores, setAnimateScores] = useState(false);
   const [animationState, setAnimationState] = useState({
     stage: '',
     highlightedCard: null,
@@ -57,6 +58,8 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
         const _roundRef = doc(roundsRef, roundId);
         onSnapshot(_roundRef, (doc) => {
           setRoundRef(_roundRef);
+          // const _roundData = doc.data();
+          // if (_roundData)
           setRoundData(doc.data());
         });
       } else {
@@ -139,8 +142,8 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
 
       const calculateScores = async () => {
         const roundPlayers = [...players];
-        let totalConnectionScore = 0;
-    
+        let connectionScores = [];
+
         for (let i = 0; i < roundPlayers.length; i++) {
           const player = roundPlayers[i];
           player.roundScore = 0;
@@ -148,7 +151,7 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
           const roundPlayer = roundData.players.find(p => p.name === player.name);
           player.gameScore = roundPlayer.gameScore;
           player.connections = roundPlayer.connections;
-    
+
           for (let j = 0; j < roundPlayers.length; j++) {
             if (i === j) continue;
             const otherPlayer = roundPlayers[j];
@@ -163,15 +166,17 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
               player.connections[otherPlayer.name] += roundScore;
             }
 
-            totalConnectionScore += player.connections[otherPlayer.name];
+            connectionScores.push(player.connections[otherPlayer.name]);
           }
           player.gameScore += player.roundScore;
         }
-        const connectionThreshold = totalConnectionScore / (roundPlayers.length * (roundPlayers.length - 1));
+        connectionScores.sort((a, b) => a - b);
+        const connectionThreshold = connectionScores[Math.floor(connectionScores.length / 2)];
         try {
           await updateDoc(roundRef, {
             players: roundPlayers,
             scoresCalculated: true,
+            connectionScores,
             connectionThreshold
           });
           console.log("Update successful");
@@ -179,11 +184,10 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
           console.error("Error updating document: ", error);
         }
       }
-      
+
       if (!roundData.scoresCalculated) {
         calculateScores();
       }
-
       // setAnimationState({
       //   ...animationState,
       //   stage: 'highlight',
@@ -191,11 +195,36 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
     }
   }, [roundData])
 
+  useEffect(() => {
+    const checkAllCardsSubmitted = async () => {
+      let allCardsSubmitted = true;
+      for (let player of players) {
+        if (player.chosenCards.length < 5) {
+          allCardsSubmitted = false;
+          break;
+        }
+      }
+      if (allCardsSubmitted) {
+        try {
+          await updateDoc(roundRef, {
+            allCardsSubmitted: true
+          });
+          console.log("Update successful");
+        } catch (error) {
+          console.error("Error updating document: ", error);
+        }
+      }
+    }
+
+    checkAllCardsSubmitted();
+
+  }, [players]);
+
   // Function to be called when score animation ends
   const handleScoreAnimationRest = () => {
-    setTimeout(() => {
-      setAnimationState({ ...animationState, stage: 'nextCard' });
-    }, 500);
+    // setTimeout(() => {
+    //   setAnimationState({ ...animationState, stage: 'nextCard' });
+    // }, 500);
   };
 
   if (!roundData) {
@@ -210,7 +239,7 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
     const phrase = roundData.phrase;
     return (
       phrase ? "Phrase: " + phrase :
-        <span>Waiting for <span className="text-blue-500">{chooserName}</span> to choose the phrase</span>
+        <span>Waiting for <span className="text-green-500 font-bold">{chooserName}</span> to choose the phrase</span>
     )
   }
 
@@ -232,25 +261,25 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
         <div className="grid grid-cols-2 gap-3">
           {players.map((player, playerIndex) => (
             <div key={playerIndex}
-              className='flex bg-gray-800 text-gray-100 rounded shadow px-3 pt-2'
+              className='flex bg-gray-800 text-gray-100 rounded-lg shadow px-3 pt-2'
               style={{
                 boxShadow: highlightPlayer(playerIndex) ? '0 0 20px 10px gold' : '',
               }}>
               <div className="flex flex-col justify-between items-start">
                 <div className="flex flex-col items-center mb-2">
-                  <div className="text-lg font-semibold w-20 mr-2 pb-2">{player.name}</div>
-                  <div className="text-sm w-20 mr-2 border-t-2 border-gray-100 pt-2">Round</div>
-                  <div className="relative text-md font-semibold w-20 mr-2 pb-2">
-                    {(animationState.stage === "animateScore" && animationState.playerIndex === playerIndex) ? (
+                  <div className="text-lg font-semibold w-20 mr-2 pb-2 text-center">{player.name}</div>
+                  <div className="text-sm w-20 mr-2 border-t-2 border-gray-100 pt-2 text-center">Round</div>
+                  <div className="relative text-md font-semibold w-20 mr-2 pb-2 flex justify-center">
+                    {(roundData.scoresCalculated) ? (
                       <AnimatedPlayerScore
                         score={roundData.players[playerIndex].roundScore}
                         onRest={handleScoreAnimationRest}
                       />
                     ) :
-                      <div className='absolute text-base'>{roundData.players[playerIndex].roundScore}</div>}
+                      <div className='absolute text-base text-center'>{roundData.players[playerIndex].roundScore}</div>}
                   </div>
-                  <div className="text-sm w-20 mr-2 border-t-2 border-gray-100 pt-2 mt-5">Game</div>
-                  <div className="text-md font-semibold w-20 mr-2">{roundData.players[playerIndex].gameScore}</div>
+                  <div className="text-sm w-20 mr-2 border-t-2 border-gray-100 pt-2 mt-5 text-center">Game</div>
+                  <div className="text-md font-semibold w-20 mr-2 text-center">{roundData.players[playerIndex].gameScore}</div>
                 </div>
               </div>
               <div className="flex flex-col">

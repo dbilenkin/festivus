@@ -5,7 +5,7 @@ import cardback from './card-back.jpg';
 
 function HostCard({ deck, cardIndex, placeholder, flip, position, backToChosenCards, highlight }) {
 
-  const [cardSize, setCardSize] = useState({ width: 80, height: 112 });
+  const [cardSize, setCardSize] = useState({ width: 100, height: 140 });
 
   const translateY = position;
 
@@ -52,25 +52,25 @@ function HostCard({ deck, cardIndex, placeholder, flip, position, backToChosenCa
 
 
 
-  useEffect(() => {
-    function handleResize() {
-      let newWidth = Math.min(window.innerHeight / 7.7, 100);
-      let newHeight = Math.min(window.innerHeight / 5.5, 140);
-      setCardSize({ width: newWidth, height: newHeight });
-    }
+  // useEffect(() => {
+  //   function handleResize() {
+  //     let newWidth = Math.min(window.innerHeight / 7.7, 100);
+  //     let newHeight = Math.min(window.innerHeight / 5.5, 140);
+  //     setCardSize({ width: newWidth, height: newHeight });
+  //   }
 
-    handleResize();
+  //   handleResize();
 
-    window.addEventListener('resize', handleResize);
+  //   window.addEventListener('resize', handleResize);
 
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  //   return () => window.removeEventListener('resize', handleResize);
+  // }, []);
 
   // Card styles
   const cardStyle = {
     position: 'relative',
-    width: cardSize.width,
-    height: cardSize.height,
+    width: 100,
+    height: 140,
     zIndex: zIndex,
   };
 

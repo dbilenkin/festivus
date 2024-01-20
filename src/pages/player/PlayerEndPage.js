@@ -3,6 +3,7 @@ import { collection, query, where, getDocs, doc } from 'firebase/firestore';
 import { CurrentGameContext } from '../../contexts/CurrentGameContext';
 import Spinner from '../../components/Spinner';
 import ConnectionThresholdRangeInput from '../../components/ConnectionThresholdRangeInput';
+import ConnectionThresholdSelector from '../../components/ConnectionThresholdSelector';
 
 function PlayerEndPage({ gameData, gameRef }) {
 
@@ -58,33 +59,8 @@ function PlayerEndPage({ gameData, gameRef }) {
 
   return (
     <div className="container mx-auto p-4">
-      Update Connection Threshold:
-      <ConnectionThresholdRangeInput roundRef={roundRef} />
-      {/* Team Placement */}
-      {/* <div className="mb-8">
-        <h2 className="text-xl font-bold mb-2">Team Placement</h2>
-        <p>Your team, <span className={`text-${team.name}-700 font-bold`}>{team.name}</span>, finished in <span className="font-semibold">{teamRank} place</span>.</p>
-      </div> */}
-
-      {/* Individual Placement */}
-      {/* <div className="mb-8">
-        <h2 className="text-xl font-bold mb-2">Individual Placement</h2>
-        <p>You finished in <span className="font-semibold">{playerRank} place</span>.</p>
-      </div> */}
-
-      {/* Match List */}
-      {/* <div>
-        <h2 className="text-xl font-bold mb-2">Incommon with Others</h2>
-        <ul>
-          {player.gamePlayerScores
-            .sort((a, b) => b.score - a.score)
-            .map((otherPlayer, index) => (
-              <li key={otherPlayer.name} className="mb-1">
-                {index + 1}. {otherPlayer.name} - Score: {otherPlayer.score}
-              </li>
-            ))}
-        </ul>
-      </div> */}
+      <div className='text-2xl'>Update Connection Threshold</div>
+      <ConnectionThresholdSelector roundData={round} roundRef={roundRef} />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { useSpring, animated } from '@react-spring/web';
 const AnimatedPlayerScore = ({ score, onRest }) => {
   const [props, set] = useSpring(() => ({
     transform: 'scale(1)', // Initial scale
-    onRest,
+    // onRest,
   }));
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const AnimatedPlayerScore = ({ score, onRest }) => {
       position: 'absolute',
       display: 'flex',
       justifyContent: 'center', // Center content horizontally
-      alignItems: 'center', // Center content vertically
+      alignItems: 'start', // Center content vertically
       width: '100%', // Take full width to allow horizontal centering
       height: '100%', // Take full height to allow vertical centering
     }}>
