@@ -5,7 +5,7 @@ import path from 'path';
 const targetAspectRatio = 5 / 7;
 const resizeWidth = 200;
 const resizeHeight = 280;
-const deckType = 'life';
+const deckType = 'animals';
 
 // Function to crop and resize an image
 const cropAndResizeImage = async (filePath, outputFolder, index) => {
@@ -52,7 +52,7 @@ const processImages = async () => {
     }
 
     const files = fs.readdirSync(inputFolder);
-    let index = 1;
+    let index = 0;
 
     for (const file of files) {
         const filePath = path.join(inputFolder, file);

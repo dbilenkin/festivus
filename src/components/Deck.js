@@ -19,6 +19,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
   const [firstPassDone, setFirstPassDone] = useState(false);
   const [hoveredBox, setHoveredBox] = useState(null);
   const [assignedBoxes, setAssignedBoxes] = useState([]);
+  const [markedSet, setMarkedSet] = useState(new Set());
 
   const boxRefs = useRef([]);
 
@@ -110,6 +111,9 @@ function Deck({ deck, handleSelectCards, gameData }) {
           cardSet[i] = "deck";
         } else if (cardSet[i] === "marked") {
           cardSet[i] = "ready";
+          const newMarked = new Set(markedSet);
+          newMarked.delete(i);
+          setMarkedSet(newMarked);
         }
       }
       const updatedBoxes = [...assignedBoxes];
@@ -121,6 +125,9 @@ function Deck({ deck, handleSelectCards, gameData }) {
           cardSet[i] = "ready";
         } else if (cardSet[i] === "ready" || cardSet[i] === "reviewed") {
           cardSet[i] = "marked";
+          const newMarked = new Set(markedSet);
+          newMarked.add(i);
+          setMarkedSet(newMarked);
         }
       }
     }
@@ -227,6 +234,12 @@ function Deck({ deck, handleSelectCards, gameData }) {
       } else if (mx > 80) {
         cardSet[index] = "toReady";
       }
+    } else if (cardState === "marked") {
+      if (my < 100 && !firstPassDone) {
+        cardSet[index] = "markedToReady";
+      } else if (mx > 80) {
+        cardSet[index] = "readyToMarked";
+      }
     }
 
     if (active) {
@@ -241,8 +254,8 @@ function Deck({ deck, handleSelectCards, gameData }) {
         if (ref.current) {
           const box = ref.current;
           const boxRect = box.getBoundingClientRect();
-          const xOffset = -90;
-          const yOffest = -160;
+          const xOffset = -85;
+          const yOffest = -150;
           if (
             cardRect.x + xOffset < boxRect.right &&
             cardRect.x + xOffset + cardRect.width > boxRect.left &&
@@ -259,8 +272,8 @@ function Deck({ deck, handleSelectCards, gameData }) {
     }
 
     if (!active) {
-      // console.log({ hoveredBox, index });
       if (Number.isInteger(hoveredBox) && Number.isInteger(index)) {
+        console.log({ hoveredBox, index });
         const updatedBoxes = [...assignedBoxes];
         const originalBoxIndex = updatedBoxes.findIndex(box => box === index);
         if (originalBoxIndex !== -1) {
@@ -334,7 +347,8 @@ function Deck({ deck, handleSelectCards, gameData }) {
           if (active) {
             newX = mx + bx;
             newY = my + by;
-          } else if (y < 325) {
+          } else if (!Number.isInteger(hoveredBox)) {
+            console.log({ y });
             newX = 0;
             newY = 0;
             zIndex = numReady + maxZIndex;
@@ -352,6 +366,9 @@ function Deck({ deck, handleSelectCards, gameData }) {
               newY = markedY;
               zIndex = numMarked + maxZIndex;
               cardSet[i] = "marked";
+              const newSet = new Set(markedSet);
+              newSet.add(i);
+              setMarkedSet(newSet);
             }
             break;
           case "reviewedToMarked":
@@ -362,6 +379,22 @@ function Deck({ deck, handleSelectCards, gameData }) {
               newY = markedY;
               zIndex = numMarked + maxZIndex;
               cardSet[i] = "marked";
+              const newSet = new Set(markedSet);
+              newSet.add(i);
+              setMarkedSet(newSet);
+            }
+            break;
+          case "markedToReady":
+            if (active) {
+              newY = my + markedY;
+            } else {
+              newX = 0;
+              newY = 0;
+              zIndex = numReady + maxZIndex;
+              cardSet[i] = "ready";
+              const newSet = new Set(markedSet);
+              newSet.delete(i);
+              setMarkedSet(newSet);
             }
             break;
           case "marked":
@@ -398,7 +431,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
           <animated.div
             key={i}
             ref={ref}
-            className={`box ${hoveredBox === i ? 'bg-gray-300 text-gray-800 border-solid' : 'text-gray-300 border-dashed'} 
+            className={`box ${hoveredBox === i ? 'bg-gray-300 text-gray-800 border-solid shadow-[0_0_10px_10px_rgba(255,255,255,1)]' : 'text-gray-300 border-dashed'} 
           border-2 border-gray-300 p-6 m-1 rounded-lg flex items-center justify-center 
           text-2xl font-bold w-[100px] h-[140px] ${i > 2 ? 'mt-2' : ''}`}
             style={boxAnimation}
@@ -449,6 +482,8 @@ function Deck({ deck, handleSelectCards, gameData }) {
       </div>
     )
   }
+
+  console.log("Current marked set:", markedSet); // Log the state
 
   return (
     <div className=''>
@@ -514,14 +549,20 @@ function Deck({ deck, handleSelectCards, gameData }) {
       </div>
 
       {!firstPassDone && <div className='flex justify-evenly markedSection pb-6'>
-        <div>
-          <div className='markedInstructions text-gray-300 flex items-center justify-center text-xl pt-8 px-5'>
+        <div className='p-4 w-1/2 ml-2 mr-4'>
+          <div className='markedInstructions text-gray-300 flex items-center justify-center text-xl pt-6'>
             Swipe 5 or more cards down to order
           </div>
-          <Button onClick={handleCheckboxChange} style={{ zIndex: '2000' }} className='w-28 mt-4'>Ready to Order</Button>
+          <Button
+            onClick={handleCheckboxChange}
+            disabled={markedSet.size < 5}
+            className='w-full mt-8'>Ready to Order</Button>
         </div>
-        <div className='markedCards text-gray-300 border-dashed border-2 border-gray-300 rounded-lg flex items-center justify-center text-2xl font-bold'>
-          First Pass Cards
+        <div className='w-1/2 ml-5'>
+          <div className='markedCards text-gray-300 border-dashed border-2 border-gray-300 rounded-lg flex items-center justify-center text-2xl font-bold'>
+            First Pass Cards
+          </div>
+          <div className='relative text-xl text-gray-300 font-bold pt-2'>{markedSet.size} cards ready</div>
         </div>
       </div>}
     </div>

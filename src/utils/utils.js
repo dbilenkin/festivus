@@ -48,7 +48,6 @@ export function getIndexDeck(deckType) {
     case "celebrities":
     case "actors":
     case "famousPeople":
-    case "animals":
       indexDeck = createIndexDeck(names[deckType].length);
       break;
     case "original":
@@ -56,6 +55,9 @@ export function getIndexDeck(deckType) {
       break;
     case "life":
       indexDeck = createIndexDeck(68);
+      break;
+    case "animals":
+      indexDeck = createIndexDeck(62);
       break;
     default:
       break;
@@ -73,7 +75,6 @@ export function getDeck(_indexDeck, deckType) {
     case "celebrities":
     case "actors":
     case "famousPeople":
-    case "animals":
       for (let i = 0; i < deckSize; i++) {
         const randomI = _indexDeck[i];
         const name = names[deckType][randomI].name;
@@ -85,6 +86,7 @@ export function getDeck(_indexDeck, deckType) {
       }
       break;
     case "original": // decks without names
+    case "animals":
     case "life":
       for (let i = 0; i < deckSize; i++) {
         const randomI = _indexDeck[i];
@@ -147,7 +149,7 @@ export function displayFormattedDeckType(deckType = "life") {
 }
 
 export function displayWordSelection(wordSelection = "custom") {
-  const wordSelectionOptions = { custom: "Custom", wordList: "Word List"};
+  const wordSelectionOptions = { custom: "Custom", wordList: "Word List" };
   return wordSelectionOptions[wordSelection];
 }
 

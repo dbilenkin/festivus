@@ -38,21 +38,12 @@
   height: 210px;
 }
 
-.markedSection {
-  width: 360px;
-}
-
-.markedInstructions {
-  width: 190px;
-}
-
 .markedCards {
   position: relative;
   margin-top: 20px;
   right: 3px;
   height: 210px;
   width: 150px;
-  float: right;
 }
 
 .switch {
