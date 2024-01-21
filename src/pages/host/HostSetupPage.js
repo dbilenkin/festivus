@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { animated, useTransition } from '@react-spring/web';
 import Nav from '../../components/Nav';
 import { displayFormattedDeckType, displayGameLength, displayWordSelection } from '../../utils/utils';
+import Button from '../../components/Button';
 
 const HostSetupPage = ({ gameData, players }) => {
 
@@ -10,7 +11,7 @@ const HostSetupPage = ({ gameData, players }) => {
 
   useEffect(() => {
     if (players.length > 0) {
-      const audio = new Audio('sounds/pop.mp3'); // assuming pop.mp3 is in the public folder
+      const audio = new Audio('sounds/whoosh.mp3'); // assuming pop.mp3 is in the public folder
       audio.play().catch(error => console.log('Error playing the sound:', error));
     }
   }, [players]);
@@ -29,6 +30,8 @@ const HostSetupPage = ({ gameData, players }) => {
     keys: player => player.id,
   });
 
+  const colors = ['red','orange','yellow','green','blue','indigo','violet','purple']
+
   return (
     <div className="">
       <Nav className="max-w-screen-md" />
@@ -41,10 +44,10 @@ const HostSetupPage = ({ gameData, players }) => {
             Joined Players
           </div>
           <div className="pt-2 text-lg font-bold flex">
-            {transitions((styles, player) => (
+            {transitions((styles, player, index) => (
               <animated.div style={styles} className="text-lg font-bold" key={player.id}>
                 {/* Apply random colors or styles here */}
-                <div className='bg-green-600 py-2 px-4 mx-2 rounded-lg'>
+                <div className={`bg-blue-700 text-white py-2 px-4 mr-2 mt-2 rounded-full`}>
                   {player.name}
                 </div>
               </animated.div>
@@ -62,6 +65,7 @@ const HostSetupPage = ({ gameData, players }) => {
             Word Selection: <span className='font-bold'>{displayWordSelection(gameData.wordSelection)}</span>
           </label>
         </div>
+        <Button className="mt-4">Allow Sounds</Button>
       </div>
     </div>
   );
