@@ -409,7 +409,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
         }
       }
 
-      const scale = active ? 1.1 : 1 // Active cards lift up a bit
+      const scale = active ? 1.3 : 1 // Active cards lift up a bit
       return {
         x: newX,
         y: newY,

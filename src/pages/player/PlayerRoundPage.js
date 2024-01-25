@@ -52,6 +52,7 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
     await updateDoc(roundRef, {
       word
     });
+    setWord('');
   };
 
   const handleWordSelection = async (wordOption) => {
@@ -143,7 +144,7 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
     if (!roundData.allCardsSubmitted) {
       return (
         <p className="mx-4 text-xl font-semibold text-gray-300 bg-gray-800 px-4 py-2 rounded-lg shadow mt-4">
-          Waiting for all players <br></br> to submit cards...
+          Sit tight. <br></br> Some people are slow.
         </p >
       )
     }
@@ -173,7 +174,7 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
   const showWaitingForNextRound = () => {
     return (
       <p className="mx-4 text-lg font-semibold text-gray-300 bg-gray-800 px-4 py-2 rounded-lg shadow mt-4">
-        Waiting for next round to start...
+        Sit tight. Not everyone is as fast as you.
       </p >
     )
   }

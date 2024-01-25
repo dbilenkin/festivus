@@ -36,19 +36,42 @@ const HostGamePage = () => {
     if (gameRef) {
       const playersRef = collection(gameRef, 'players');
       const q = query(playersRef, orderBy('joinedAt', 'asc'));
-
+  
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        const playersData = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        setPlayers(playersData);
+        setPlayers(prevPlayers => {
+          // Convert existing players to a Map for easy access
+          const playersMap = new Map(prevPlayers.map(player => [player.id, player]));
+  
+          // Update or add players
+          querySnapshot.docs.forEach(doc => {
+            const newPlayerData = { id: doc.id, ...doc.data() };
+            const currentPlayer = playersMap.get(doc.id);
+  
+            // Update the player in the map only if the data has changed
+            if (!currentPlayer || JSON.stringify(currentPlayer) !== JSON.stringify(newPlayerData)) {
+              playersMap.set(doc.id, newPlayerData);
+            }
+          });
+  
+          // Remove players that are no longer in the snapshot
+          const snapshotPlayerIds = new Set(querySnapshot.docs.map(doc => doc.id));
+          playersMap.forEach((value, key) => {
+            if (!snapshotPlayerIds.has(key)) {
+              playersMap.delete(key);
+            }
+          });
+  
+          // Convert the Map back to an array
+          return Array.from(playersMap.values());
+        });
       });
-
+  
       // Clean up the listener when the component unmounts
       return () => unsubscribe();
     }
   }, [gameRef]);
+  
+  
 
 
   if (!gameData) {

@@ -25,7 +25,7 @@
 .deck>div {
   touch-action: none;
   background-color: white;
-  background-size: 110% auto;
+  background-size: 106% auto;
   background-repeat: no-repeat;
   background-position: top center;
   /* box-shadow: 0 12.5px 10px -10px rgba(50, 50, 73, 0.4), 0 10px 10px -10px rgba(50, 50, 73, 0.3); */

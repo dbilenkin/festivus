@@ -257,8 +257,8 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
   return (
     <div>
       <Nav className={`${players.length <= 4 ? 'max-w-2xl' : 'max-w-screen-xl'}`} round={currentRound} word={getWord()} />
-      <div className='max-w-screen-xl mx-auto mt-3'>
-        <div className={`grid ${players.length <= 4 ? 'grid-cols-1' : 'grid-cols-2'} gap-3`}>
+      <div className='max-w-screen-xl mx-auto mt-2'>
+        <div className={`grid ${players.length <= 4 ? 'grid-cols-1' : 'grid-cols-2'} gap-2`}>
           {players.map((player, playerIndex) => (
             <div key={playerIndex}
               className={`flex bg-gray-800 text-gray-200 rounded-lg shadow px-3 pt-2 ${players.length <= 4 ? 'mx-auto' : ''}`}
