@@ -15,7 +15,7 @@ function HostEndPage({ gameData, gameRef }) {
 
     ////////////// TESTING
 
-    const TESTING = true;
+    const TESTING = false;
     // const numPlayers = 8;
     const numPlayers = Math.floor(Math.random() * 5) + 3
 
@@ -72,34 +72,6 @@ function HostEndPage({ gameData, gameRef }) {
       connectionScores.sort((a, b) => a - b);
       // round.connectionThreshold = connectionScores[Math.floor(connectionScores.length * 1/2)];
     }
-    
-    // const calculateScores = async () => {
-    //   const roundPlayers = round.players;
-  
-    //   for (let i = 0; i < roundPlayers.length; i++) {
-    //     const player = roundPlayers[i];
-    //     player.roundScore = 0;
-    //     player.gameScore = 0;
-    //     player.connections = [];
-  
-    //     for (let j = 0; j < roundPlayers.length; j++) {
-    //       if (i === j) continue;
-    //       const otherPlayer = roundPlayers[j];
-    //       const cards1 = player.chosenCards;
-    //       const cards2 = otherPlayer.chosenCards;
-    //       const roundScore = getCardScores(cards1, cards2);
-    //       player.roundScore += roundScore;
-    //       const connection = {
-    //         name: otherPlayer.name,
-    //         score: roundScore
-    //       }
-    //       player.connections.push(connection);
-    //     }
-    //     player.gameScore += player.roundScore;
-    //   }
-    // }
-  
-    // console.log(round.players);
   
     ///////////////// END TESTING ///////////
 
