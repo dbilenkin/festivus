@@ -172,6 +172,13 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
   };
 
   const showWaitingForNextRound = () => {
+    if (roundData.allCardsSubmitted) {
+      return (
+        <p className="mx-4 text-lg font-semibold text-gray-300 bg-gray-800 px-4 py-2 rounded-lg shadow mt-4">
+          All cards are in! <br></br>Now <span className="text-green-500 font-bold">{players[0].name}</span> can flip the cards.
+        </p >
+      )
+    }
     return (
       <p className="mx-4 text-lg font-semibold text-gray-300 bg-gray-800 px-4 py-2 rounded-lg shadow mt-4">
         Sit tight. Not everyone is as fast as you.
@@ -202,11 +209,15 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
       }
 
       return (
-        <div className='bg-gray-800 mx-4 text-gray-300 text-lg p-4 mt-4 rounded-lg'>
-          <p className="text-lg font-semibold mb-4">Choose the word for round {currentRound}</p>
-          <div className="flex flex-wrap gap-2">
+        <div className='bg-gray-800 mx-4 text-gray-300 text-lg p-6 mt-4 rounded-lg'>
+          <p className="text-2xl font-semibold mb-4">Choose the word for <br></br>round {currentRound}</p>
+          <div className="">
             {wordList.map((wordOption, index) => (
-              <Button key={index} onClick={() => handleWordSelection(wordOption)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              <Button 
+                key={index} 
+                onClick={() => handleWordSelection(wordOption)} 
+                buttonType='large'
+                className="w-full mb-6">
                 {wordOption}
               </Button>
             ))}

@@ -245,7 +245,7 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
 
   const getCardPosition = (playerNumber) => {
     const row = Math.floor(playerNumber / 2);
-    const y = row * 10 - 40;
+    const y = row * 5 - 30;
     return y + 'px';
   }
 

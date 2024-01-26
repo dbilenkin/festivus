@@ -22,10 +22,10 @@ const PlayerConnectionsTable = ({ playersData, averageScore, strongestPlayer, st
               <td className="px-4 py-2">
                 <div className="flex flex-wrap gap-2">
                   {Object.entries(player.connections)
-                    .filter(([name, score]) => score > averageScore)
+                    .filter(([name, score]) => score > 0)
                     .sort((a, b) => b[1] - a[1]) // Sort connections by score
                     .map(([name, score]) => (
-                      <span key={name} className="text-gray-100 bg-gray-700 rounded px-2">
+                      <span key={name} className={`${score > averageScore ? 'text-gray-100' : 'text-gray-500'} text-sm bg-gray-700 rounded px-2`}>
                         {`${name}: ${score}`}
                       </span>
                     ))}

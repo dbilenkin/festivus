@@ -170,3 +170,16 @@ export function getRandomWords(deckType) {
   }
   return randomWords;
 }
+
+export function getContrastYIQ(hexcolor){
+  hexcolor = hexcolor.replace("#", "");
+  var r = parseInt(hexcolor.substr(0,2),16);
+  var g = parseInt(hexcolor.substr(2,2),16);
+  var b = parseInt(hexcolor.substr(4,2),16);
+  var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+  return (yiq >= 128) ? 'rgb(31,41,55)' : 'rgb(243, 244, 246)';
+}
+
+// export const playerColors = ["#6f1926", "#de324c", "#f4895f", "#f8e16f", "#95cf92", "#369acc", "#9656a2", "#cbabd1"];
+export const playerColors = ["#f8522e","#f8893a","#f7c045","#abc32f","#5ec618","#368d6d","#0d54c1","#4048aa","#733c93"];
+

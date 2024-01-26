@@ -1,19 +1,31 @@
 import React, { useState } from 'react';
-import { updateDoc } from 'firebase/firestore'; // Ensure you import updateDoc correctly
+import { updateDoc } from 'firebase/firestore';
+
+const getThresholds = (numPlayers) => {
+  switch (numPlayers) {
+    case 8:
+    case 7:
+      return [.5, .65, .8];
+    case 6:
+    case 5:
+      return [.3, .5, .7];
+    default:
+      return [0, .5];
+  }
+}
 
 const ConnectionThresholdSelector = ({ roundData, roundRef }) => {
   const { connectionScores } = roundData;
-  const all = 0;
-  const median = connectionScores[Math.floor(connectionScores.length / 2)];
-  const strong = connectionScores[Math.floor(connectionScores.length * (2 / 3))];
-  const strongest = connectionScores[Math.floor(connectionScores.length * (4 / 5))];
 
-  const options = [
-    { label: 'All Connections', value: all },
-    { label: 'Median Connections', value: median },
-    { label: 'Strong Connections', value: strong },
-    { label: 'Strongest Connections', value: strongest }
-  ];
+  const thresholds = getThresholds(roundData.players.length);
+  const labels = ["Strong", "Stronger", "Strongest"];
+  const options = [];
+  for (let i = 0; i < thresholds.length; i++) {
+    options.push({
+      label: labels[i],
+      value: connectionScores[Math.floor(connectionScores.length * thresholds[i])]
+    })
+  }
 
   const [selectedOption, setSelectedOption] = useState(options[1].value);
 
@@ -28,9 +40,9 @@ const ConnectionThresholdSelector = ({ roundData, roundRef }) => {
   };
 
   return (
-    <div className="flex flex-col space-y-3 p-4">
+    <div className="flex justify-around p-2">
       {options.map((option) => (
-        <label key={option.value} className="flex items-center space-x-3">
+        <label key={option.value} className="flex items-center space-x-1">
           <input
             type="radio"
             name="connectionThreshold"
@@ -39,7 +51,7 @@ const ConnectionThresholdSelector = ({ roundData, roundRef }) => {
             onChange={() => handleChange(option.value)}
             className="radio radio-primary w-8 h-8" // Larger radio buttons
           />
-          <span className="text-xl">{option.label}</span> {/* Larger text */}
+          <span className="text-lg text-gray-200">{option.label}</span> {/* Larger text */}
         </label>
       ))}
     </div>

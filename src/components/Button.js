@@ -4,9 +4,11 @@ const Button = ({ children, onClick, className, style, disabled = false, type = 
   let buttonClass = ""
 
   if (buttonType === 'secondary') {
-    buttonClass = "bg-gray-800 border border-gray-300 text-gray-300";
+    buttonClass = "bg-gray-800 border border-gray-300 text-gray-300 text-xl";
+  } else if (buttonType === 'large') {
+    buttonClass = "bg-green-600 text-white text-3xl";
   } else {
-    buttonClass = "bg-green-600 text-white";
+    buttonClass = "bg-green-600 text-white text-xl";
   }
 
   if (disabled) {
@@ -21,7 +23,7 @@ const Button = ({ children, onClick, className, style, disabled = false, type = 
         ...style,
         userSelect: 'none',
       }}
-      className={`text-xl font-bold py-2 px-4 rounded-lg shadow-lg ${buttonClass} ${className}`}
+      className={`font-bold py-2 px-4 rounded-lg shadow-lg ${buttonClass} ${className}`}
       disabled={disabled}
     >
       {children}

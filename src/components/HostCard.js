@@ -20,7 +20,7 @@ function HostCard({ deck, cardIndex, placeholder, flip, position, backToChosenCa
 
   useEffect(() => {
     set({
-      transform: `perspective(600px) rotateY(${flip ? 180 : 0}deg) scale(${flip ? 1.3 : 1}) translateY(${flip ? translateY : '0px'})`,
+      transform: `perspective(600px) rotateY(${flip ? 180 : 0}deg) scale(${flip ? 1.2 : 1}) translateY(${flip ? translateY : '0px'})`,
       zIndex: flip ? 10 : 0,
       opacity: flip ? 1 : 0,
       immediate: key => key === 'zIndex',

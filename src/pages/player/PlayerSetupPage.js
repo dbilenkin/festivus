@@ -14,7 +14,7 @@ const PlayerSetupPage = ({ gameData, gameRef, players }) => {
   const [joinedTeam, setJoinedTeam] = useState(false);
   const [selectedDeck, setSelectedDeck] = useState(gameData.deckType || 'life');
   const [selectedGameLength, setSelectedGameLength] = useState(gameData.gameLength || 3);
-  const [selectedWordSelection, setSelectedWordSelection] = useState(gameData.wordSelection || 'custom');
+  const [selectedWordSelection, setSelectedWordSelection] = useState(gameData.wordSelection || 'wordList');
 
   useEffect(() => {
     const updateGame = async () => {
@@ -107,9 +107,9 @@ const PlayerSetupPage = ({ gameData, gameRef, players }) => {
         </div>
       </div>
 
-      <div className='text-gray-300'>
-        {firstPlayer ? <div className="mt-4 p-4 bg-gray-800 rounded-lg flex items-center">
-          <label htmlFor="deckType" className="block font-bold mb-2 w-5/12">
+      <div className='text-gray-300 mt-4 p-4 bg-gray-800 rounded-lg'>
+        {firstPlayer ? <div className="flex items-center pb-4 border-b-2 border-gray-700">
+          <label htmlFor="deckType" className="block font-bold w-5/12">
             Deck
           </label>
           <select
@@ -126,13 +126,13 @@ const PlayerSetupPage = ({ gameData, gameRef, players }) => {
             <option value="original">Original</option>
           </select>
         </div> :
-          <div className='mt-4 p-4 bg-gray-800 rounded-lg'>
-            <label htmlFor="deckType" className="block font-normal">
+          <div className=''>
+            <label htmlFor="deckType" className="block pb-2 font-normal border-b-2 border-gray-700">
               Deck: <span className='font-bold'>{displayFormattedDeckType(gameData.deckType)}</span>
             </label>
           </div>}
-        {firstPlayer ? <div className="mt-4 p-4 bg-gray-800 rounded-lg flex items-center">
-          <label htmlFor="deckType" className="block font-bold mb-2 w-5/12">
+        {firstPlayer ? <div className="flex items-center py-4 border-b-2 border-gray-700">
+          <label htmlFor="deckType" className="block font-bold w-5/12">
             Game Length
           </label>
           <select
@@ -146,14 +146,14 @@ const PlayerSetupPage = ({ gameData, gameRef, players }) => {
             <option key="10" value="10">Long</option>
           </select>
         </div> :
-          <div className='mt-4 p-4 bg-gray-800 rounded-lg'>
-            <label htmlFor="deckType" className="block font-normal">
+          <div className=''>
+            <label htmlFor="deckType" className="block py-2 font-normal border-b-2 border-gray-700">
               Game Length: <span className='font-bold'>{displayGameLength(gameData.gameLength)}</span>
             </label>
           </div>}
-        {firstPlayer ? <div className="mt-4 p-4 bg-gray-800 rounded-lg flex items-center">
-          <label htmlFor="deckType" className="block font-bold mb-2 w-5/12">
-            Word Selection
+        {firstPlayer ? <div className="flex items-center pt-4">
+          <label htmlFor="deckType" className="block font-bold w-5/12">
+            Word Choice
           </label>
           <select
             id="deckType"
@@ -161,19 +161,19 @@ const PlayerSetupPage = ({ gameData, gameRef, players }) => {
             onChange={handleWordSelectionChange}
             className="block appearance-none w-7/12 bg-gray-700 border border-gray-500 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-gray-600 focus:border-gray-500"
           >
-            <option value="custom">Custom</option>
             <option value="wordList">Word List</option>
+            <option value="custom">Custom</option>
           </select>
         </div> :
-          <div className='mt-4 p-4 bg-gray-800 rounded-lg'>
-            <label htmlFor="deckType" className="block font-normal">
-              Word Selection: <span className='font-bold'>{displayWordSelection(gameData.wordSelection)}</span>
+          <div className=''>
+            <label htmlFor="deckType" className="block pt-2 font-normal">
+              Word Choice: <span className='font-bold'>{displayWordSelection(gameData.wordSelection)}</span>
             </label>
           </div>}
-        {firstPlayer && <Button onClick={handleStartGame} className={"mt-4 w-full text-xl p-4"}>
-          Start Game
-        </Button>}
       </div>
+      {firstPlayer && <Button onClick={handleStartGame} className={"mt-4 w-full text-xl p-4"}>
+        Start Game
+      </Button>}
     </div>
   );
 };

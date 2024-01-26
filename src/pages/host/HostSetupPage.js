@@ -11,7 +11,7 @@ const HostSetupPage = ({ gameData, players }) => {
 
   useEffect(() => {
     if (players.length > 0) {
-      const audio = new Audio('sounds/pop.mp3'); // assuming pop.mp3 is in the public folder
+      const audio = new Audio('sounds/bubble.mp3'); // assuming pop.mp3 is in the public folder
       audio.play().catch(error => console.log('Error playing the sound:', error));
     }
   }, [players]);
@@ -19,8 +19,8 @@ const HostSetupPage = ({ gameData, players }) => {
   return (
     <div className="">
       <Nav className="max-w-screen-md" />
-      <div className="max-w-screen-md mx-auto p-4 text-gray-200"> {/* text color adjusted for dark background */}
-        <div className='flex justify-between bg-gray-800  mb-4 p-6 rounded-lg'>
+      <div className="max-w-screen-md mx-auto px-4 pt-2 text-gray-200"> {/* text color adjusted for dark background */}
+        <div className='flex justify-between bg-gray-800 p-6 rounded-lg'>
           <h2 className="text-4xl font-bold text-gray-200 ">
             Game Code: <span className='text-green-500'>{shortId}</span>
           </h2>
@@ -28,7 +28,7 @@ const HostSetupPage = ({ gameData, players }) => {
         </div>
 
 
-        <div className='mt-4 p-6 bg-gray-800 rounded-lg'>
+        <div className='mt-2 p-6 bg-gray-800 rounded-lg'>
           <div className="flex justify-between items-end pb-2 text-2xl">
             <div className='text-2xl'>
               Joined Players
@@ -45,14 +45,14 @@ const HostSetupPage = ({ gameData, players }) => {
             }))} width={680} height={300} />
           </div>
         </div>
-        <div className='mt-4 p-6 bg-gray-800 rounded-lg text-2xl'>
-          <label htmlFor="deckType" className="block">
+        <div className='mt-2 p-6 bg-gray-800 rounded-lg text-2xl'>
+          <label htmlFor="deckType" className="block border-b pb-2 border-gray-600">
             Deck: <span className='font-bold'>{displayFormattedDeckType(gameData.deckType)}</span>
           </label>
-          <label htmlFor="deckType" className="block font-normal">
+          <label htmlFor="deckType" className="block border-b py-2 border-gray-600">
             Game Length: <span className='font-bold'>{displayGameLength(gameData.gameLength)}</span>
           </label>
-          <label htmlFor="deckType" className="block font-normal">
+          <label htmlFor="deckType" className="block pt-2">
             Word Selection: <span className='font-bold'>{displayWordSelection(gameData.wordSelection)}</span>
           </label>
         </div>

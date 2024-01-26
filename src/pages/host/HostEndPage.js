@@ -13,6 +13,96 @@ function HostEndPage({ gameData, gameRef }) {
   const [strongestPlayer, setStrongestPlayer] = useState(null);
   const [strongestConnectionCount, setStrongestConnectionCount] = useState(null);
 
+    ////////////// TESTING
+
+    const TESTING = true;
+    // const numPlayers = 8;
+    const numPlayers = Math.floor(Math.random() * 5) + 3
+
+    const generateChosenCards = () => {
+      round.players = round.players.slice(0, numPlayers);
+      for (let i = 0; i < round.players.length; i++) {
+        const chosenCards = [];
+        for (let j = 0; j < 5; j++) {
+          let randomIndexFound = false;
+          while (!randomIndexFound) {
+            const randomTry = Math.floor(Math.random() * 26)
+            if (!chosenCards.includes(randomTry)) {
+              chosenCards.push(randomTry);
+              randomIndexFound = true;
+            }
+          }
+          round.players[i].chosenCards = chosenCards;
+        }
+      }
+    }
+  
+    const calculateScores = async () => {
+      const roundPlayers = round.players;
+      let connectionScores = [];
+
+      for (let i = 0; i < roundPlayers.length; i++) {
+        const player = roundPlayers[i];
+        player.roundScore = 0;
+        player.gameScore = 0;
+        player.connections = [];
+
+        const roundPlayer = round.players.find(p => p.name === player.name);
+        player.gameScore = roundPlayer.gameScore;
+        player.connections = roundPlayer.connections;
+
+        for (let j = 0; j < roundPlayers.length; j++) {
+          if (i === j) continue;
+          const otherPlayer = roundPlayers[j];
+          const cards1 = player.chosenCards;
+          const cards2 = otherPlayer.chosenCards;
+          const roundScore = getCardScores(cards1, cards2);
+          player.roundScore += roundScore;
+
+          if (!player.connections || !player.connections[otherPlayer.name]) {
+            player.connections[otherPlayer.name] = roundScore;
+          } else {
+            player.connections[otherPlayer.name] += roundScore;
+          }
+
+          connectionScores.push(player.connections[otherPlayer.name]);
+        }
+        player.gameScore += player.roundScore;
+      }
+      connectionScores.sort((a, b) => a - b);
+      // round.connectionThreshold = connectionScores[Math.floor(connectionScores.length * 1/2)];
+    }
+    
+    // const calculateScores = async () => {
+    //   const roundPlayers = round.players;
+  
+    //   for (let i = 0; i < roundPlayers.length; i++) {
+    //     const player = roundPlayers[i];
+    //     player.roundScore = 0;
+    //     player.gameScore = 0;
+    //     player.connections = [];
+  
+    //     for (let j = 0; j < roundPlayers.length; j++) {
+    //       if (i === j) continue;
+    //       const otherPlayer = roundPlayers[j];
+    //       const cards1 = player.chosenCards;
+    //       const cards2 = otherPlayer.chosenCards;
+    //       const roundScore = getCardScores(cards1, cards2);
+    //       player.roundScore += roundScore;
+    //       const connection = {
+    //         name: otherPlayer.name,
+    //         score: roundScore
+    //       }
+    //       player.connections.push(connection);
+    //     }
+    //     player.gameScore += player.roundScore;
+    //   }
+    // }
+  
+    // console.log(round.players);
+  
+    ///////////////// END TESTING ///////////
+
   useEffect(() => {
     const roundsRef = collection(gameRef, "rounds");
     const q = query(roundsRef, where('roundNumber', '==', gameData.gameLength));
@@ -33,6 +123,11 @@ function HostEndPage({ gameData, gameRef }) {
   useEffect(() => {
 
     if (!round || !Number.isInteger(round.connectionThreshold)) return;
+
+    if (TESTING) {
+      generateChosenCards();
+      calculateScores();
+    }
     
     const _data = { nodes: [], links: [] };
     let groups = {};
@@ -123,60 +218,6 @@ function HostEndPage({ gameData, gameRef }) {
   //   ]
   // };
 
-  ////////////// TESTING
-
-  // round.players = round.players.slice(0, 8);
-
-  // const generateChosenCards = () => {
-  //   for (let i = 0; i < round.players.length; i++) {
-  //     const chosenCards = [];
-  //     for (let j = 0; j < 5; j++) {
-  //       let randomIndexFound = false;
-  //       while (!randomIndexFound) {
-  //         const randomTry = Math.floor(Math.random() * 26)
-  //         if (!chosenCards.includes(randomTry)) {
-  //           chosenCards.push(randomTry);
-  //           randomIndexFound = true;
-  //         }
-  //       }
-  //       round.players[i].chosenCards = chosenCards;
-  //     }
-  //   }
-  // }
-
-  // generateChosenCards();
-
-  // const calculateScores = async () => {
-  //   const roundPlayers = round.players;
-
-  //   for (let i = 0; i < roundPlayers.length; i++) {
-  //     const player = roundPlayers[i];
-  //     player.roundScore = 0;
-  //     player.gameScore = 0;
-  //     player.connections = [];
-
-  //     for (let j = 0; j < roundPlayers.length; j++) {
-  //       if (i === j) continue;
-  //       const otherPlayer = roundPlayers[j];
-  //       const cards1 = player.chosenCards;
-  //       const cards2 = otherPlayer.chosenCards;
-  //       const roundScore = getCardScores(cards1, cards2);
-  //       player.roundScore += roundScore;
-  //       const connection = {
-  //         name: otherPlayer.name,
-  //         score: roundScore
-  //       }
-  //       player.connections.push(connection);
-  //     }
-  //     player.gameScore += player.roundScore;
-  //   }
-  // }
-
-  // calculateScores();
-  // console.log(round.players);
-
-  ///////////////// END TESTING ///////////
-
 
   let maxScore = 0;
   let totalScore = 0;
@@ -214,13 +255,13 @@ function HostEndPage({ gameData, gameRef }) {
         <Nav className="container" />
         <div className='max-w-screen-xl mx-auto mt-3'>
           {/* Summary Section */}
-          <div className='text-center mb-4 p-4 bg-gray-700 text-gray-200 rounded-lg'>
+          <div className='text-center mb-4 p-4 bg-gray-800 text-gray-200 rounded-lg'>
             <h2 className='text-3xl font-bold mb-4'>Game Summary</h2>
-            <p className='text-xl'>
-              <span className='font-bold'>{strongestPlayer.name}</span> had the most in common with the group with {strongestConnectionCount} connections totaling {strongestPlayer.gameScore} points!
+            <p className='text-2xl'>
+              <span className='font-bold'>{strongestPlayer.name}</span> had the most in common with everyone!
             </p>
-            <p className='text-xl'>
-              <span className='font-bold'>{strongestPair.source}</span> & <span className='font-bold'>{strongestPair.target}</span> had the most in common with each other with a score of {maxScore} points!
+            <p className='text-2xl'>
+              <span className='font-bold'>{strongestPair.source}</span> & <span className='font-bold'>{strongestPair.target}</span> had the most in common with each other!
             </p>
           </div>
 
@@ -235,7 +276,7 @@ function HostEndPage({ gameData, gameRef }) {
             </div>
             {/* Player Graph */}
             <div className='md:col-span-1 bg-gray-100 border border-2 border-gray-800 rounded-lg'>
-              <PlayerGraph data={data} strongestPlayer={strongestPlayer.name} strongestPair={strongestPair} />
+              <PlayerGraph width={600} height={400} data={data} strongestPlayer={strongestPlayer.name} strongestPair={strongestPair} />
             </div>
           </div>
         </div>

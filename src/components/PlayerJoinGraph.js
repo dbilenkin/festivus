@@ -1,43 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
+import { getContrastYIQ, playerColors } from '../utils/utils';
 
-const RADIUS = 40; // Radius of the nodes
-
-// const darkColors = [
-//   "#7F0000", // Dark red
-//   "#8C3700", // Dark orange
-//   "#7F6A00", // Dark yellow
-//   "#2E7D32", // Dark green
-//   "#0057A8", // Dark blue
-//   "#4B0082", // Indigo
-//   "#6B5B95", // Dark violet
-//   "#3E4444", // Dark slate
-// ];
-
-// const darkColors = [
-//   "#34568B", // Dark blue
-//   "#6B5B95", // Dark purple
-//   "#88B04B", // Olive green
-//   "#955251", // Dark red
-//   "#6A4E42", // Dark brown
-//   "#4B0082", // Indigo
-//   "#4F644E", // Dark green
-//   "#3E4444", // Dark slate
-// ];
-
-const darkColors = [
-  "#2E4A62", // Dark cerulean
-  "#546A7B", // Steel blue
-  "#6D597A", // Dark mauve
-  "#355E3B", // Dark moss green
-  "#5D5C61", // Dark lavender gray
-  "#813F4C", // Wine red
-  "#7F4F24", // Sienna
-  "#4B3F72", // Dark indigo (replacing Dark slate gray)
-];
-
-
-
+const RADIUS = 40;
 
 const getNodeX = (d, numNodes, width) => {
   const spaceBetween = Math.random() * 10 + 40
@@ -47,7 +12,7 @@ const getNodeX = (d, numNodes, width) => {
 }
 
 const getFontSize = (d) => {
-  const size = 24 - d.name.length;
+  const size = 22 - d.name.length;
   return size + 'px';
 }
 
@@ -111,9 +76,9 @@ const PlayerJoinGraph = ({ players, width, height }) => {
         .join(
           enter => enter.append('circle')
             .attr('r', 0) // start with radius 0
-            .attr('fill', d => darkColors[d.id])
+            .attr('fill', d => playerColors[d.id])
             .attr("stroke-width", d => d.id === 0 ? 4 : 2)
-            .attr("stroke", d => d.id === 0 ? "gold" : "#2c3e50")
+            .attr("stroke", d => d.id === 0 ? "gold" : "rgb(107,114,128)")
             .transition() // begin a transition
             .duration(300) // duration of 500ms
             .attr('r', RADIUS), // transition to the actual radius
@@ -139,7 +104,7 @@ const PlayerJoinGraph = ({ players, width, height }) => {
         .attr('y', d => d.y + 1)
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
-        .style('fill', 'rgb(229, 231, 235)')
+        .style('fill', d => getContrastYIQ(playerColors[d.id]))
         .style('font-size', getFontSize)
         .style('font-weight', 'bold');
     });
