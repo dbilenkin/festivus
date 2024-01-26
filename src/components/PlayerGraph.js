@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { getContrastYIQ, playerColors } from '../utils/utils';
 
-const PlayerGraph = ({ height, width, data, strongestPlayer, strongestPair }) => {
+const PlayerGraph = ({ size, height, width, data, strongestPlayer, strongestPair }) => {
   const margin = { top: 20, right: 20, bottom: 40, left: 20 };
 
   const svgRef = useRef();
@@ -40,7 +40,7 @@ const PlayerGraph = ({ height, width, data, strongestPlayer, strongestPair }) =>
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
     // Increase the node size dynamically or to a fixed value larger than 5
-    const nodeRadius = 30;  // Or make it dynamic based on data
+    const nodeRadius = size === "small" ? 20 : 30;  // Or make it dynamic based on data
     const minValue = 0;
     const maxValue = data.topScore;
     // Normalize your values (example function, you'll need to adjust this to your data)

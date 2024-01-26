@@ -132,11 +132,11 @@ function PlayerEndPage({ gameData, gameRef, players }) {
         <p className='text-xl text-left py-2 border-b-2 border-gray-700'>
           Strongest connection with <span className='font-bold'>{connections[0][0]}</span>.
         </p>
-        <p className='text-xl text-left flex py-2 border-b-2 border-gray-700'>
+        <p className='text-xl text-left flex items-center py-2 border-b-2 border-gray-700'>
           <div>Connections: </div>
           <div className="ml-4 flex flex-wrap gap-2">
             {connections.map(([name, score]) => (
-              <span key={name} className={`text-gray-100 bg-gray-700 rounded px-2`}>
+              <span key={name} className={`text-gray-100 text-sm bg-gray-700 rounded px-2`}>
                 {`${name}: ${score}`}
               </span>
             ))}
