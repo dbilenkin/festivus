@@ -221,15 +221,15 @@ function Deck({ deck, handleSelectCards, gameData }) {
   const bind = useDrag(({ args: [index], active, xy: [x, y], movement: [mx, my], offset: [ox, oy], direction: [xDir, yDir], velocity: [vx, vy] }) => {
 
     let cardState = cardSet[index];
-
+    console.log({state: cardSet[index],mx, my});
     if (cardState === "ready") {
-      if (my > 110 && !firstPassDone) {
+      if (my > 80 && !firstPassDone) {
         cardSet[index] = "readyToMarked";
       } else if (mx < -80) {
         cardSet[index] = "toReviewed";
       }
     } else if (cardState === "reviewed") {
-      if (my > 90 && !firstPassDone) {
+      if (my > 60 && !firstPassDone) {
         cardSet[index] = "reviewedToMarked";
       } else if (mx > 80) {
         cardSet[index] = "toReady";

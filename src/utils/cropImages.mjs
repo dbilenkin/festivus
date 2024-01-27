@@ -5,7 +5,7 @@ import path from 'path';
 const targetAspectRatio = 5 / 7;
 const resizeWidth = 200;
 const resizeHeight = 280;
-const deckType = 'animals';
+const deckType = 'life';
 
 // Function to crop and resize an image
 const cropAndResizeImage = async (filePath, outputFolder, index) => {
