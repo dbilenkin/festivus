@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { getContrastYIQ, playerColors } from '../utils/utils';
+import { getContrastYIQ } from '../utils';
+import * as Constants from '../constants';
 
 const RADIUS = 40;
 
@@ -76,7 +77,7 @@ const PlayerJoinGraph = ({ players, width, height }) => {
         .join(
           enter => enter.append('circle')
             .attr('r', 0) // start with radius 0
-            .attr('fill', d => playerColors[d.id])
+            .attr('fill', d => Constants.playerColors[d.id])
             .attr("stroke-width", d => d.id === 0 ? 4 : 2)
             .attr("stroke", d => d.id === 0 ? "gold" : "rgb(107,114,128)")
             .transition() // begin a transition
@@ -104,7 +105,7 @@ const PlayerJoinGraph = ({ players, width, height }) => {
         .attr('y', d => d.y + 1)
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
-        .style('fill', d => getContrastYIQ(playerColors[d.id]))
+        .style('fill', d => getContrastYIQ(Constants.playerColors[d.id]))
         .style('font-size', getFontSize)
         .style('font-weight', 'bold');
     });

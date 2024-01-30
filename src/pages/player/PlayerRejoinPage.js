@@ -1,54 +1,41 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { collection, addDoc, updateDoc, doc, query, where, getDocs, serverTimestamp } from 'firebase/firestore';
-import { db } from '../utils/Firebase';
-import { generateShortId } from '../utils';
-import { CurrentGameContext } from '../contexts/CurrentGameContext';
-import Button from '../components/Button';
-import Nav from '../components/Nav';
+import { collection, addDoc, updateDoc, doc, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { db } from '../../utils/Firebase';
+import { CurrentGameContext } from '../../contexts/CurrentGameContext';
+import Button from '../../components/Button';
+import Nav from '../../components/Nav';
 
-function StartPage() {
+function PlayerRejoinPage() {
   const { setCurrentPlayerName, setCurrentPlayerId, setGameRef } = useContext(CurrentGameContext);
-
-  useEffect(() => {
-    const storedPlayerName = localStorage.getItem('currentPlayerName');
-    if (storedPlayerName) {
-      setCurrentPlayerName(storedPlayerName);
-    }
-  }, [setCurrentPlayerName]);
 
   const [playerName, setPlayerName] = useState('');
   const [shortId, setShortId] = useState('');
   const navigate = useNavigate();
 
-  const newGameJson = {
-    gameState: 'setup'
-  }
-
   const handleSetShortId = value => {
     setShortId(value.toUpperCase());
   }
 
-  const handleCreateGame = async () => {
-    const gameRef = await addDoc(collection(db, 'games'), newGameJson);
-    setGameRef(gameRef);
-    const gameId = gameRef.id;
-    const shortId = generateShortId(gameId);
+  const getCurrentPlayerId = (gameRef, currentPlayerName) => {
+    const playersRef = collection(gameRef, 'players');
+    const q = query(playersRef, where('name', '==', currentPlayerName, orderBy('joinedAt', 'asc')));
 
-    await updateDoc(gameRef, {
-      shortId: shortId
-    });
-
-    navigate(`/host/${shortId}`);
-  };
+    getDocs(q).then((querySnapshot) => {
+      if (querySnapshot.size >= 1) {
+        const playerId = querySnapshot.docs[0].id;
+        setCurrentPlayerId(playerId);
+      } else {
+        console.error('Invalid Player Name.');
+      }
+    })
+  }
 
   const handleJoinGame = async () => {
     if (!playerName || !shortId) {
-      alert('Please enter your name and game ID.');
+      alert('Please enter your name and game code.');
       return;
     }
-
-    setCurrentPlayerName(playerName);
 
     const gamesRef = collection(db, 'games');
     const q = query(gamesRef, where('shortId', '==', shortId));
@@ -58,37 +45,18 @@ function StartPage() {
         const gameId = querySnapshot.docs[0].id;
         const gameRef = doc(db, 'games', gameId);
         setGameRef(gameRef);
-
-        const playersRef = collection(gameRef, "players")
-        addDoc(playersRef, {
-          name: playerName,
-          gameScore: 0,
-          roundScore: 0,
-          chosenCards: [],
-          connections: {},
-          joinedAt: serverTimestamp()
-        }).then(player => {
-          setCurrentPlayerId(player.id);
-          navigate(`/player/${shortId}`);
-        }).catch((error) => {
-          console.error(error);
-        });
+        setCurrentPlayerName(playerName);
+        getCurrentPlayerId(gameRef, playerName)
+        navigate(`/player/${shortId}`);
       } else {
-        alert('Invalid game ID.');
+        alert('Invalid game code.');
       }
     });
   };
 
-
   return (
     <div className="">
-      <Nav className="max-w-screen-md" />
-      <div className='max-w-screen-md mx-auto text-gray-100'> {/* Adjusted text color for dark background */}
-        <div className="bg-gray-800 mx-4 p-4 mt-4 rounded-lg">
-          <Button onClick={handleCreateGame} className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded">
-            Create Game
-          </Button>
-        </div>
+      <div className='max-w-screen-md mx-auto text-gray-100'>
         <div className='bg-gray-800 mx-4 p-4 mt-4 rounded-lg'>
           <div className='flex '>
             <div className="mb-4 w-2/3">
@@ -103,7 +71,7 @@ function StartPage() {
             </div>
 
             <div className="ml-4 mb-4 w-1/3">
-              <label htmlFor="shortId" className="block text-gray-300 text-sm font-bold mb-2">Game ID</label>
+              <label htmlFor="shortId" className="block text-gray-300 text-sm font-bold mb-2">Game Code</label>
               <input
                 type="text"
                 id="shortId"
@@ -115,14 +83,12 @@ function StartPage() {
 
           </div>
           <Button onClick={handleJoinGame} className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded">
-            Join Game
+            Rejoin Game
           </Button>
         </div>
       </div>
     </div>
-
-
   );
 }
 
-export default StartPage;
+export default PlayerRejoinPage;

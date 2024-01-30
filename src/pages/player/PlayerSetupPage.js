@@ -5,13 +5,10 @@ import { CurrentGameContext } from '../../contexts/CurrentGameContext';
 import Button from '../../components/Button';
 import { db } from '../../utils/Firebase';
 import Spinner from '../../components/Spinner';
-import { getIndexDeck, displayFormattedDeckType, displayGameLength, displayWordSelection } from '../../utils/utils';
+import { getIndexDeck, displayFormattedDeckType, displayGameLength, displayWordSelection } from '../../utils';
 
 const PlayerSetupPage = ({ gameData, gameRef, players }) => {
-  const { currentPlayerName, currentPlayerId } = useContext(CurrentGameContext); // Access context
-
-  const [chosenTeam, setChosenTeam] = useState('');
-  const [joinedTeam, setJoinedTeam] = useState(false);
+  const { currentPlayerName, currentPlayerId } = useContext(CurrentGameContext);
   const [selectedDeck, setSelectedDeck] = useState(gameData.deckType || 'life');
   const [selectedGameLength, setSelectedGameLength] = useState(gameData.gameLength || 3);
   const [selectedWordSelection, setSelectedWordSelection] = useState(gameData.wordSelection || 'wordList');
@@ -46,34 +43,8 @@ const PlayerSetupPage = ({ gameData, gameRef, players }) => {
     );
   }
 
-  const { teams, shortId } = gameData;
+  const { shortId } = gameData;
   const firstPlayer = players[0].name === currentPlayerName;
-
-  const handleSelectTeam = (event) => {
-    setChosenTeam(event.target.value);
-  };
-
-  const handleJoinTeam = async () => {
-    if (!chosenTeam) {
-      alert("Please choose a team.");
-      return;
-    }
-
-    const updatedTeams = [...gameData.teams];
-    const teamIndex = updatedTeams.findIndex((team) => team.name === chosenTeam);
-    updatedTeams[teamIndex].players.push(currentPlayerName);
-
-    const playerDocRef = doc(db, 'games', gameRef.id, 'players', currentPlayerId);
-    await updateDoc(playerDocRef, {
-      team: chosenTeam
-    });
-
-    await updateDoc(gameRef, {
-      teams: updatedTeams
-    });
-
-    setJoinedTeam(true);
-  };
 
   const handleStartGame = async () => {
 
@@ -92,6 +63,7 @@ const PlayerSetupPage = ({ gameData, gameRef, players }) => {
       deckType: selectedDeck,
       indexDeck,
       gameState: 'started',
+      numCards: players.length <= 8 ? 5 : 4
     });
   };
 

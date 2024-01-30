@@ -1,7 +1,7 @@
 
 import React, { useEffect } from 'react';
 import Nav from '../../components/Nav';
-import { displayFormattedDeckType, displayGameLength, displayWordSelection } from '../../utils/utils';
+import { displayFormattedDeckType, displayGameLength, displayWordSelection } from '../../utils';
 import Toggle from '../../components/Toggle';
 import PlayerJoinGraph from '../../components/PlayerJoinGraph';
 

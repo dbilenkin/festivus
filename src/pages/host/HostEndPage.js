@@ -4,7 +4,7 @@ import Spinner from '../../components/Spinner';
 import Nav from '../../components/Nav';
 import PlayerGraph from '../../components/PlayerGraph';
 import PlayerConnectionsTable from '../../components/PlayerConnectionsTable';
-import { getCardScores } from '../../utils/utils';
+import { getCardScores } from '../../utils';
 
 function HostEndPage({ gameData, gameRef }) {
 
@@ -17,7 +17,7 @@ function HostEndPage({ gameData, gameRef }) {
 
     const TESTING = false;
     // const numPlayers = 8;
-    const numPlayers = Math.floor(Math.random() * 5) + 3
+    const numPlayers = Math.floor(Math.random() * 6) + 3
 
     const generateChosenCards = () => {
       round.players = round.players.slice(0, numPlayers);
@@ -220,6 +220,7 @@ function HostEndPage({ gameData, gameRef }) {
 
   // getAverageScore();
 
+  const height = round.players.length * 20 + 320;
 
   return (
     <div>
@@ -248,7 +249,7 @@ function HostEndPage({ gameData, gameRef }) {
             </div>
             {/* Player Graph */}
             <div className='md:col-span-1 bg-gray-100 border border-2 border-gray-800 rounded-lg'>
-              <PlayerGraph width={600} height={400} data={data} strongestPlayer={strongestPlayer.name} strongestPair={strongestPair} />
+              <PlayerGraph width={600} height={height} data={data} strongestPlayer={strongestPlayer.name} strongestPair={strongestPair} />
             </div>
           </div>
         </div>

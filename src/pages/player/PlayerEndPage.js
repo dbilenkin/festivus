@@ -4,7 +4,7 @@ import { CurrentGameContext } from '../../contexts/CurrentGameContext';
 import Spinner from '../../components/Spinner';
 import ConnectionThresholdRangeInput from '../../components/ConnectionThresholdRangeInput';
 import ConnectionThresholdSelector from '../../components/ConnectionThresholdSelector';
-import { getOrdinal } from '../../utils/utils';
+import { getOrdinal } from '../../utils';
 import PlayerGraph from '../../components/PlayerGraph';
 
 function PlayerEndPage({ gameData, gameRef, players }) {
@@ -99,13 +99,8 @@ function PlayerEndPage({ gameData, gameRef, players }) {
     );
   }
 
-  // const sortedTeams = [...round.teams].sort((a, b) => b.gameScore - a.gameScore);
   const sortedPlayers = [...round.players].sort((a, b) => b.gameScore - a.gameScore);
-
-  // const team = sortedTeams.find(team => team.players.findIndex(p => p.name === currentPlayerName) !== -1);
   const player = sortedPlayers.find(p => p.name === currentPlayerName);
-
-  // const teamRank = sortedTeams.findIndex(t => t.name === team.name) + 1;
   const playerRank = sortedPlayers.findIndex(p => p.name === currentPlayerName) + 1;
 
   const connections = Object.entries(player.connections)
@@ -124,7 +119,7 @@ function PlayerEndPage({ gameData, gameRef, players }) {
 
   return (
     <div className="max-w-screen-sm mx-auto">
-      <div className='text-center m-2 mb-4 p-4 bg-gray-800 text-gray-200 rounded-lg'>
+      <div className='text-center m-2 p-4 bg-gray-800 text-gray-200 rounded-lg'>
         <h2 className='text-2xl font-bold mb-4'>Player Summary</h2>
         <p className='text-xl text-left pb-2 border-b-2 border-gray-700'>
           {rankMessage()}
@@ -132,9 +127,9 @@ function PlayerEndPage({ gameData, gameRef, players }) {
         <p className='text-xl text-left py-2 border-b-2 border-gray-700'>
           Strongest connection with <span className='font-bold'>{connections[0][0]}</span>.
         </p>
-        <p className='text-xl text-left flex items-center py-2 border-b-2 border-gray-700'>
-          <div>Connections: </div>
-          <div className="ml-4 flex flex-wrap gap-2">
+        <p className={`flex flex-col ${firstPlayer ? 'py-2' : 'pt-2'}`}>
+          <div className='text-left text-xl pb-2'>Your Connections</div>
+          <div className="flex flex-wrap gap-2">
             {connections.map(([name, score]) => (
               <span key={name} className={`text-gray-100 text-sm bg-gray-700 rounded px-2`}>
                 {`${name}: ${score}`}
@@ -143,12 +138,12 @@ function PlayerEndPage({ gameData, gameRef, players }) {
           </div>
         </p>
         {firstPlayer && <div className=''>
-          <div className='text-xl text-left pt-2 text-gray-200'>Update Connection Threshold</div>
+          <div className='text-xl text-left pt-2 text-gray-200 border-t-2 border-gray-700'>Update Connection Threshold</div>
           <ConnectionThresholdSelector roundData={round} roundRef={roundRef} />
         </div>}
       </div>
-      {data && <div className='m-2 bg-gray-100 border border-2 border-gray-800 rounded-lg'>
-        <PlayerGraph width={300} height={200} data={data} strongestPlayer={currentPlayerName} strongestPair={strongestPair} />
+      {data && <div className='mx-2 bg-gray-100 border border-2 border-gray-800 rounded-lg'>
+        <PlayerGraph small={true} width={315} height={200} data={data} strongestPlayer={currentPlayerName} strongestPair={strongestPair} />
       </div>}
     </div>
 

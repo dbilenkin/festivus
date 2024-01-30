@@ -6,7 +6,7 @@ import HostSetupPage from './HostSetupPage';
 import HostRoundPage from './HostRoundPage';
 import HostEndPage from './HostEndPage';
 import Spinner from '../../components/Spinner';
-import { getDeck } from '../../utils/utils';
+import { getDeck } from '../../utils';
 
 const HostGamePage = () => {
   const [gameData, setGameData] = useState(null);

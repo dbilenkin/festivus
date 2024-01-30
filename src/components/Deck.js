@@ -10,7 +10,7 @@ const reviewedX = -193;
 const markedY = 263;
 const boxAdjustX = -235;
 const boxAdjustY = 166;
-const deckSize = 26;
+const deckSize = 32;
 
 // const cardStates = ["deck", "ready", "toReviewed", "reviewed", "toReady", "toMarked", "marked"];
 let cardSet = [...Array(deckSize)].map(() => "ready");
@@ -21,10 +21,12 @@ function Deck({ deck, handleSelectCards, gameData }) {
   const [assignedBoxes, setAssignedBoxes] = useState([]);
   const [markedSet, setMarkedSet] = useState(new Set());
 
+  const { numCards } = gameData;
+
   const boxRefs = useRef([]);
 
   useEffect(() => {
-    boxRefs.current = Array.from({ length: 5 }, () => createRef());
+    boxRefs.current = Array.from({ length: numCards }, () => createRef());
   }, []);
 
   useEffect(() => {
@@ -117,7 +119,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
         }
       }
       const updatedBoxes = [...assignedBoxes];
-      updatedBoxes[5] = "placeholder" + Math.random();
+      updatedBoxes[numCards] = "placeholder" + Math.random();
       setAssignedBoxes(updatedBoxes);
     } else {
       for (let i = 0; i < cardSet.length; i++) {
@@ -142,7 +144,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
   }, [firstPassDone, api]);
 
   const getBoxPosition = boxIndex => {
-    if (boxIndex === 5) {
+    if (boxIndex === numCards) {
       return {
         bx: 0,
         by: 0,
@@ -157,7 +159,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
   }
 
   const assignedBoxesFull = () => {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < numCards; i++) {
       if (!Number.isInteger(assignedBoxes[i])) {
         return false;
       }
@@ -169,7 +171,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
     if (assignedBoxesFull()) {
       handleSelectCards(assignedBoxes);
     } else {
-      alert("You must select 5 cards in order");
+      alert(`You must select ${numCards} cards in order`);
     }
   }
 
@@ -180,9 +182,9 @@ function Deck({ deck, handleSelectCards, gameData }) {
       const boxIndex = assignedBoxes.findIndex(el => el === i);
       if (boxIndex !== -1) {
 
-        if (boxIndex === 5) {
+        if (boxIndex === numCards) {
           const updatedBoxes = [...assignedBoxes];
-          updatedBoxes[5] = undefined;
+          updatedBoxes[numCards] = undefined;
           setAssignedBoxes(updatedBoxes);
         }
 
@@ -193,7 +195,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
           y: by,
           scale: 1,
           rot: 0,
-          zIndex: boxIndex === 5 ? numReady + maxZIndex : 1000
+          zIndex: boxIndex === numCards ? numReady + maxZIndex : 1000
         };
       }
       // Return to original position or other logic for cards not in a box
@@ -498,7 +500,7 @@ function Deck({ deck, handleSelectCards, gameData }) {
             if (firstPassDone) {
               right = 27;
               const boxIndex = assignedBoxes.findIndex(el => el === i);
-              const cardPicked = boxIndex !== -1 && boxIndex < 5;
+              const cardPicked = boxIndex !== -1 && boxIndex < numCards;
               correctTrans = cardPicked ? transBoxes : trans;
               if (cardPicked) {
                 width = 96;
@@ -551,11 +553,11 @@ function Deck({ deck, handleSelectCards, gameData }) {
       {!firstPassDone && <div className='flex justify-evenly markedSection pb-6'>
         <div className='p-4 w-1/2 ml-2 mr-4'>
           <div className='markedInstructions text-gray-300 flex items-center justify-center text-xl pt-6'>
-            Swipe 5 or more cards down to order
+            Swipe {numCards} or more cards down to order
           </div>
           <Button
             onClick={handleCheckboxChange}
-            disabled={markedSet.size < 5}
+            disabled={markedSet.size < numCards}
             className='w-full mt-8'>Ready to Order</Button>
         </div>
         <div className='w-1/2 ml-5'>

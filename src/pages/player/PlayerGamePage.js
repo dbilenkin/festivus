@@ -7,8 +7,10 @@ import { CurrentGameContext } from '../../contexts/CurrentGameContext';
 import PlayerRoundPage from './PlayerRoundPage';
 import PlayerSetupPage from './PlayerSetupPage';
 import PlayerEndPage from './PlayerEndPage';
+import PlayerRejoinPage from './PlayerRejoinPage';
 import Nav from '../../components/Nav';
-import { getDeck } from '../../utils/utils';
+import { getDeck } from '../../utils';
+import Spinner from '../../components/Spinner';
 
 const PlayerGamePage = () => {
 
@@ -38,7 +40,9 @@ const PlayerGamePage = () => {
       onSnapshot(gameRef, (doc) => {
         console.log(doc.data());
         setGameData(doc.data());
-        getCurrentPlayerId(gameRef);
+        if (currentPlayerName) {
+          getCurrentPlayerId(gameRef);
+        }
       });
     } else {
       const gamesRef = collection(db, 'games');
@@ -54,7 +58,9 @@ const PlayerGamePage = () => {
             setGameData(doc.data());
 
           });
-          getCurrentPlayerId(_gameRef);
+          if (currentPlayerName) {
+            getCurrentPlayerId(_gameRef);
+          }
         } else {
           console.error('Invalid short ID.');
         }
@@ -83,10 +89,13 @@ const PlayerGamePage = () => {
   }, [gameRef]);
 
   if (!gameData) {
-    return <p>Loading...</p>;
+    return <Spinner />;
   }
 
   const displayPlayerPage = () => {
+    if (!currentPlayerName) {
+      return <PlayerRejoinPage />
+    }
     const { deckType, indexDeck, gameState } = gameData;
     if (gameState === "setup") {
       return <PlayerSetupPage gameData={gameData} gameRef={gameRef} players={players} />

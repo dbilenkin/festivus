@@ -3,10 +3,10 @@ import { doc, onSnapshot, updateDoc, collection, query, where, getDocs, addDoc }
 import { CurrentGameContext } from '../../contexts/CurrentGameContext';
 import Deck from '../../components/Deck';
 import Button from '../../components/Button';
-import { getOrdinal, getRandomWords } from '../../utils/utils';
+import { getOrdinal, getRandomWords } from '../../utils';
 
 const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
-  const { currentRound, gameLength, wordSelection, deckType } = gameData;
+  const { currentRound, gameLength, wordSelection, deckType, numCards } = gameData;
   const currentPlayerIndex = currentRound % players.length;
 
   const { currentPlayerName, currentPlayerId } = useContext(CurrentGameContext);
@@ -18,7 +18,6 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
   const [cardsSubmitted, setCardsSubmitted] = useState(false);
   const [flippedCards, setFlippedCards] = useState(0);
   const [wordList, setWordList] = useState([]);
-  const totalCards = 5;
 
   useEffect(() => {
     console.log({ currentPlayerId })
@@ -63,7 +62,7 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
   }
 
   const handleSelectCards = async (assignedBoxes) => {
-    const chosenCards = Object.values(assignedBoxes).slice(0, 5);
+    const chosenCards = Object.values(assignedBoxes).slice(0, numCards);
 
     try {
       const currentPlayerDocRef = doc(gameRef, 'players', currentPlayerId);
@@ -98,7 +97,7 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
   };
 
   const handleFlipCard = async () => {
-    if (flippedCards <= totalCards) {
+    if (flippedCards <= numCards) {
       const newFlippedCards = flippedCards + 1;
       setFlippedCards(newFlippedCards);
       await updateDoc(roundRef, { flippedCards: newFlippedCards });
@@ -148,9 +147,9 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
         </p >
       )
     }
-    if (flippedCards < totalCards) {
+    if (flippedCards < numCards) {
       message = `Flip ${getOrdinal(flippedCards + 1)} Card`;
-    } else if (flippedCards === totalCards) {
+    } else if (flippedCards === numCards) {
       message = 'Show Scores';
     } else if (currentRound === gameLength) {
       message = "Show End Screen";
@@ -158,7 +157,7 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
 
     return (
       <div className='m-4'>
-        {flippedCards <= totalCards ? (
+        {flippedCards <= numCards ? (
           <Button className="w-full" onClick={handleFlipCard}>
             {message}
           </Button>

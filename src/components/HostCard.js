@@ -3,9 +3,9 @@ import { useSpring, animated } from '@react-spring/web';
 import './HostCard.css';
 import cardback from './card-back.jpg';
 
-function HostCard({ deck, cardIndex, placeholder, flip, position, backToChosenCards, highlight }) {
+function HostCard({ deck, cardIndex, placeholder, flip, position, backToChosenCards, highlight, size }) {
 
-  const [cardSize, setCardSize] = useState({ width: 100, height: 140 });
+  // const [cardSize, setCardSize] = useState({ width: 100, height: 140 });
 
   const translateY = position;
 
@@ -69,8 +69,8 @@ function HostCard({ deck, cardIndex, placeholder, flip, position, backToChosenCa
   // Card styles
   const cardStyle = {
     position: 'relative',
-    width: 100,
-    height: 140,
+    width: size.width,
+    height: size.height,
     zIndex: zIndex,
   };
 
@@ -105,8 +105,8 @@ function HostCard({ deck, cardIndex, placeholder, flip, position, backToChosenCa
   return (
     placeholder ?
       <div style={{
-        width: cardSize.width,
-        height: cardSize.height,
+        width: size.width,
+        height: size.height,
         borderStyle: 'dashed',
         borderWidth: '2px',
         borderColor: 'white',

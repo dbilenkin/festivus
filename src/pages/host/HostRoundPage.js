@@ -3,12 +3,12 @@ import { doc, onSnapshot, collection, query, where, getDocs, updateDoc } from 'f
 import HostCard from '../../components/HostCard';
 import Nav from '../../components/Nav';
 import AnimatedScore from '../../components/AnimatedScore';
-import { getCardMatchScore } from '../../utils/utils';
+import { getCardMatchScore } from '../../utils';
 import AnimatedPlayerScore from '../../components/AnimatePlayerScore';
-import { getCardScores } from '../../utils/utils';
+import { getCardScores } from '../../utils';
 
 const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
-  const { currentRound } = gameData;
+  const { currentRound, shortId, numCards } = gameData;
   const currentPlayerIndex = currentRound % players.length;
 
   const chooserName = players[currentPlayerIndex].name;
@@ -138,7 +138,7 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
 
 
   useEffect(() => {
-    if (roundData && roundData.flippedCards === 6) {
+    if (roundData && roundData.flippedCards === numCards + 1) {
 
       const calculateScores = async () => {
         const roundPlayers = [...players];
@@ -199,7 +199,7 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
     const checkAllCardsSubmitted = async () => {
       let allCardsSubmitted = true;
       for (let player of players) {
-        if (player.chosenCards.length < 5) {
+        if (player.chosenCards.length < numCards) {
           allCardsSubmitted = false;
           break;
         }
@@ -243,6 +243,12 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
     )
   }
 
+  const getGameCode = () => {
+    return (
+      <span>Game Code:  <span className='text-yellow-500 font-bold uppercase'>{shortId}</span></span>
+    )
+  }
+
   const getCardPosition = (playerNumber) => {
     const row = Math.floor(playerNumber / 2);
     const y = row * 5 - 30;
@@ -254,11 +260,25 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
     return false;
   }
 
+  const getCardSize = () => {
+    return { width: 100, height: 140 };
+    if (players.length > 8) {
+      return { width: 80, height: 112 };
+    }
+    if (players.length > 3) {
+      return { width: 100, height: 140 };
+    }
+    return { width: 120, height: 168 };
+  }
+
   return (
     <div>
-      <Nav className={`${players.length <= 4 ? 'max-w-2xl' : 'max-w-screen-xl'}`} round={currentRound} word={getWord()} />
-      <div className='max-w-screen-xl mx-auto mt-2'>
-        <div className={`grid ${players.length <= 4 ? 'grid-cols-1' : 'grid-cols-2'} gap-2`}>
+      <Nav className={`${players.length <= 4 ? 'max-w-2xl' : 'max-w-screen-xl'}`}
+        gameCode={getGameCode()}
+        round={currentRound}
+        word={getWord()} />
+      <div className={`${players.length > 8 ? 'mx-2' : 'max-w-screen-xl'} mx-auto mt-2`}>
+        <div className={`grid grid-cols-${Math.ceil(players.length / 4)} gap-2`}>
           {players.map((player, playerIndex) => (
             <div key={playerIndex}
               className={`flex bg-gray-800 text-gray-200 rounded-lg shadow px-3 pt-2 ${players.length <= 4 ? 'mx-auto' : ''}`}
@@ -266,36 +286,49 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
                 boxShadow: highlightPlayer(playerIndex) ? '0 0 20px 10px gold' : '',
                 width: players.length <= 4 ? '55%' : 'auto', // Adjust width for fewer players
               }}>
-              <div className="flex flex-col justify-between items-start">
-                <div className="flex flex-col items-center mb-2">
-                  <div className="text-lg font-semibold w-20 mr-2 pb-2 text-center">{player.name}</div>
-                  <div className="text-sm w-20 mr-2 border-t-2 border-gray-100 pt-2 text-center">Round</div>
-                  <div className="relative text-md font-semibold w-20 mr-2 pb-2 flex justify-center">
-                    {(roundData.scoresCalculated) ? (
-                      <AnimatedPlayerScore
-                        score={roundData.players[playerIndex].roundScore}
-                        onRest={handleScoreAnimationRest}
-                      />
-                    ) :
-                      <div className='absolute text-base text-center'>{roundData.players[playerIndex].roundScore}</div>}
-                  </div>
-                  <div className={`text-sm ${players.length <= 4 ? 'w-28' : 'w-20'} mr-2 border-t-2 border-gray-100 pt-2 mt-5 text-center`}>Game</div>
-                  <div className="relative text-md font-semibold w-20 mr-2 pb-2 flex justify-center">
-                    {(roundData.scoresCalculated) ? (
-                      <AnimatedPlayerScore
-                        score={roundData.players[playerIndex].gameScore}
-                        onRest={handleScoreAnimationRest}
-                      />
-                    ) :
-                      <div className='absolute text-base text-center'>{roundData.players[playerIndex].gameScore}</div>}
-                  </div>                </div>
+              <div className="flex flex-col justify-center items-center">
+                <div className="">
+                  <div className="text-base font-semibold w-12 mr-2 pb-2 text-center">{player.name}</div>
+                  {/* <div className="text-sm font-semibold w-12 mr-2" style={{
+                    transform: 'rotate(-90deg)',
+                    transformOrigin: 'right top',
+                    whiteSpace: 'nowrap',
+                    marginBottom: '1rem', // Adjust this value as needed
+                    marginRight: '-1.5rem' // Adjust this value to align the text within the box
+                  }}>
+                    {player.name}
+                  </div> */}
+                  {false && <div>
+                    <div className="text-sm w-20 mr-2 border-t-2 border-gray-100 pt-2 text-center">Round</div>
+                    <div className="relative text-md font-semibold w-20 mr-2 pb-2 flex justify-center">
+                      {(roundData.scoresCalculated) ? (
+                        <AnimatedPlayerScore
+                          score={roundData.players[playerIndex].roundScore}
+                          onRest={handleScoreAnimationRest}
+                        />
+                      ) :
+                        <div className='absolute text-base text-center'>{roundData.players[playerIndex].roundScore}</div>}
+                    </div>
+                    <div className={`text-sm ${players.length <= 4 ? 'w-28' : 'w-20'} mr-2 border-t-2 border-gray-100 pt-2 mt-5 text-center`}>Game</div>
+                    <div className="relative text-md font-semibold w-20 mr-2 pb-2 flex justify-center">
+                      {(roundData.scoresCalculated) ? (
+                        <AnimatedPlayerScore
+                          score={roundData.players[playerIndex].gameScore}
+                          onRest={handleScoreAnimationRest}
+                        />
+                      ) :
+                        <div className='absolute text-base text-center'>{roundData.players[playerIndex].gameScore}</div>}
+                    </div>
+                  </div>}
+                </div>
               </div>
               <div className="flex flex-col">
                 <div className="flex items-center mb-2">
-                  <div className="flex-grow grid grid-cols-5 gap-1">
-                    {player.chosenCards.length === 5 ? player.chosenCards.map((cardIndex, i) => (
+                  <div className={`flex-grow grid grid-cols-${numCards} gap-1`}>
+                    {player.chosenCards.length === numCards ? player.chosenCards.map((cardIndex, i) => (
                       <div key={cardIndex} className="p-1">
                         <HostCard
+                          size={getCardSize()}
                           deck={deck}
                           cardIndex={cardIndex}
                           flip={roundData.flippedCards > i}
@@ -305,9 +338,9 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
                         />
                       </div>
                     )) :
-                      Array(5).fill().map((_, i) => (
+                      Array(numCards).fill().map((_, i) => (
                         <div key={i} className="p-1">
-                          <HostCard placeholder={true} />
+                          <HostCard size={getCardSize()} placeholder={true} />
                         </div>
                       ))}
                   </div>

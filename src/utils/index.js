@@ -1,11 +1,7 @@
-import celebrities from './dataFiles/celebrities.json';
-import actors from './dataFiles/actors.json';
-import famousPeople from './dataFiles/famousPeople.json';
-import animals from './dataFiles/animals.json';
 import names from './data/names.json';
 import words from './data/words.json';
+import * as Constants from '../constants';
 
-const deckSize = 26;
 const numWords = 5;
 let deck = [];
 let createdDeckType = "";
@@ -26,7 +22,7 @@ export function generateShortId(id) {
 
 export function createIndexDeck(deckLength) {
   const indexDeck = [];
-  for (let i = 0; i < deckSize; i++) {
+  for (let i = 0; i < Constants.deckSize; i++) {
     let randomIndexFound = false;
     while (!randomIndexFound) {
       const randomTry = Math.floor(Math.random() * deckLength)
@@ -68,14 +64,14 @@ export function getIndexDeck(deckType) {
 
 export function getDeck(_indexDeck, deckType) {
 
-  if (deckType === createdDeckType && deck.length > 0) return deck;
+  // if (deckType === createdDeckType && deck.length > 0) return deck;
   createdDeckType = deckType;
   deck = [];
   switch (deckType) {
     case "celebrities":
     case "actors":
     case "famousPeople":
-      for (let i = 0; i < deckSize; i++) {
+      for (let i = 0; i < Constants.deckSize; i++) {
         const randomI = _indexDeck[i];
         const name = names[deckType][randomI].name;
         const imageUrl = `decks/${deckType}/${names[deckType][randomI].imageUrl}`;
@@ -88,7 +84,7 @@ export function getDeck(_indexDeck, deckType) {
     case "original": // decks without names
     case "animals":
     case "life":
-      for (let i = 0; i < deckSize; i++) {
+      for (let i = 0; i < Constants.deckSize; i++) {
         const randomI = _indexDeck[i];
         const imageName = `${deckType}-${randomI}.jpg`; // Construct the image name
         const imageUrl = `decks/${deckType}/${imageName}`; // Construct the image path
@@ -180,6 +176,5 @@ export function getContrastYIQ(hexcolor){
   return (yiq >= 128) ? 'rgb(31,41,55)' : 'rgb(243, 244, 246)';
 }
 
-// export const playerColors = ["#6f1926", "#de324c", "#f4895f", "#f8e16f", "#95cf92", "#369acc", "#9656a2", "#cbabd1"];
-export const playerColors = ["#f8522e","#f8893a","#f7c045","#abc32f","#5ec618","#368d6d","#0d54c1","#4048aa","#733c93"];
+// export const Constants.playerColors = ["#6f1926", "#de324c", "#f4895f", "#f8e16f", "#95cf92", "#369acc", "#9656a2", "#cbabd1"];
 

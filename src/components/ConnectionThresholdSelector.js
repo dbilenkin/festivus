@@ -3,6 +3,12 @@ import { updateDoc } from 'firebase/firestore';
 
 const getThresholds = (numPlayers) => {
   switch (numPlayers) {
+    case 12:
+    case 11:
+      return [.6, .8, .9];
+    case 10:
+    case 9:
+      return [.55, .7, .85];
     case 8:
     case 7:
       return [.5, .65, .8];
@@ -27,7 +33,7 @@ const ConnectionThresholdSelector = ({ roundData, roundRef }) => {
     })
   }
 
-  const [selectedOption, setSelectedOption] = useState(options[1].value);
+  const [selectedOption, setSelectedOption] = useState(options[0].value);
 
   const handleChange = async (newValue) => {
     setSelectedOption(newValue);
