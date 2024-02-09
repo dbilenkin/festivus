@@ -21,7 +21,7 @@ const HostSetupPage = ({ gameData, players }) => {
       <Nav className="max-w-screen-md" />
       <div className="max-w-screen-md mx-auto px-4 pt-2 text-gray-200"> {/* text color adjusted for dark background */}
         <div className='flex justify-between bg-gray-800 p-6 rounded-lg'>
-          <h2 className="text-4xl font-bold text-gray-200 ">
+          <h2 className="text-5xl font-bold text-gray-200 ">
             Game Code: <span className='text-green-500'>{shortId}</span>
           </h2>
           <Toggle className="text-2xl text-gray-200">Allow Sounds</Toggle>

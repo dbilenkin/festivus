@@ -95,7 +95,6 @@ const PlayerSetupPage = ({ gameData, gameRef, players }) => {
             <option value="actors">Actors</option>
             <option value="famousPeople">Famous People</option>
             <option value="animals">Animals</option>
-            <option value="original">Original</option>
           </select>
         </div> :
           <div className=''>

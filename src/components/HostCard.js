@@ -3,8 +3,9 @@ import { useSpring, animated } from '@react-spring/web';
 import './HostCard.css';
 import cardback from './card-back.jpg';
 
-function HostCard({ deck, cardIndex, placeholder, flip, position, backToChosenCards, highlight, size }) {
+function HostCard({ deck, cardIndex, placeholder, flip, position, backToChosenCards, highlight, size, showName, flyAway }) {
 
+  const [isFlyAway, setIsFlyAway] = useState(false);
   // const [cardSize, setCardSize] = useState({ width: 100, height: 140 });
 
   const translateY = position;
@@ -18,7 +19,33 @@ function HostCard({ deck, cardIndex, placeholder, flip, position, backToChosenCa
     config: { mass: 5, tension: 300, friction: 100 }
   }));
 
+  // Trigger fly-away animation
   useEffect(() => {
+    if (flyAway && !isFlyAway) {
+      console.log({flyAway});
+      const up = Math.random() > .5 ? 1 : -1;
+      const randomX = Math.random() * window.innerWidth; // Random X offscreen
+      const randomY = 3000 * up; // Random Y offscreen
+      // const randomY = Math.random() * (window.innerHeight * 2) - window.innerHeight; // Random Y offscreen
+
+      const randomRotate = Math.random() * 720 - 360; // Random rotation
+
+      set({
+        to: {
+          transform: `translateX(${randomX}px) translateY(${randomY}px) rotateY(180deg) scale(1)`
+        },
+        from: {
+          transform: 'translateX(0px) translateY(0px) rotateY(180deg) scale(1)'
+        },
+        config: { mass: 1, tension: 200, friction: 300 }
+      });
+
+      setIsFlyAway(true); // Prevent re-triggering the animation
+    }
+  }, [flyAway, isFlyAway, set]);
+
+  useEffect(() => {
+    if (flyAway) return;
     set({
       transform: `perspective(600px) rotateY(${flip ? 180 : 0}deg) scale(${flip ? 1.2 : 1}) translateY(${flip ? translateY : '0px'})`,
       zIndex: flip ? 10 : 0,
@@ -32,7 +59,8 @@ function HostCard({ deck, cardIndex, placeholder, flip, position, backToChosenCa
   }, [flip, backToChosenCards, set, translateY]);
 
   useEffect(() => {
-    if (highlight) {
+    if (highlight && !flyAway) {
+      console.log({highlight});
       set({
         boxShadow: '0 0 20px 10px gold',
         transform: `perspective(600px) rotateY(180deg) scale(1.3) translateY(${translateY})`,
@@ -98,7 +126,7 @@ function HostCard({ deck, cardIndex, placeholder, flip, position, backToChosenCa
     const lastName = name.split(" ").slice(1).join(" ");
 
     return (
-      <div className='text-white text-center bg-gray-800 w-full p-1 text-xs flex justify-center self-end'>{firstName} <br></br> {lastName} </div>
+      <div className='text-white text-center bg-gray-800 w-full p-1 text-sm flex justify-center self-end'>{firstName} <br></br> {lastName} </div>
     )
   }
 
@@ -117,7 +145,7 @@ function HostCard({ deck, cardIndex, placeholder, flip, position, backToChosenCa
         <animated.div className='card'
           style={{
             ...cardFaceStyle,
-            backgroundImage: `url(${cardback})`,
+            backgroundImage: `url('images/card-back.jpg')`,
             opacity: opacity.to(o => 1 - o),
           }}
         ></animated.div>
@@ -128,7 +156,7 @@ function HostCard({ deck, cardIndex, placeholder, flip, position, backToChosenCa
             opacity,
             rotateY: "180deg",
           }}
-        >{false && displayName()}</animated.div>
+        >{showName && displayName()}</animated.div>
       </animated.div>
   );
 }

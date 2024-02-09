@@ -5,10 +5,11 @@ import Nav from '../../components/Nav';
 import AnimatedScore from '../../components/AnimatedScore';
 import { getCardMatchScore } from '../../utils';
 import AnimatedPlayerScore from '../../components/AnimatePlayerScore';
-import { getCardScores } from '../../utils';
+import { getCardScores, capitalize } from '../../utils';
+import TopCardsModal from '../../components/TopCardsModal';
 
 const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
-  const { currentRound, shortId, numCards } = gameData;
+  const { currentRound, shortId, numCards, deckType } = gameData;
   const currentPlayerIndex = currentRound % players.length;
 
   const chooserName = players[currentPlayerIndex].name;
@@ -25,6 +26,8 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
     startPosition: { x: 0, y: 0 },
     endPosition: { x: 0, y: 0 },
   });
+  const [topCards, setTopCards] = useState([]);
+  const [triggerFlyAway, setTriggerFlyAway] = useState(false);
 
   const getCardMatch = (card) => {
     const { cardIndex, playerIndex } = animationState;
@@ -49,6 +52,8 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
   }
 
   useEffect(() => {
+    setTopCards([]);
+    setTriggerFlyAway(false);
     const roundsRef = collection(gameRef, "rounds");
     const q = query(roundsRef, where('roundNumber', '==', currentRound));
 
@@ -143,6 +148,7 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
       const calculateScores = async () => {
         const roundPlayers = [...players];
         let connectionScores = [];
+        let topCardMap = {};
 
         for (let i = 0; i < roundPlayers.length; i++) {
           const player = roundPlayers[i];
@@ -151,13 +157,21 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
           const roundPlayer = roundData.players.find(p => p.name === player.name);
           player.gameScore = roundPlayer.gameScore;
           player.connections = roundPlayer.connections;
+          const cards = player.chosenCards;
+          for (const [index, cardIndex] of cards.entries()) {
+            const cardScore = 10 - index;
+            if (topCardMap[cardIndex]) {
+              topCardMap[cardIndex] += cardScore;
+            } else {
+              topCardMap[cardIndex] = cardScore;
+            }
+          }
 
           for (let j = 0; j < roundPlayers.length; j++) {
             if (i === j) continue;
             const otherPlayer = roundPlayers[j];
-            const cards1 = player.chosenCards;
-            const cards2 = otherPlayer.chosenCards;
-            const roundScore = getCardScores(cards1, cards2);
+            const otherCards = otherPlayer.chosenCards;
+            const roundScore = getCardScores(cards, otherCards);
             player.roundScore += roundScore;
 
             if (!player.connections || !player.connections[otherPlayer.name]) {
@@ -170,6 +184,13 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
           }
           player.gameScore += player.roundScore;
         }
+
+        setTriggerFlyAway(true);
+        // Wait for the animation to finish before showing the modal
+        setTimeout(() => {
+          setTopCards(Object.entries(topCardMap).sort((a, b) => b[1] - a[1]).map(c => c[0]).slice(0, 5));
+        }, 1000);
+        
         connectionScores.sort((a, b) => a - b);
         const connectionThreshold = connectionScores[Math.floor(connectionScores.length / 2)];
         try {
@@ -271,9 +292,23 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
     return { width: 120, height: 168 };
   }
 
+  const displayTopCardsModal = () => {
+
+    const cardSize = { width: 150, height: 210 };
+    return (
+      topCards.length > 0 && <TopCardsModal
+        topCards={topCards}
+        deck={deck}
+        deckType={deckType}
+        cardSize={cardSize}
+        word={roundData.word}
+      />
+    )
+  }
+
   return (
     <div>
-      <Nav className={`${players.length <= 4 ? 'max-w-2xl' : 'max-w-screen-xl'}`}
+      <Nav className={`${players.length <= 4 ? 'max-w-screen-lg' : 'max-w-screen-xl'}`}
         gameCode={getGameCode()}
         round={currentRound}
         word={getWord()} />
@@ -283,43 +318,11 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
             <div key={playerIndex}
               className={`flex bg-gray-800 text-gray-200 rounded-lg shadow px-3 pt-2 ${players.length <= 4 ? 'mx-auto' : ''}`}
               style={{
-                boxShadow: highlightPlayer(playerIndex) ? '0 0 20px 10px gold' : '',
                 width: players.length <= 4 ? '55%' : 'auto', // Adjust width for fewer players
               }}>
               <div className="flex flex-col justify-center items-center">
                 <div className="">
                   <div className="text-base font-semibold w-12 mr-2 pb-2 text-center">{player.name}</div>
-                  {/* <div className="text-sm font-semibold w-12 mr-2" style={{
-                    transform: 'rotate(-90deg)',
-                    transformOrigin: 'right top',
-                    whiteSpace: 'nowrap',
-                    marginBottom: '1rem', // Adjust this value as needed
-                    marginRight: '-1.5rem' // Adjust this value to align the text within the box
-                  }}>
-                    {player.name}
-                  </div> */}
-                  {false && <div>
-                    <div className="text-sm w-20 mr-2 border-t-2 border-gray-100 pt-2 text-center">Round</div>
-                    <div className="relative text-md font-semibold w-20 mr-2 pb-2 flex justify-center">
-                      {(roundData.scoresCalculated) ? (
-                        <AnimatedPlayerScore
-                          score={roundData.players[playerIndex].roundScore}
-                          onRest={handleScoreAnimationRest}
-                        />
-                      ) :
-                        <div className='absolute text-base text-center'>{roundData.players[playerIndex].roundScore}</div>}
-                    </div>
-                    <div className={`text-sm ${players.length <= 4 ? 'w-28' : 'w-20'} mr-2 border-t-2 border-gray-100 pt-2 mt-5 text-center`}>Game</div>
-                    <div className="relative text-md font-semibold w-20 mr-2 pb-2 flex justify-center">
-                      {(roundData.scoresCalculated) ? (
-                        <AnimatedPlayerScore
-                          score={roundData.players[playerIndex].gameScore}
-                          onRest={handleScoreAnimationRest}
-                        />
-                      ) :
-                        <div className='absolute text-base text-center'>{roundData.players[playerIndex].gameScore}</div>}
-                    </div>
-                  </div>}
                 </div>
               </div>
               <div className="flex flex-col">
@@ -335,6 +338,7 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
                           position={getCardPosition(playerIndex)}
                           backToChosenCards={i + 1 < roundData.flippedCards}
                           highlight={cardIndex === animationState.highlightedCard}
+                          flyAway={triggerFlyAway}
                         />
                       </div>
                     )) :
@@ -350,6 +354,7 @@ const HostRoundPage = ({ gameData, gameRef, players, deck }) => {
           ))}
         </div>
       </div>
+      {displayTopCardsModal()}
     </div>
 
   );

@@ -237,11 +237,9 @@ function Deck({ deck, handleSelectCards, gameData }) {
         cardSet[index] = "toReady";
       }
     } else if (cardState === "marked") {
-      if (my < 100 && !firstPassDone) {
+      if (my < -80 && !firstPassDone) {
         cardSet[index] = "markedToReady";
-      } else if (mx > 80) {
-        cardSet[index] = "readyToMarked";
-      }
+      } 
     }
 
     if (active) {
@@ -400,11 +398,14 @@ function Deck({ deck, handleSelectCards, gameData }) {
             }
             break;
           case "marked":
-            // if (active) {
-            newX = 0;
-            newY = markedY;
-            zIndex = numMarked + maxZIndex;
-            // }
+            if (active) {
+              newX = mx;
+              newY = my + markedY;
+            } else {
+              newX = 0;
+              newY = markedY;
+              zIndex = numMarked + maxZIndex;
+            }
             break;
           default:
             break;
@@ -485,7 +486,12 @@ function Deck({ deck, handleSelectCards, gameData }) {
     )
   }
 
-  console.log("Current marked set:", markedSet); // Log the state
+  // console.log("Current marked set:", markedSet); // Log the state
+
+  const numMarkedAndBoxed = () => {
+    const count = [...cardSet].filter(c => c === 'marked' || c.startsWith("box")).length;
+    return count;
+  }
 
   return (
     <div className=''>
@@ -557,14 +563,14 @@ function Deck({ deck, handleSelectCards, gameData }) {
           </div>
           <Button
             onClick={handleCheckboxChange}
-            disabled={markedSet.size < numCards}
+            disabled={numMarkedAndBoxed() < numCards}
             className='w-full mt-8'>Ready to Order</Button>
         </div>
         <div className='w-1/2 ml-5'>
           <div className='markedCards text-gray-300 border-dashed border-2 border-gray-300 rounded-lg flex items-center justify-center text-2xl font-bold'>
             First Pass Cards
           </div>
-          <div className='relative text-xl text-gray-300 font-bold pt-2'>{markedSet.size} cards ready</div>
+          <div className='relative text-xl text-gray-300 font-bold pt-2'>{numMarkedAndBoxed()} cards ready</div>
         </div>
       </div>}
     </div>

@@ -5,7 +5,7 @@ import * as Constants from '../constants';
 
 const PlayerGraph = ({ small, height, width, data, strongestPlayer, strongestPair }) => {
   const margin = { top: 20, right: 20, bottom: 40, left: 20 };
-  const sizeConstant = 3 / data.nodes.length + .5;
+  const sizeConstant = 4 / data.nodes.length + .5;
 
   const svgRef = useRef();
 
@@ -123,23 +123,52 @@ const PlayerGraph = ({ small, height, width, data, strongestPlayer, strongestPai
     }
 
     // Custom centering force
+    // const customCenterForce = () => {
+    //   const alpha = .2;
+    //   const numNodes = data.nodes.length;
+
+    //   data.nodes.forEach(d => {
+    //     const averagePosition = data.nodes.reduce((prev, curr) => {
+    //       return {
+    //         x: prev.x + (curr.x / numNodes),
+    //         y: prev.y + (curr.y / numNodes),
+    //       }
+    //     }, { x: 0, y: 0});
+
+    //     // Apply the force
+    //     d.vx += (width/2 - averagePosition.x) * alpha;
+    //     d.vy += (height/2 - averagePosition.y) * alpha;
+    //   });
+
+    // };
     const customCenterForce = () => {
-      const alpha = .2;
+      const alpha = .001;
       const numNodes = data.nodes.length;
+      let farthestDistanceFromCenter = 0;
+      let secondDistance = 0;
+      let farthestFromCenter, secondFromCenter;
 
       data.nodes.forEach(d => {
-        const averagePosition = data.nodes.reduce((prev, curr) => {
-          return {
-            x: prev.x + (curr.x / numNodes),
-            y: prev.y + (curr.y / numNodes),
-          }
-        }, { x: 0, y: 0});
-
-        // Apply the force
-        d.vx += (width/2 - averagePosition.x) * alpha;
-        d.vy += (height/2 - averagePosition.y) * alpha;
+        const distanceFromCenter = Math.sqrt((width / 2 - d.x) * (width / 2 - d.x) + (height / 2 - d.y) * (height / 2 - d.y));
+        if (distanceFromCenter > farthestDistanceFromCenter) {
+          secondDistance = farthestDistanceFromCenter;
+          farthestDistanceFromCenter = distanceFromCenter;
+          secondFromCenter = farthestFromCenter;
+          farthestFromCenter = d;
+        }
       });
 
+      if (Math.abs(farthestDistanceFromCenter - secondDistance) > 10) {
+
+        const xForce = width / 2 - farthestFromCenter.x;
+        const yForce = height / 2 - farthestFromCenter.y;
+
+        data.nodes.forEach(d => {
+          // Apply the force
+          d.vx += xForce * alpha;
+          d.vy += yForce * alpha;
+        });
+      }
     };
 
     // Create a simulation for positioning nodes with adjusted forces

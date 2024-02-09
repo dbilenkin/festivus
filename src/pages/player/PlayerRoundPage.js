@@ -150,7 +150,7 @@ const PlayerRoundPage = ({ gameData, gameRef, players, deck }) => {
     if (flippedCards < numCards) {
       message = `Flip ${getOrdinal(flippedCards + 1)} Card`;
     } else if (flippedCards === numCards) {
-      message = 'Show Scores';
+      message = 'Show Top Cards';
     } else if (currentRound === gameLength) {
       message = "Show End Screen";
     }

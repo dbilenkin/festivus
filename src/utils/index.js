@@ -7,6 +7,10 @@ let deck = [];
 let createdDeckType = "";
 let allChosenWords = [];
 
+export function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1); 
+}
+
 export function generateShortId(id) {
   const shortIdLength = 4;
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
