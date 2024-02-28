@@ -125,10 +125,6 @@
       "imageUrl": "Meryl_Streep.jpg"
     },
     {
-      "name": "Shawn Mendes",
-      "imageUrl": "Shawn_Mendes.png"
-    },
-    {
       "name": "Jimmy Fallon",
       "imageUrl": "Jimmy_Fallon.jpg"
     },
@@ -149,10 +145,6 @@
       "imageUrl": "Morgan_Freeman.jpg"
     },
     {
-      "name": "Harry Styles",
-      "imageUrl": "Harry_Styles.jpg"
-    },
-    {
       "name": "Reese Witherspoon",
       "imageUrl": "Reese_Witherspoon.jpg"
     },
@@ -167,10 +159,6 @@
     {
       "name": "Ryan Reynolds",
       "imageUrl": "Ryan_Reynolds.jpg"
-    },
-    {
-      "name": "Gigi Hadid",
-      "imageUrl": "Gigi_Hadid.png"
     },
     {
       "name": "Stephen Curry",
@@ -349,10 +337,6 @@
       "imageUrl": "Brie_Larson.jpg"
     },
     {
-      "name": "Camila Cabello",
-      "imageUrl": "Camila_Cabello.jpg"
-    },
-    {
       "name": "Chadwick Boseman",
       "imageUrl": "Chadwick_Boseman.jpg"
     },
@@ -391,10 +375,6 @@
     {
       "name": "Jessica Chastain",
       "imageUrl": "Jessica_Chastain.jpg"
-    },
-    {
-      "name": "JoJo Siwa",
-      "imageUrl": "JoJo_Siwa.jpg"
     },
     {
       "name": "John Krasinski",
@@ -1299,18 +1279,6 @@
       "imageUrl": "Plato.jpg"
     },
     {
-      "name": "Gautama Buddha",
-      "imageUrl": "Gautama_Buddha.jpg"
-    },
-    {
-      "name": "Jesus Christ",
-      "imageUrl": "Jesus_Christ.jpg"
-    },
-    {
-      "name": "Muhammad",
-      "imageUrl": "Muhammad.jpg"
-    },
-    {
       "name": "Confucius",
       "imageUrl": "Confucius.jpg"
     },
@@ -1495,10 +1463,6 @@
       "imageUrl": "Homer.jpg"
     },
     {
-      "name": "Dante Alighieri",
-      "imageUrl": "Dante_Alighieri.jpg"
-    },
-    {
       "name": "Leo Tolstoy",
       "imageUrl": "Leo_Tolstoy.jpg"
     },
@@ -1617,10 +1581,6 @@
     {
       "name": "Albert Schweitzer",
       "imageUrl": "Albert_Schweitzer.jpg"
-    },
-    {
-      "name": "Fridtjof Nansen",
-      "imageUrl": "Fridtjof_Nansen.jpg"
     },
     {
       "name": "Alexander Fleming",
