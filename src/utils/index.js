@@ -54,7 +54,7 @@ export function getIndexDeck(deckType) {
       indexDeck = createIndexDeck(52);
       break;
     case "life":
-      indexDeck = createIndexDeck(68);
+      indexDeck = createIndexDeck(65);
       break;
     case "animals":
       indexDeck = createIndexDeck(62);

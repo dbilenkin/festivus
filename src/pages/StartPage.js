@@ -26,7 +26,11 @@ function StartPage() {
   }
 
   const handleSetShortId = value => {
-    setShortId(value.toUpperCase());
+    setShortId(value.toUpperCase().slice(0, 4).trim());
+  }
+
+  const handleSetPlayerName = value => {
+    setPlayerName(value.slice(0, 11).trim());
   }
 
   const handleCreateGame = async () => {
@@ -85,25 +89,25 @@ function StartPage() {
       <Nav className="max-w-screen-md" />
       <div className='max-w-screen-md mx-auto text-gray-100'> {/* Adjusted text color for dark background */}
         <div className="bg-gray-800 mx-4 p-4 mt-4 rounded-lg">
-          <Button onClick={handleCreateGame} className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded">
+          <Button onClick={handleCreateGame} buttonType="large" className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded">
             Create Game
           </Button>
         </div>
-        <div className='bg-gray-800 mx-4 p-4 mt-4 rounded-lg'>
+        <div className='text-2xl bg-gray-800 mx-4 p-4 mt-4 rounded-lg'>
           <div className='flex '>
             <div className="mb-4 w-2/3">
-              <label htmlFor="playerName" className="block text-gray-300 text-sm font-bold mb-2">Your Name</label>
+              <label htmlFor="playerName" className="block text-gray-300 text-2xl font-bold mb-2">Your Name</label>
               <input
                 type="text"
                 id="playerName"
                 value={playerName}
-                onChange={e => setPlayerName(e.target.value)}
+                onChange={e => handleSetPlayerName(e.target.value)}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-300"
               />
             </div>
 
             <div className="ml-4 mb-4 w-1/3">
-              <label htmlFor="shortId" className="block text-gray-300 text-sm font-bold mb-2">Game ID</label>
+              <label htmlFor="shortId" className="block text-gray-300 text-2xl font-bold mb-2">Game ID</label>
               <input
                 type="text"
                 id="shortId"
@@ -114,7 +118,7 @@ function StartPage() {
             </div>
 
           </div>
-          <Button onClick={handleJoinGame} className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded">
+          <Button onClick={handleJoinGame} buttonType="large" className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded">
             Join Game
           </Button>
         </div>

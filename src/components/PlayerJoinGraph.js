@@ -13,7 +13,7 @@ const getNodeX = (d, numNodes, width) => {
 }
 
 const getFontSize = (d) => {
-  const size = 22 - d.name.length;
+  const size = 26 - d.name.length;
   return size + 'px';
 }
 
@@ -26,7 +26,6 @@ const PlayerJoinGraph = ({ players, width, height }) => {
   // const canvasRef = useRef(null);
   const svgRef = useRef();
   const [nodes, setNodes] = useState([]);
-  const [links, setLinks] = useState([]);
 
   useEffect(() => {
     if (!nodes || nodes.length === 0) {
@@ -36,10 +35,13 @@ const PlayerJoinGraph = ({ players, width, height }) => {
         y: height / 2
       }))
       setNodes(positionedPlayers);
+    } else if (players.length < nodes.length) {
+      const newNodes = nodes.filter(n => players.find(p => p.name === n.name) !== undefined);
+      setNodes(newNodes);
     } else {
       let newNodes = [];
       for (let player of players) {
-        if (!nodes.find(n => n.id === player.id)) {
+        if (!nodes.find(n => n.name === player.name)) {
           const newNode = players[player.id];
           newNode.x = width / 2;
           newNode.y = height / 2;
@@ -49,10 +51,6 @@ const PlayerJoinGraph = ({ players, width, height }) => {
 
       setNodes([...nodes, ...newNodes]);
     }
-
-    // setTimeout(() => {
-    //   setLinks([{ source: 0, target: 5, value: 10 }])
-    // }, 2000);
   }, [players]);
 
 
@@ -62,7 +60,6 @@ const PlayerJoinGraph = ({ players, width, height }) => {
     const svg = d3.select(svgRef.current);
 
     const simulation = d3.forceSimulation(nodes)
-      .force("link", d3.forceLink(links).id(d => d.id))
       .force("x", d3.forceX((d) => getNodeX(d, players.length, width)).strength(0.2))
       .force("y", d3.forceY(height / 2).strength(0.2))
       .force("collide", d3.forceCollide((d) => RADIUS * getSpace(d)))
@@ -80,8 +77,8 @@ const PlayerJoinGraph = ({ players, width, height }) => {
             .attr('fill', d => Constants.playerColors[d.id])
             .attr("stroke-width", d => d.id === 0 ? 4 : 2)
             .attr("stroke", d => d.id === 0 ? "gold" : "rgb(107,114,128)")
-            .transition() // begin a transition
-            .duration(300) // duration of 500ms
+            // .transition() // begin a transition
+            // .duration(300) // duration of 500ms
             .attr('r', RADIUS), // transition to the actual radius
           update => update,
           exit => exit.remove()
@@ -95,8 +92,8 @@ const PlayerJoinGraph = ({ players, width, height }) => {
           enter => enter.append('text')
             .style('fill-opacity', 0)
             .text(d => d.name)
-            .transition()
-            .duration(500)
+            // .transition()
+            // .duration(300)
             .style('fill-opacity', 1),
           update => update,
           exit => exit.remove()
@@ -110,7 +107,7 @@ const PlayerJoinGraph = ({ players, width, height }) => {
         .style('font-weight', 'bold');
     });
 
-  }, [width, height, nodes, links]);
+  }, [width, height, nodes]);
 
   return (
     <svg ref={svgRef} width={width} height={height} />
