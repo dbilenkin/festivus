@@ -1,6 +1,6 @@
 import fs, { read } from 'fs';
 
-const deckType = "famousPeople";
+const deckType = "festivus";
 
 const readFile = async () => {
   const data = [];

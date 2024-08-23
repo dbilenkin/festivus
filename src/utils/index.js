@@ -48,6 +48,7 @@ export function getIndexDeck(deckType) {
     case "celebrities":
     case "actors":
     case "famousPeople":
+    case "festivus":
       indexDeck = createIndexDeck(names[deckType].length);
       break;
     case "original":
@@ -75,6 +76,7 @@ export function getDeck(_indexDeck, deckType) {
     case "celebrities":
     case "actors":
     case "famousPeople":
+    case "festivus":
       for (let i = 0; i < Constants.deckSize; i++) {
         const randomI = _indexDeck[i];
         const name = names[deckType][randomI].name;
@@ -144,7 +146,7 @@ export function displayGameLength(numRounds = 3) {
 }
 
 export function displayFormattedDeckType(deckType = "life") {
-  const deckTypes = { life: "Life", original: "Original", actors: "Actors", celebrities: "Celebrities", famousPeople: "Famous People", animals: "Animals" };
+  const deckTypes = { life: "Life", original: "Original", actors: "Actors", celebrities: "Celebrities", famousPeople: "Famous People", festivus: "Festivus", animals: "Animals", custom: "Custom" };
   return deckTypes[deckType];
 }
 
@@ -156,6 +158,24 @@ export function displayWordSelection(wordSelection = "custom") {
 export function getRandomWords(deckType) {
   const randomWords = [];
   const allWords = words[deckType];
+  for (let i = 0; i < numWords; i++) {
+    let randomIndexFound = false;
+    while (!randomIndexFound) {
+      const randomTry = Math.floor(Math.random() * allWords.length)
+      const randomWord = allWords[randomTry]
+      if (!allChosenWords.includes(randomWord)) {
+        randomWords.push(randomWord);
+        allChosenWords.push(randomWord);
+        randomIndexFound = true;
+      }
+    }
+  }
+  return randomWords;
+}
+
+export function getWordsOutOfWordsWords() {
+  const randomWords = [];
+  const allWords = words['life'];
   for (let i = 0; i < numWords; i++) {
     let randomIndexFound = false;
     while (!randomIndexFound) {

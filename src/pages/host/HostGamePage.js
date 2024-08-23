@@ -3,7 +3,9 @@ import { useParams } from 'react-router-dom';
 import { doc, onSnapshot, collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '../../utils/Firebase';
 import HostSetupPage from './HostSetupPage';
+import HostBuildDeckPage from './HostBuildDeckPage';
 import HostRoundPage from './HostRoundPage';
+import HostWordsRoundPage from './HostWordsRoundPage';
 import HostEndPage from './HostEndPage';
 import Spinner from '../../components/Spinner';
 import { getDeck } from '../../utils';
@@ -81,13 +83,20 @@ const HostGamePage = () => {
   }
 
   const displayHostPage = () => {
-    const { deckType, indexDeck, gameState } = gameData;
+    const { deckType, indexDeck, gameState, gameType } = gameData;
 
     if (gameState === "setup") {
       return <HostSetupPage gameData={gameData} gameRef={gameRef} players={players} />
     }
+    if (gameState === "buildDeck") {
+      return <HostBuildDeckPage gameData={gameData} gameRef={gameRef} players={players} />
+    }
     if (gameState === 'started') {
-      return <HostRoundPage deck={getDeck(indexDeck, deckType)} gameData={gameData} gameRef={gameRef} players={players} />
+      if (gameType === 'Incommon') {
+        return <HostRoundPage deck={getDeck(indexDeck, deckType)} gameData={gameData} gameRef={gameRef} players={players} />
+      } else if (gameType === 'Out of Words, Words') {
+        return <HostWordsRoundPage gameData={gameData} gameRef={gameRef} players={players} />
+      }
     }
     if (gameState === "ended") {
       return <HostEndPage deck={getDeck(indexDeck, deckType)} gameData={gameData} gameRef={gameRef} players={players} />

@@ -19,19 +19,21 @@ function StartPage() {
 
   const [playerName, setPlayerName] = useState('');
   const [shortId, setShortId] = useState('');
+  const [gameType, setGameType] = useState('Incommon');
   const navigate = useNavigate();
 
   const newGameJson = {
-    gameState: 'setup'
-  }
+    gameState: 'setup',
+    gameType: gameType
+  };
 
   const handleSetShortId = value => {
     setShortId(value.toUpperCase().slice(0, 4).trim());
-  }
+  };
 
   const handleSetPlayerName = value => {
     setPlayerName(value.slice(0, 11).trim());
-  }
+  };
 
   const handleCreateGame = async () => {
     const gameRef = await addDoc(collection(db, 'games'), newGameJson);
@@ -63,7 +65,7 @@ function StartPage() {
         const gameRef = doc(db, 'games', gameId);
         setGameRef(gameRef);
 
-        const playersRef = collection(gameRef, "players")
+        const playersRef = collection(gameRef, "players");
         addDoc(playersRef, {
           name: playerName,
           gameScore: 0,
@@ -83,18 +85,48 @@ function StartPage() {
     });
   };
 
-
   return (
     <div className="">
       <Nav className="max-w-screen-md" />
-      <div className='max-w-screen-md mx-auto text-gray-100'> {/* Adjusted text color for dark background */}
+      <div className='max-w-screen-md mx-auto text-gray-100'>
         <div className="bg-gray-800 mx-4 p-4 mt-4 rounded-lg">
+          <div className="mb-4">
+            <div className="text-gray-300 text-2xl font-bold mb-2">Select Game Type</div>
+            <div className="flex items-center justify-evenly">
+              <div className="flex items-center mr-4">
+                <input
+                  type="radio"
+                  id="incommon"
+                  name="gameType"
+                  value="Incommon"
+                  checked={gameType === 'Incommon'}
+                  onChange={(e) => setGameType(e.target.value)}
+                  className="mr-2"
+                />
+                <label htmlFor="incommon" className="text-gray-300 text-2xl">Incommon</label>
+              </div>
+              <div className="flex items-center">
+                <input
+                  type="radio"
+                  id="outofwords"
+                  name="gameType"
+                  value="Out of Words, Words"
+                  checked={gameType === 'Out of Words, Words'}
+                  onChange={(e) => setGameType(e.target.value)}
+                  className="mr-2"
+                />
+                <label htmlFor="outofwords" className="text-gray-300 text-2xl">Out of Words, Words</label>
+              </div>
+            </div>
+          </div>
+
+
           <Button onClick={handleCreateGame} buttonType="large" className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded">
             Create Game
           </Button>
         </div>
         <div className='text-2xl bg-gray-800 mx-4 p-4 mt-4 rounded-lg'>
-          <div className='flex '>
+          <div className='flex'>
             <div className="mb-4 w-2/3">
               <label htmlFor="playerName" className="block text-gray-300 text-2xl font-bold mb-2">Your Name</label>
               <input
@@ -116,7 +148,6 @@ function StartPage() {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-200 leading-tight focus:outline-none focus:shadow-outline bg-gray-800 text-gray-300"
               />
             </div>
-
           </div>
           <Button onClick={handleJoinGame} buttonType="large" className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded">
             Join Game
@@ -124,8 +155,6 @@ function StartPage() {
         </div>
       </div>
     </div>
-
-
   );
 }
 

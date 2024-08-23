@@ -5,7 +5,7 @@ import path from 'path';
 const targetAspectRatio = 5 / 7;
 const resizeWidth = 200;
 const resizeHeight = 280;
-const deckType = 'life';
+const deckType = 'festivus';
 
 // Function to crop and resize an image
 const cropAndResizeImage = async (filePath, outputFolder, index) => {
@@ -23,7 +23,8 @@ const cropAndResizeImage = async (filePath, outputFolder, index) => {
             newHeight = Math.round(width / targetAspectRatio);
         }
 
-        const outputFilename = `${deckType}-${index}.jpg`; // Format: deckType_index.jpg
+        // const outputFilename = `${deckType}-${index}.jpg`; // Format: deckType_index.jpg
+        const outputFilename = filePath.split("/").pop();
         const outputPath = path.join(outputFolder, outputFilename);
 
         await sharp(filePath)

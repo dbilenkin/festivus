@@ -5,7 +5,9 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../../utils/Firebase';
 import { CurrentGameContext } from '../../contexts/CurrentGameContext';
 import PlayerRoundPage from './PlayerRoundPage';
+import PlayerWordsRoundPage from './PlayerWordsRoundPage';
 import PlayerSetupPage from './PlayerSetupPage';
+import PlayerBuildDeckPage from './PlayerBuildDeckPage';
 import PlayerEndPage from './PlayerEndPage';
 import PlayerRejoinPage from './PlayerRejoinPage';
 import Nav from '../../components/Nav';
@@ -96,12 +98,19 @@ const PlayerGamePage = () => {
     if (!currentPlayerName) {
       return <PlayerRejoinPage />
     }
-    const { deckType, indexDeck, gameState } = gameData;
+    const { deckType, indexDeck, gameState, gameType } = gameData;
     if (gameState === "setup") {
       return <PlayerSetupPage gameData={gameData} gameRef={gameRef} players={players} />
     }
+    if (gameState === "buildDeck") {
+      return <PlayerBuildDeckPage gameData={gameData} gameRef={gameRef} players={players} />
+    }
     if (gameState === 'started') {
-      return <PlayerRoundPage deck={getDeck(indexDeck, deckType)} gameData={gameData} gameRef={gameRef} players={players} />
+      if (gameType === 'Incommon') {
+        return <PlayerRoundPage deck={getDeck(indexDeck, deckType)} gameData={gameData} gameRef={gameRef} players={players} />
+      } else if (gameType === 'Out of Words, Words') {
+        return <PlayerWordsRoundPage gameData={gameData} gameRef={gameRef} players={players} />
+      }
     }
     if (gameState === "ended") {
       return <PlayerEndPage deck={getDeck(indexDeck, deckType)} gameData={gameData} gameRef={gameRef} players={players} />

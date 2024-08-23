@@ -57,7 +57,7 @@ function readListsOfNames(category) {
   });
 }
 
-readListsOfNames("famousPeople");
+readListsOfNames("now");
 
 // const fileName = 'celebrities';
 // const file = fs.readFileSync(fileName + '.json', 'utf8');

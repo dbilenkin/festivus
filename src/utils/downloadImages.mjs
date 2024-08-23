@@ -10,7 +10,7 @@ const downloadImage = async (url, filename, folder) => {
     console.log(`Downloaded ${filename}`);
 };
 
-const deckCategory = "famousPeople";
+const deckCategory = "festivus";
 
 // Main function
 const downloadImages = async () => {
