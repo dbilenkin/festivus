@@ -13,6 +13,10 @@
       "imageUrl": "Alison_Brie.jpg"
     },
     {
+      "name": "Allison Stokke",
+      "imageUrl": "Allison_Stokke.jpeg"
+    },
+    {
       "name": "Amy Adams",
       "imageUrl": "Amy_Adams.jpg"
     },
@@ -29,6 +33,14 @@
       "imageUrl": "Audrey_Hepburn.jpeg"
     },
     {
+      "name": "Bella Thorne",
+      "imageUrl": "Bella_Thorne.jpg"
+    },
+    {
+      "name": "Brie Larson",
+      "imageUrl": "Brie_Larson.jpeg"
+    },
+    {
       "name": "Charlize Theron",
       "imageUrl": "Charlize_Theron.jpg"
     },
@@ -43,6 +55,10 @@
     {
       "name": "Claudia Schiffer",
       "imageUrl": "Claudia_Schiffer.jpg"
+    },
+    {
+      "name": "Diane Lane",
+      "imageUrl": "Diane_Lane.jpg"
     },
     {
       "name": "Emma Watson",
@@ -81,8 +97,16 @@
       "imageUrl": "Jessica_Alba.jpg"
     },
     {
+      "name": "Joanna Kerns",
+      "imageUrl": "Joanna_Kerns.jpg"
+    },
+    {
       "name": "Julia Louis Dreyfus",
       "imageUrl": "Julia_Louis_Dreyfus.jpeg"
+    },
+    {
+      "name": "Jutta Leerdom",
+      "imageUrl": "Jutta_Leerdom.jpg"
     },
     {
       "name": "Kate Beckinsale",
@@ -99,6 +123,10 @@
     {
       "name": "Lauren Summer",
       "imageUrl": "Lauren_Summer.jpg"
+    },
+    {
+      "name": "Lea Thompson",
+      "imageUrl": "Lea_Thompson.jpg"
     },
     {
       "name": "Livvy Dunne",
@@ -129,6 +157,10 @@
       "imageUrl": "Milana_Vayntrub.jpeg"
     },
     {
+      "name": "Milana Vayntrub",
+      "imageUrl": "Milana_Vayntrub.webp"
+    },
+    {
       "name": "Monica Bellucci",
       "imageUrl": "Monica_Bellucci.jpeg"
     },
@@ -137,16 +169,20 @@
       "imageUrl": "Natalie_Portman.jpg"
     },
     {
+      "name": "Phylicia Rashad",
+      "imageUrl": "Phylicia_Rashad.jpg"
+    },
+    {
+      "name": "Prianka Chopra",
+      "imageUrl": "Prianka_Chopra.jpeg"
+    },
+    {
       "name": "Rihanna",
       "imageUrl": "Rihanna.jpg"
     },
     {
       "name": "Salma Hayak",
       "imageUrl": "Salma_Hayak.jpg"
-    },
-    {
-      "name": "Scarlett Johansson",
-      "imageUrl": "Scarlett_Johansson.jpeg"
     },
     {
       "name": "Scarlett Johansson",
