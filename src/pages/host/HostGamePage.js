@@ -38,23 +38,23 @@ const HostGamePage = () => {
     if (gameRef) {
       const playersRef = collection(gameRef, 'players');
       const q = query(playersRef, orderBy('joinedAt', 'asc'));
-  
+
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
         setPlayers(prevPlayers => {
           // Convert existing players to a Map for easy access
           const playersMap = new Map(prevPlayers.map(player => [player.id, player]));
-  
+
           // Update or add players
           querySnapshot.docs.forEach(doc => {
             const newPlayerData = { id: doc.id, ...doc.data() };
             const currentPlayer = playersMap.get(doc.id);
-  
+
             // Update the player in the map only if the data has changed
             if (!currentPlayer || JSON.stringify(currentPlayer) !== JSON.stringify(newPlayerData)) {
               playersMap.set(doc.id, newPlayerData);
             }
           });
-  
+
           // Remove players that are no longer in the snapshot
           const snapshotPlayerIds = new Set(querySnapshot.docs.map(doc => doc.id));
           playersMap.forEach((value, key) => {
@@ -62,18 +62,18 @@ const HostGamePage = () => {
               playersMap.delete(key);
             }
           });
-  
+
           // Convert the Map back to an array
           return Array.from(playersMap.values());
         });
       });
-  
+
       // Clean up the listener when the component unmounts
       return () => unsubscribe();
     }
   }, [gameRef]);
-  
-  
+
+
 
 
   if (!gameData) {
@@ -92,11 +92,7 @@ const HostGamePage = () => {
       return <HostBuildDeckPage gameData={gameData} gameRef={gameRef} players={players} />
     }
     if (gameState === 'started') {
-      if (gameType === 'Incommon') {
-        return <HostRoundPage deck={getDeck(indexDeck, deckType)} gameData={gameData} gameRef={gameRef} players={players} />
-      } else if (gameType === 'Out of Words, Words') {
-        return <HostWordsRoundPage gameData={gameData} gameRef={gameRef} players={players} />
-      }
+      return <HostRoundPage deck={getDeck(indexDeck, deckType)} gameData={gameData} gameRef={gameRef} players={players} />
     }
     if (gameState === "ended") {
       return <HostEndPage deck={getDeck(indexDeck, deckType)} gameData={gameData} gameRef={gameRef} players={players} />

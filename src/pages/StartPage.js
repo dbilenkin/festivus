@@ -90,37 +90,6 @@ function StartPage() {
       <Nav className="max-w-screen-md" />
       <div className='max-w-screen-md mx-auto text-gray-100'>
         <div className="bg-gray-800 mx-4 p-4 mt-4 rounded-lg">
-          <div className="mb-4">
-            <div className="text-gray-300 text-2xl font-bold mb-2">Select Game Type</div>
-            <div className="flex items-center justify-evenly">
-              <div className="flex items-center mr-4">
-                <input
-                  type="radio"
-                  id="incommon"
-                  name="gameType"
-                  value="Incommon"
-                  checked={gameType === 'Incommon'}
-                  onChange={(e) => setGameType(e.target.value)}
-                  className="mr-2"
-                />
-                <label htmlFor="incommon" className="text-gray-300 text-2xl">Incommon</label>
-              </div>
-              <div className="flex items-center">
-                <input
-                  type="radio"
-                  id="outofwords"
-                  name="gameType"
-                  value="Out of Words, Words"
-                  checked={gameType === 'Out of Words, Words'}
-                  onChange={(e) => setGameType(e.target.value)}
-                  className="mr-2"
-                />
-                <label htmlFor="outofwords" className="text-gray-300 text-2xl">Out of Words, Words</label>
-              </div>
-            </div>
-          </div>
-
-
           <Button onClick={handleCreateGame} buttonType="large" className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded">
             Create Game
           </Button>

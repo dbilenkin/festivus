@@ -1,7 +1,7 @@
 {
-  "name": "incommon",
+  "name": "festivus",
   "version": "0.1.0",
-  "homepage": "https://dbilenkin.github.io/incommon",
+  "homepage": "https://dbilenkin.github.io/festivus",
   "private": true,
   "main": "electron-main.js",
   "dependencies": {
